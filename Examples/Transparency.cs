@@ -1,8 +1,7 @@
-﻿using System.Numerics;
-using R3d_cs;
+using System.Numerics;
+using R3D_cs;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
-using static R3d_cs.R3D;
 
 namespace Examples;
 
@@ -15,30 +14,30 @@ public static class Transparency
         SetTargetFPS(60);
 
         // Initialize R3D
-        R3D_Init(GetScreenWidth(), GetScreenHeight());
+        R3D.Init(GetScreenWidth(), GetScreenHeight());
 
         // Create cube model
-        R3D_Mesh cube = R3D_GenMeshCube(1, 1, 1);
-        R3D_Material matCube = R3D_MATERIAL_BASE;
-        matCube.transparencyMode = R3D_TransparencyMode.R3D_TRANSPARENCY_ALPHA;
-        matCube.albedo.color = new Color(150, 150, 255, 100);
-        matCube.orm.occlusion = 1.0f;
-        matCube.orm.roughness = 0.2f;
-        matCube.orm.metalness = 0.2f;
+        var cube = R3D.GenMeshCube(1, 1, 1);
+        var matCube = R3D.MATERIAL_BASE;
+        matCube.TransparencyMode = TransparencyMode.Alpha;
+        matCube.Albedo.Color = new Color(150, 150, 255, 100);
+        matCube.Orm.Occlusion = 1.0f;
+        matCube.Orm.Roughness = 0.2f;
+        matCube.Orm.Metalness = 0.2f;
 
         // Create plane model
-        R3D_Mesh plane = R3D_GenMeshPlane(1000, 1000, 1, 1);
-        R3D_Material matPlane = R3D_MATERIAL_BASE;
-        matPlane.orm.occlusion = 1.0f;
-        matPlane.orm.roughness = 1.0f;
-        matPlane.orm.metalness = 0.0f;
+        var plane = R3D.GenMeshPlane(1000, 1000, 1, 1);
+        var matPlane = R3D.MATERIAL_BASE;
+        matPlane.Orm.Occlusion = 1.0f;
+        matPlane.Orm.Roughness = 1.0f;
+        matPlane.Orm.Metalness = 0.0f;
 
         // Create sphere model
-        R3D_Mesh sphere = R3D_GenMeshSphere(0.5f, 64, 64);
-        R3D_Material matSphere = R3D_MATERIAL_BASE;
-        matSphere.orm.occlusion = 1.0f;
-        matSphere.orm.roughness = 0.25f;
-        matSphere.orm.metalness = 0.75f;
+        var sphere = R3D.GenMeshSphere(0.5f, 64, 64);
+        var matSphere = R3D.MATERIAL_BASE;
+        matSphere.Orm.Occlusion = 1.0f;
+        matSphere.Orm.Roughness = 0.25f;
+        matSphere.Orm.Metalness = 0.75f;
 
         // Setup camera
         Camera3D camera = new() {
@@ -49,11 +48,11 @@ public static class Transparency
         };
 
         // Setup lighting
-        R3D_ENVIRONMENT_SET((ref env) => env.ambient.color = new Color(10, 10, 10, 255));
-        R3D_Light light = R3D_CreateLight(R3D_LightType.R3D_LIGHT_SPOT);
-        R3D_LightLookAt(light, new Vector3(0, 10, 5), Vector3.Zero);
-        R3D_SetLightActive(light, true);
-        R3D_EnableShadow(light);
+        R3D.SetEnvironmentEx((ref env) => env.Ambient.Color = new Color(10, 10, 10, 255));
+        var light = R3D.CreateLight(LightType.Spot);
+        R3D.LightLookAt(light, new Vector3(0, 10, 5), Vector3.Zero);
+        R3D.SetLightActive(light, true);
+        R3D.EnableShadow(light);
 
         // Main loop
         while (!WindowShouldClose())
@@ -63,20 +62,20 @@ public static class Transparency
             BeginDrawing();
                 ClearBackground(Color.RayWhite);
 
-                R3D_Begin(camera);
-                    R3D_DrawMesh(plane, matPlane, new Vector3(0, -0.5f, 0), 1.0f);
-                    R3D_DrawMesh(sphere, matSphere, Vector3.Zero, 1.0f);
-                    R3D_DrawMesh(cube, matCube, Vector3.Zero, 1.0f);
-                R3D_End();
+                R3D.Begin(camera);
+                    R3D.DrawMesh(plane, matPlane, new Vector3(0, -0.5f, 0), 1.0f);
+                    R3D.DrawMesh(sphere, matSphere, Vector3.Zero, 1.0f);
+                    R3D.DrawMesh(cube, matCube, Vector3.Zero, 1.0f);
+                R3D.End();
 
             EndDrawing();
         }
 
         // Cleanup
-        R3D_UnloadMesh(sphere);
-        R3D_UnloadMesh(plane);
-        R3D_UnloadMesh(cube);
-        R3D_Close();
+        R3D.UnloadMesh(sphere);
+        R3D.UnloadMesh(plane);
+        R3D.UnloadMesh(cube);
+        R3D.Close();
 
         CloseWindow();
 

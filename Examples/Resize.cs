@@ -1,8 +1,8 @@
-﻿using System.Numerics;
-using R3d_cs;
+using System.Numerics;
+using R3D_cs;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
-using static R3d_cs.R3D;
+using Material = R3D_cs.Material;
 
 namespace Examples;
 
@@ -16,21 +16,21 @@ public static class Resize
         SetTargetFPS(60);
 
         // Initialize R3D
-        R3D_Init(GetScreenWidth(), GetScreenHeight());
+        R3D.Init(GetScreenWidth(), GetScreenHeight());
 
         // Create sphere mesh and materials
-        R3D_Mesh sphere = R3D_GenMeshSphere(0.5f, 64, 64);
-        R3D_Material[] materials = new R3D_Material[5];
+        var sphere = R3D.GenMeshSphere(0.5f, 64, 64);
+        var materials = new Material[5];
         for (int i = 0; i < 5; i++)
         {
-            materials[i] = R3D_GetDefaultMaterial();
-            materials[i].albedo.color = Color.FromHSV((float)i / 5 * 330, 1.0f, 1.0f);
+            materials[i] = R3D.GetDefaultMaterial();
+            materials[i].Albedo.Color = Color.FromHSV((float)i / 5 * 330, 1.0f, 1.0f);
         }
 
         // Set up directional light
-        R3D_Light light = R3D_CreateLight(R3D_LightType.R3D_LIGHT_DIR);
-        R3D_SetLightDirection(light, new Vector3(0, 0, -1));
-        R3D_SetLightActive(light, true);
+        var light = R3D.CreateLight(LightType.Dir);
+        R3D.SetLightDirection(light, new Vector3(0, 0, -1));
+        R3D.SetLightActive(light, true);
 
         // Setup camera
         Camera3D camera = new Camera3D {
@@ -41,8 +41,8 @@ public static class Resize
         };
 
         // Current blit state
-        R3D_AspectMode aspect = R3D_AspectMode.R3D_ASPECT_EXPAND;
-        R3D_UpscaleMode upscale = R3D_UpscaleMode.R3D_UPSCALE_NEAREST;
+        AspectMode aspect = AspectMode.Expand;
+        UpscaleMode upscale = UpscaleMode.Nearest;
 
         // Main loop
         while (!WindowShouldClose())
@@ -51,25 +51,25 @@ public static class Resize
 
             // Toggle aspect keep
             if (IsKeyPressed(KeyboardKey.R)) {
-                aspect = (R3D_AspectMode)(((int)aspect + 1) % 2);
-                R3D_SetAspectMode(aspect);
+                aspect = (AspectMode)(((int)aspect + 1) % 2);
+                R3D.SetAspectMode(aspect);
             }
 
             // Toggle linear filtering
             if (IsKeyPressed(KeyboardKey.F)) {
-                upscale = (R3D_UpscaleMode)(((int)upscale + 1) % 4);
-                R3D_SetUpscaleMode(upscale);
+                upscale = (UpscaleMode)(((int)upscale + 1) % 4);
+                R3D.SetUpscaleMode(upscale);
             }
 
             BeginDrawing();
                 ClearBackground(Color.Black);
 
                 // Draw spheres
-                R3D_Begin(camera);
+                R3D.Begin(camera);
                     for (int i = 0; i < 5; i++) {
-                        R3D_DrawMesh(sphere, materials[i], new Vector3((float)i - 2, 0, 0), 1.0f);
+                        R3D.DrawMesh(sphere, materials[i], new Vector3((float)i - 2, 0, 0), 1.0f);
                     }
-                R3D_End();
+                R3D.End();
 
                 // Draw info
                 DrawText($"Resize mode: {GetAspectModeName(aspect)}", 10, 10, 20, Color.RayWhite);
@@ -79,30 +79,30 @@ public static class Resize
         }
 
         // Cleanup
-        R3D_UnloadMesh(sphere);
-        R3D_Close();
+        R3D.UnloadMesh(sphere);
+        R3D.Close();
 
         CloseWindow();
 
         return 0;
     }
-    
-    private static string GetAspectModeName(R3D_AspectMode mode)
+
+    private static string GetAspectModeName(AspectMode mode)
     {
         switch (mode) {
-            case R3D_AspectMode.R3D_ASPECT_EXPAND: return "EXPAND";
-            case R3D_AspectMode.R3D_ASPECT_KEEP: return "KEEP";
+            case AspectMode.Expand: return "EXPAND";
+            case AspectMode.Keep: return "KEEP";
         }
         return "UNKNOWN";
     }
 
-    private static string GetUpscaleModeName(R3D_UpscaleMode mode)
+    private static string GetUpscaleModeName(UpscaleMode mode)
     {
         switch (mode) {
-            case R3D_UpscaleMode.R3D_UPSCALE_NEAREST: return "NEAREST";
-            case R3D_UpscaleMode.R3D_UPSCALE_LINEAR: return "LINEAR";
-            case R3D_UpscaleMode.R3D_UPSCALE_BICUBIC: return "BICUBIC";
-            case R3D_UpscaleMode.R3D_UPSCALE_LANCZOS: return "LANCZOS";
+            case UpscaleMode.Nearest: return "NEAREST";
+            case UpscaleMode.Linear: return "LINEAR";
+            case UpscaleMode.Bicubic: return "BICUBIC";
+            case UpscaleMode.Lanczos: return "LANCZOS";
         }
         return "UNKNOWN";
     }

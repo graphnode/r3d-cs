@@ -1,38 +1,36 @@
-﻿using System.Numerics;
-using R3d_cs;
+using System.Numerics;
+using R3D_cs;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
-using static R3d_cs.R3D;
 
 namespace Examples;
 
 public static class Basic
 {
-    public static int Main()
+    public static unsafe int Main()
     {
         // Initialize window
         InitWindow(800, 450, "[r3d] - Basic example");
         SetTargetFPS(60);
 
         // Initialize R3D
-        R3D_Init(GetScreenWidth(), GetScreenHeight());
+        R3D.Init(GetScreenWidth(), GetScreenHeight());
 
         // Create meshes
-        R3D_Mesh plane = R3D_GenMeshPlane(1000, 1000, 1, 1);
-        R3D_Mesh sphere = R3D_GenMeshSphere(0.5f, 64, 64);
-        R3D_Material material = R3D_GetDefaultMaterial();
+        var plane = R3D.GenMeshPlane(1000, 1000, 1, 1);
+        var sphere = R3D.GenMeshSphere(0.5f, 64, 64);
+        var material = R3D.GetDefaultMaterial();
 
         // Setup environment
-        R3D_ENVIRONMENT_SET((ref env) =>
-        {
-            env.ambient.color = new Color(10, 10, 10, 255);
-        });
+        var env = R3D.GetEnvironment();
+        env->Ambient.Color = new Color(10, 10, 10, 255);
+        R3D.SetEnvironment(env);
 
         // Create light
-        R3D_Light light = R3D_CreateLight(R3D_LightType.R3D_LIGHT_SPOT);
-        R3D_LightLookAt(light, new Vector3(0, 10, 5), Vector3.Zero);
-        R3D_EnableShadow(light);
-        R3D_SetLightActive(light, true);
+        Light light = R3D.CreateLight(LightType.Spot);
+        R3D.LightLookAt(light, new Vector3(0, 10, 5), Vector3.Zero);
+        R3D.EnableShadow(light);
+        R3D.SetLightActive(light, true);
 
         // Setup camera
         var camera = new Camera3D() {
@@ -50,18 +48,18 @@ public static class Basic
             BeginDrawing();
                 ClearBackground(Color.RayWhite);
 
-                R3D_Begin(camera);
-                    R3D_DrawMesh(plane, material, new Vector3(0, -0.5f, 0), 1.0f);
-                    R3D_DrawMesh(sphere, material, Vector3.Zero, 1.0f);
-                R3D_End();
+                R3D.Begin(camera);
+                    R3D.DrawMesh(plane, material, new Vector3(0, -0.5f, 0), 1.0f);
+                    R3D.DrawMesh(sphere, material, Vector3.Zero, 1.0f);
+                R3D.End();
 
             EndDrawing();
         }
 
         // Cleanup
-        R3D_UnloadMesh(sphere);
-        R3D_UnloadMesh(plane);
-        R3D_Close();
+        R3D.UnloadMesh(sphere);
+        R3D.UnloadMesh(plane);
+        R3D.Close();
 
         CloseWindow();
 

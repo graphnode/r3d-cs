@@ -1,8 +1,7 @@
-﻿using System.Numerics;
-using R3d_cs;
+using System.Numerics;
+using R3D_cs;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
-using static R3d_cs.R3D;
 
 namespace Examples;
 
@@ -15,34 +14,34 @@ public static class Billboards
         SetTargetFPS(60);
 
         // Initialize R3D
-        R3D_Init(GetScreenWidth(), GetScreenHeight());
-        R3D_SetTextureFilter(TextureFilter.Point);
+        R3D.Init(GetScreenWidth(), GetScreenHeight());
+        R3D.SetTextureFilter(TextureFilter.Point);
 
         // Set background/ambient color
-        R3D_ENVIRONMENT_SET((ref env) =>
+        R3D.SetEnvironmentEx((ref env) =>
         {
-            env.background.color = new Color(102, 191, 255, 255);
-            env.ambient.color = new Color(10, 19, 25, 255);
-            env.tonemap.mode = R3D_Tonemap.R3D_TONEMAP_FILMIC;
+            env.Background.Color = new Color(102, 191, 255, 255);
+            env.Ambient.Color = new Color(10, 19, 25, 255);
+            env.Tonemap.Mode = Tonemap.Filmic;
         });
 
         // Create ground mesh and material
-        R3D_Mesh meshGround = R3D_GenMeshPlane(200, 200, 1, 1);
-        R3D_Material matGround = R3D_GetDefaultMaterial();
-        matGround.albedo.color = Color.Green;
+        var meshGround = R3D.GenMeshPlane(200, 200, 1, 1);
+        var matGround = R3D.GetDefaultMaterial();
+        matGround.Albedo.Color = Color.Green;
 
         // Create billboard mesh and material
-        R3D_Mesh meshBillboard = R3D_GenMeshQuad(1.0f, 1.0f, 1, 1, new Vector3(0.0f, 0.0f, 1.0f));
-        meshBillboard.shadowCastMode = R3D_ShadowCastMode.R3D_SHADOW_CAST_ON_DOUBLE_SIDED;
+        var meshBillboard = R3D.GenMeshQuad(1.0f, 1.0f, 1, 1, new Vector3(0.0f, 0.0f, 1.0f));
+        meshBillboard.ShadowCastMode = ShadowCastMode.OnDoubleSided;
 
-        R3D_Material matBillboard = R3D_GetDefaultMaterial();
-        matBillboard.albedo = R3D_LoadAlbedoMap("resources/images/tree.png", Color.White);
-        matBillboard.billboardMode = R3D_BillboardMode.R3D_BILLBOARD_Y_AXIS;
+        var matBillboard = R3D.GetDefaultMaterial();
+        matBillboard.Albedo = R3D.LoadAlbedoMap("resources/images/tree.png", Color.White);
+        matBillboard.BillboardMode = BillboardMode.YAxis;
 
         // Create transforms for instanced billboards
-        R3D_InstanceBuffer instances = R3D_LoadInstanceBuffer(64, R3D_InstanceFlags.R3D_INSTANCE_POSITION | R3D_InstanceFlags.R3D_INSTANCE_SCALE);
-        var positions = R3D_MapInstances<Vector3>(instances, R3D_InstanceFlags.R3D_INSTANCE_POSITION);
-        var scales = R3D_MapInstances<Vector3>(instances, R3D_InstanceFlags.R3D_INSTANCE_SCALE);
+        var instances = R3D.LoadInstanceBuffer(64, InstanceFlags.Position | InstanceFlags.Scale);
+        var positions = R3D.MapInstances<Vector3>(instances, InstanceFlags.Position);
+        var scales = R3D.MapInstances<Vector3>(instances, InstanceFlags.Scale);
         for (int i = 0; i < 64; i++) {
             float scaleFactor = GetRandomValue(25, 50) / 10.0f;
             scales[i] = new Vector3(scaleFactor, scaleFactor, 1.0f);
@@ -52,15 +51,15 @@ public static class Billboards
                 GetRandomValue(-100, 100)
             );
         }
-        R3D_UnmapInstances(instances, R3D_InstanceFlags.R3D_INSTANCE_POSITION | R3D_InstanceFlags.R3D_INSTANCE_SCALE);
+        R3D.UnmapInstances(instances, InstanceFlags.Position | InstanceFlags.Scale);
 
         // Setup directional light with shadows
-        R3D_Light light = R3D_CreateLight(R3D_LightType.R3D_LIGHT_DIR);
-        R3D_SetLightDirection(light, new Vector3(-1, -1, -1));
-        R3D_SetShadowDepthBias(light, 0.01f);
-        R3D_EnableShadow(light);
-        R3D_SetLightActive(light, true);
-        R3D_SetLightRange(light, 32.0f);
+        var light = R3D.CreateLight(LightType.Dir);
+        R3D.SetLightDirection(light, new Vector3(-1, -1, -1));
+        R3D.SetShadowDepthBias(light, 0.01f);
+        R3D.EnableShadow(light);
+        R3D.SetLightActive(light, true);
+        R3D.SetLightRange(light, 32.0f);
 
         // Setup camera
         Camera3D camera = new Camera3D {
@@ -81,19 +80,19 @@ public static class Billboards
             BeginDrawing();
                 ClearBackground(Color.RayWhite);
 
-                R3D_Begin(camera);
-                    R3D_DrawMesh(meshGround, matGround, Vector3.Zero, 1.0f);
-                    R3D_DrawMeshInstanced(meshBillboard, matBillboard, instances, 64);
-                R3D_End();
+                R3D.Begin(camera);
+                    R3D.DrawMesh(meshGround, matGround, Vector3.Zero, 1.0f);
+                    R3D.DrawMeshInstanced(meshBillboard, matBillboard, instances, 64);
+                R3D.End();
 
             EndDrawing();
         }
 
         // Cleanup
-        R3D_UnloadMaterial(matBillboard);
-        R3D_UnloadMesh(meshBillboard);
-        R3D_UnloadMesh(meshGround);
-        R3D_Close();
+        R3D.UnloadMaterial(matBillboard);
+        R3D.UnloadMesh(meshBillboard);
+        R3D.UnloadMesh(meshGround);
+        R3D.Close();
 
         CloseWindow();
 

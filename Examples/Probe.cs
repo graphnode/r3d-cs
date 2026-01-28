@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Numerics;
-using R3d_cs;
+using R3D_cs;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
-using static R3d_cs.R3D;
 
 namespace Examples;
 
@@ -16,44 +15,44 @@ public static class Probe
         SetTargetFPS(60);
 
         // Initialize R3D
-        R3D_Init(GetScreenWidth(), GetScreenHeight());
+        R3D.Init(GetScreenWidth(), GetScreenHeight());
 
-        R3D_Cubemap cubemap = R3D_LoadCubemap("resources/panorama/indoor.hdr", R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_AUTO_DETECT);
+        var cubemap = R3D.LoadCubemap("resources/panorama/indoor.hdr", R3D_cs.CubemapLayout.AutoDetect);
         
-        R3D_AmbientMap ambientMap = R3D_GenAmbientMap(cubemap, R3D_AmbientFlags.R3D_AMBIENT_ILLUMINATION | R3D_AmbientFlags.R3D_AMBIENT_REFLECTION);
+        var ambientMap = R3D.GenAmbientMap(cubemap, AmbientFlags.Illumination | AmbientFlags.Reflection);
         
-        R3D_ENVIRONMENT_SET((ref env) =>
+        R3D.SetEnvironmentEx((ref env) =>
         {
             // Setup environment sky
-            env.background.skyBlur = 0.3f;
-            env.background.energy = 0.6f;
-            env.background.sky = cubemap;
+            env.Background.SkyBlur = 0.3f;
+            env.Background.Energy = 0.6f;
+            env.Background.Sky = cubemap;
             
             // Setup environment ambient
-            env.ambient.map = ambientMap;
-            env.ambient.energy = 0.25f;
+            env.Ambient.Map = ambientMap;
+            env.Ambient.Energy = 0.25f;
             
             // Setup tonemapping
-            env.tonemap.mode = R3D_Tonemap.R3D_TONEMAP_FILMIC;
+            env.Tonemap.Mode = Tonemap.Filmic;
         });
 
         // Create meshes
-        R3D_Mesh plane = R3D_GenMeshPlane(30, 30, 1, 1);
-        R3D_Mesh sphere = R3D_GenMeshSphere(0.5f, 64, 64);
-        R3D_Material material = R3D_GetDefaultMaterial();
+        var plane = R3D.GenMeshPlane(30, 30, 1, 1);
+        var sphere = R3D.GenMeshSphere(0.5f, 64, 64);
+        var material = R3D.GetDefaultMaterial();
 
         // Create light
-        R3D_Light light = R3D_CreateLight(R3D_LightType.R3D_LIGHT_SPOT);
-        R3D_LightLookAt(light, new Vector3(0, 10, 5), Vector3.Zero);
-        R3D_SetLightActive(light, true);
-        R3D_EnableShadow(light);
+        var light = R3D.CreateLight(LightType.Spot);
+        R3D.LightLookAt(light, new Vector3(0, 10, 5), Vector3.Zero);
+        R3D.SetLightActive(light, true);
+        R3D.EnableShadow(light);
 
         // Create probe
-        R3D_Probe probe = R3D_CreateProbe(R3D_ProbeFlags.R3D_PROBE_ILLUMINATION | R3D_ProbeFlags.R3D_PROBE_REFLECTION);
-        R3D_SetProbePosition(probe, new Vector3(0, 1, 0));
-        R3D_SetProbeShadows(probe, true);
-        R3D_SetProbeFalloff(probe, 0.5f);
-        R3D_SetProbeActive(probe, true);
+        var probe = R3D.CreateProbe(ProbeFlags.Illumination | ProbeFlags.Reflection);
+        R3D.SetProbePosition(probe, new Vector3(0, 1, 0));
+        R3D.SetProbeShadows(probe, true);
+        R3D.SetProbeFalloff(probe, 0.5f);
+        R3D.SetProbeActive(probe, true);
 
         // Setup camera
         Camera3D camera = new Camera3D() {
@@ -71,19 +70,19 @@ public static class Probe
             BeginDrawing();
                 ClearBackground(Color.RayWhite);
 
-                R3D_Begin(camera);
+                R3D.Begin(camera);
 
-                    material.orm.roughness = 0.5f;
-                    material.orm.metalness = 0.0f;
-                    R3D_DrawMesh(plane, material, Vector3.Zero, 1.0f);
+                    material.Orm.Roughness = 0.5f;
+                    material.Orm.Metalness = 0.0f;
+                    R3D.DrawMesh(plane, material, Vector3.Zero, 1.0f);
 
                     for (int i = -1; i <= 1; i++) {
-                        material.orm.roughness = MathF.Abs(i) * 0.4f;
-                        material.orm.metalness = 1.0f - MathF.Abs(i);
-                        R3D_DrawMesh(sphere, material, new Vector3(i * 3.0f, 1.0f, 0), 2.0f);
+                        material.Orm.Roughness = MathF.Abs(i) * 0.4f;
+                        material.Orm.Metalness = 1.0f - MathF.Abs(i);   
+                        R3D.DrawMesh(sphere, material, new Vector3(i * 3.0f, 1.0f, 0), 2.0f);
                     }
 
-                R3D_End();
+                R3D.End();
                 
                 DrawFPS(10, 10);
 
@@ -91,11 +90,11 @@ public static class Probe
         }
 
         // Cleanup
-        R3D_UnloadAmbientMap(ambientMap);
-        R3D_UnloadCubemap(cubemap);
-        R3D_UnloadMesh(sphere);
-        R3D_UnloadMesh(plane);
-        R3D_Close();
+        R3D.UnloadAmbientMap(ambientMap);
+        R3D.UnloadCubemap(cubemap);
+        R3D.UnloadMesh(sphere);
+        R3D.UnloadMesh(plane);
+        R3D.Close();
 
         CloseWindow();
 

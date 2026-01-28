@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Numerics;
-using R3d_cs;
+using R3D_cs;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
-using static R3d_cs.R3D;
 
 namespace Examples;
 
@@ -16,41 +15,41 @@ public static class Sprite
         SetTargetFPS(60);
 
         // Initialize R3D
-        R3D_Init(GetScreenWidth(), GetScreenHeight());
-        R3D_SetTextureFilter(TextureFilter.Point);
+        R3D.Init(GetScreenWidth(), GetScreenHeight());
+        R3D.SetTextureFilter(TextureFilter.Point);
 
         // Set background/ambient color
-        R3D_ENVIRONMENT_SET((ref env) =>
+        R3D.SetEnvironmentEx((ref env) =>
         {
-            env.background.color = new Color(102, 191, 255, 255);
-            env.ambient.color = new Color(10, 19, 25, 255);
-            env.tonemap.mode = R3D_Tonemap.R3D_TONEMAP_FILMIC;
+            env.Background.Color = new Color(102, 191, 255, 255);
+            env.Ambient.Color = new Color(10, 19, 25, 255);
+            env.Tonemap.Mode = Tonemap.Filmic;
         });
-        
+
         // Create ground mesh and material
-        R3D_Mesh meshGround = R3D_GenMeshPlane(200, 200, 1, 1);
-        R3D_Material matGround = R3D_GetDefaultMaterial();
-        matGround.albedo.color = Color.Green;
+        var meshGround = R3D.GenMeshPlane(200, 200, 1, 1);
+        var matGround = R3D.GetDefaultMaterial();
+        matGround.Albedo.Color = Color.Green;
 
         // Create sprite mesh and material
-        R3D_Mesh meshSprite = R3D_GenMeshQuad(1.0f, 1.0f, 1, 1, Vector3.UnitZ);
-        meshSprite.shadowCastMode = R3D_ShadowCastMode.R3D_SHADOW_CAST_ON_DOUBLE_SIDED;
+        var meshSprite = R3D.GenMeshQuad(1.0f, 1.0f, 1, 1, Vector3.UnitZ);
+        meshSprite.ShadowCastMode = ShadowCastMode.OnDoubleSided;
 
-        R3D_Material matSprite = R3D_GetDefaultMaterial();
-        matSprite.albedo = R3D_LoadAlbedoMap("resources/images/spritesheet.png", Color.White);
-        matSprite.billboardMode = R3D_BillboardMode.R3D_BILLBOARD_Y_AXIS;
+        var matSprite = R3D.GetDefaultMaterial();
+        matSprite.Albedo = R3D.LoadAlbedoMap("resources/images/spritesheet.png", Color.White);
+        matSprite.BillboardMode = BillboardMode.YAxis;
 
         // Setup spotlight
-        R3D_Light light = R3D_CreateLight(R3D_LightType.R3D_LIGHT_SPOT);
-        R3D_LightLookAt(light, new Vector3(0,10,10), Vector3.Zero);
-        R3D_SetLightRange(light, 64.0f);
-        R3D_EnableShadow(light);
-        R3D_SetLightActive(light, true);
+        var light = R3D.CreateLight(LightType.Spot);
+        R3D.LightLookAt(light, new Vector3(0, 10, 10), Vector3.Zero);
+        R3D.SetLightRange(light, 64.0f);
+        R3D.EnableShadow(light);
+        R3D.SetLightActive(light, true);
 
         // Setup camera
         Camera3D camera = new Camera3D() {
             Position = new Vector3(0, 2, 5),
-            Target = new Vector3(0, 0.5f, 0), 
+            Target = new Vector3(0, 0.5f, 0),
             Up = Vector3.UnitY,
             FovY = 45
         };
@@ -70,31 +69,31 @@ public static class Sprite
             // Update sprite UVs
             // We multiply by the sign of the X direction to invert the uvScale.x
             float currentFrame = 10.0f * (float)GetTime();
-            GetTexCoordScaleOffset(ref matSprite.uvScale, ref matSprite.uvOffset, (int)(4 * birdDirX), 1, currentFrame);
+            GetTexCoordScaleOffset(ref matSprite.UvScale, ref matSprite.UvOffset, (int)(4 * birdDirX), 1, currentFrame);
 
             BeginDrawing();
                 ClearBackground(Color.RayWhite);
 
                 // Draw scene
-                R3D_Begin(camera);
-                    R3D_DrawMesh(meshGround, matGround, new Vector3(0, -0.5f, 0), 1.0f);
-                    R3D_DrawMesh(meshSprite, matSprite, birdPos with { Z = 0 }, 1.0f);
-                R3D_End();
+                R3D.Begin(camera);
+                    R3D.DrawMesh(meshGround, matGround, new Vector3(0, -0.5f, 0), 1.0f);
+                    R3D.DrawMesh(meshSprite, matSprite, birdPos with { Z = 0 }, 1.0f);
+                R3D.End();
 
             EndDrawing();
         }
 
         // Cleanup
-        R3D_UnloadMaterial(matSprite);
-        R3D_UnloadMesh(meshSprite);
-        R3D_UnloadMesh(meshGround);
-        R3D_Close();
+        R3D.UnloadMaterial(matSprite);
+        R3D.UnloadMesh(meshSprite);
+        R3D.UnloadMesh(meshGround);
+        R3D.Close();
 
         CloseWindow();
 
         return 0;
     }
-    
+
     private static void GetTexCoordScaleOffset(ref Vector2 uvScale, ref Vector2 uvOffset, int xFrameCount, int yFrameCount, float currentFrame)
     {
         uvScale.X = 1.0f / xFrameCount;

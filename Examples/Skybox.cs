@@ -1,8 +1,8 @@
-﻿using System.Numerics;
-using R3d_cs;
+using System.Numerics;
+using R3D_cs;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
-using static R3d_cs.R3D;
+using CubemapLayout = R3D_cs.CubemapLayout;
 
 namespace Examples;
 
@@ -15,33 +15,33 @@ public static class Skybox
         SetTargetFPS(60);
 
         // Initialize R3D
-        R3D_Init(GetScreenWidth(), GetScreenHeight());
+        R3D.Init(GetScreenWidth(), GetScreenHeight());
 
         // Create sphere mesh
-        R3D_Mesh sphere = R3D_GenMeshSphere(0.5f, 32, 64);
+        var sphere = R3D.GenMeshSphere(0.5f, 32, 64);
 
         // Define procedural skybox parameters
-        R3D_CubemapSky skyParams = R3D_CUBEMAP_SKY_BASE;
-        skyParams.groundEnergy = 2.0f;
-        skyParams.skyEnergy = 2.0f;
-        skyParams.sunEnergy = 2.0f;
+        var skyParams = R3D.CUBEMAP_SKY_BASE;
+        skyParams.GroundEnergy = 2.0f;
+        skyParams.SkyEnergy = 2.0f;
+        skyParams.SunEnergy = 2.0f;
 
         // Load and generate skyboxes
-        R3D_Cubemap skyProcedural = R3D_GenCubemapSky(512, skyParams);
-        R3D_Cubemap skyPanorama = R3D_LoadCubemap("resources/panorama/sky.hdr", R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_AUTO_DETECT);
+        var skyProcedural = R3D.GenCubemapSky(512, skyParams);
+        var skyPanorama = R3D.LoadCubemap("resources/panorama/sky.hdr", CubemapLayout.AutoDetect);
 
         // Generate ambient maps
-        R3D_AmbientMap ambientProcedural = R3D_GenAmbientMap(skyProcedural, R3D_AmbientFlags.R3D_AMBIENT_ILLUMINATION | R3D_AmbientFlags.R3D_AMBIENT_REFLECTION);
-        R3D_AmbientMap ambientPanorama = R3D_GenAmbientMap(skyPanorama, R3D_AmbientFlags.R3D_AMBIENT_ILLUMINATION | R3D_AmbientFlags.R3D_AMBIENT_REFLECTION);
-        
-        R3D_ENVIRONMENT_SET((ref env) =>
+        var ambientProcedural = R3D.GenAmbientMap(skyProcedural, AmbientFlags.Illumination | AmbientFlags.Reflection);
+        var ambientPanorama = R3D.GenAmbientMap(skyPanorama, AmbientFlags.Illumination | AmbientFlags.Reflection);
+
+        R3D.SetEnvironmentEx((ref env) =>
         {
             // Set default sky/ambient maps
-            env.background.sky = skyPanorama;
-            env.ambient.map = ambientPanorama;
-            
+            env.Background.Sky = skyPanorama;
+            env.Ambient.Map = ambientPanorama;
+
             // Set tonemapping
-            env.tonemap.mode = R3D_Tonemap.R3D_TONEMAP_AGX;
+            env.Tonemap.Mode = Tonemap.Agx;
         });
 
         // Setup camera
@@ -64,44 +64,41 @@ public static class Skybox
             ClearBackground(Color.RayWhite);
 
             if (IsMouseButtonPressed(MouseButton.Left)) {
-                if (R3D_ENVIRONMENT_GET.background.sky.texture == skyPanorama.texture) {
-                    R3D_ENVIRONMENT_SET((ref env) =>
-                    {
-                        env.background.sky = skyProcedural;
-                        env.ambient.map = ambientProcedural;
-                    });
-                }
-                else {
-                    R3D_ENVIRONMENT_SET((ref env) =>
-                    {
-                        env.background.sky = skyPanorama;
-                        env.ambient.map = ambientPanorama;
-                    });
-                }
+                R3D.SetEnvironmentEx((ref env) =>
+                {
+                    if (env.Background.Sky.Texture == skyPanorama.Texture) {
+                        env.Background.Sky = skyProcedural;
+                        env.Ambient.Map = ambientProcedural;
+                    }
+                    else {
+                        env.Background.Sky = skyPanorama;
+                        env.Ambient.Map = ambientPanorama;
+                    }
+                });
             }
 
             // Draw sphere grid
-            R3D_Begin(camera);
+            R3D.Begin(camera);
                 for (int x = 0; x <= 8; x++) {
                     for (int y = 0; y <= 8; y++) {
-                        R3D_Material material = R3D_MATERIAL_BASE;
-                        material.orm.roughness = Raymath.Remap(y, 0.0f, 8.0f, 0.0f, 1.0f);
-                        material.orm.metalness = Raymath.Remap(x, 0.0f, 8.0f, 0.0f, 1.0f);
-                        R3D_DrawMesh(sphere, material, new Vector3((x - 4) * 1.25f, (y - 4f) * 1.25f, 0.0f), 1.0f);
+                        var material = R3D.MATERIAL_BASE;
+                        material.Orm.Roughness = Raymath.Remap(y, 0.0f, 8.0f, 0.0f, 1.0f);
+                        material.Orm.Metalness = Raymath.Remap(x, 0.0f, 8.0f, 0.0f, 1.0f);
+                        R3D.DrawMesh(sphere, material, new Vector3((x - 4) * 1.25f, (y - 4f) * 1.25f, 0.0f), 1.0f);
                     }
                 }
-            R3D_End();
+            R3D.End();
 
             EndDrawing();
         }
 
         // Cleanup
-        R3D_UnloadAmbientMap(ambientProcedural);
-        R3D_UnloadAmbientMap(ambientPanorama);
-        R3D_UnloadCubemap(skyProcedural);
-        R3D_UnloadCubemap(skyPanorama);
-        R3D_UnloadMesh(sphere);
-        R3D_Close();
+        R3D.UnloadAmbientMap(ambientProcedural);
+        R3D.UnloadAmbientMap(ambientPanorama);
+        R3D.UnloadCubemap(skyProcedural);
+        R3D.UnloadCubemap(skyPanorama);
+        R3D.UnloadMesh(sphere);
+        R3D.Close();
 
         CloseWindow();
 

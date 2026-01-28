@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Numerics;
-using R3d_cs;
+using R3D_cs;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
-using static R3d_cs.R3D;
 
 namespace Examples;
 
@@ -21,39 +20,39 @@ public static class Lights
         SetTargetFPS(60);
 
         // Initialize R3D
-        R3D_Init(GetScreenWidth(), GetScreenHeight());
+        R3D.Init(GetScreenWidth(), GetScreenHeight());
 
         // Set ambient light
-        R3D_ENVIRONMENT_SET((ref env) =>
+        R3D.SetEnvironmentEx((ref env) =>
         {
-            env.background.color = Color.Black;
-            env.ambient.color = new Color(10, 10, 10, 255);
+            env.Background.Color = Color.Black;
+            env.Ambient.Color = new Color(10, 10, 10, 255);
         });
 
         // Create plane and cube meshes
-        R3D_Mesh plane = R3D_GenMeshPlane(GRID_SIZE, GRID_SIZE, 1, 1);
-        R3D_Mesh cube = R3D_GenMeshCube(0.5f, 0.5f, 0.5f);
-        R3D_Material material = R3D_GetDefaultMaterial();
+        var plane = R3D.GenMeshPlane(GRID_SIZE, GRID_SIZE, 1, 1);
+        var cube = R3D.GenMeshCube(0.5f, 0.5f, 0.5f);
+        var material = R3D.GetDefaultMaterial();
 
         // Allocate transforms for all spheres
-        R3D_InstanceBuffer instances = R3D_LoadInstanceBuffer(GRID_SIZE * GRID_SIZE, R3D_InstanceFlags.R3D_INSTANCE_POSITION);
-        var positions = R3D_MapInstances<Vector3>(instances, R3D_InstanceFlags.R3D_INSTANCE_POSITION);
+        var instances = R3D.LoadInstanceBuffer(GRID_SIZE * GRID_SIZE, InstanceFlags.Position);
+        var positions = R3D.MapInstances<Vector3>(instances, InstanceFlags.Position);
         for (int x = -GRID_SIZE/2; x < GRID_SIZE/2; x++) {
             for (int z = -GRID_SIZE/2; z < GRID_SIZE/2; z++) {
                 positions[(z+GRID_SIZE/2)*GRID_SIZE + (x+GRID_SIZE/2)] = new Vector3(x + 0.5f, 0, z + 0.5f);
             }
         }
-        R3D_UnmapInstances(instances, R3D_InstanceFlags.R3D_INSTANCE_POSITION);
+        R3D.UnmapInstances(instances, InstanceFlags.Position);
 
         // Create lights
-        var lights = stackalloc R3D_Light[NUM_LIGHTS];
+        var lights = stackalloc Light[NUM_LIGHTS];
         for (int i = 0; i < NUM_LIGHTS; i++) {
-            lights[i] = R3D_CreateLight(R3D_LightType.R3D_LIGHT_OMNI);
-            R3D_SetLightPosition(lights[i], new Vector3(Randf(-GRID_SIZE/2f, GRID_SIZE/2f), Randf(1.0f, 5.0f), Randf(-GRID_SIZE/2f, GRID_SIZE/2f)));
-            R3D_SetLightColor(lights[i], ColorFromHSV(Randf(0.0f, 360.0f), 1.0f, 1.0f));
-            R3D_SetLightRange(lights[i], Randf(8.0f, 16.0f));
-            R3D_SetLightActive(lights[i], true);
-            //R3D_EnableShadow(lights[i]);
+            lights[i] = R3D.CreateLight(LightType.Omni);
+            R3D.SetLightPosition(lights[i], new Vector3(Randf(-GRID_SIZE/2f, GRID_SIZE/2f), Randf(1.0f, 5.0f), Randf(-GRID_SIZE/2f, GRID_SIZE/2f)));
+            R3D.SetLightColor(lights[i], ColorFromHSV(Randf(0.0f, 360.0f), 1.0f, 1.0f));
+            R3D.SetLightRange(lights[i], Randf(8.0f, 16.0f));
+            R3D.SetLightActive(lights[i], true);
+            //R3D.EnableShadow(lights[i]);
         }
 
         // Setup camera
@@ -73,16 +72,16 @@ public static class Lights
             ClearBackground(Color.RayWhite);
 
             // Draw scene
-            R3D_Begin(camera);
-                R3D_DrawMesh(plane, material, new Vector3(0, -0.25f, 0), 1.0f);
-                R3D_DrawMeshInstanced(cube, material, instances, GRID_SIZE*GRID_SIZE);
-            R3D_End();
+            R3D.Begin(camera);
+                R3D.DrawMesh(plane, material, new Vector3(0, -0.25f, 0), 1.0f);
+                R3D.DrawMeshInstanced(cube, material, instances, GRID_SIZE*GRID_SIZE);
+            R3D.End();
 
             // Optionally show lights shapes
             if (IsKeyDown(KeyboardKey.F)) {
                 BeginMode3D(camera);
                 for (int i = 0; i < NUM_LIGHTS; i++) {
-                    R3D_DrawLightShape(lights[i]);
+                    R3D.DrawLightShape(lights[i]);
                 }
                 EndMode3D();
             }
@@ -94,10 +93,10 @@ public static class Lights
         }
 
         // Cleanup
-        R3D_UnloadInstanceBuffer(instances);
-        R3D_UnloadMesh(cube);
-        R3D_UnloadMesh(plane);
-        R3D_Close();
+        R3D.UnloadInstanceBuffer(instances);
+        R3D.UnloadMesh(cube);
+        R3D.UnloadMesh(plane);
+        R3D.Close();
 
         CloseWindow();
 

@@ -1,15 +1,14 @@
-﻿using System.Numerics;
-using R3d_cs;
+using System.Numerics;
+using R3D_cs;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
-using static R3d_cs.R3D;
 
 namespace Examples;
 
 public static class Instanced
 {
     private const int INSTANCE_COUNT = 1000;
-    
+
     public static int Main()
     {
         // Initialize window
@@ -17,22 +16,22 @@ public static class Instanced
         SetTargetFPS(60);
 
         // Initialize R3D
-        R3D_Init(GetScreenWidth(), GetScreenHeight());
+        R3D.Init(GetScreenWidth(), GetScreenHeight());
 
         // Set ambient light
-        R3D_ENVIRONMENT_SET((ref env) => env.ambient.color = Color.DarkGray);
+        R3D.SetEnvironmentEx((ref env) => env.Ambient.Color = Color.DarkGray);
 
         // Create cube mesh and default material
-        R3D_Mesh mesh = R3D_GenMeshCube(1, 1, 1);
-        R3D_Material material = R3D_GetDefaultMaterial();
+        var mesh = R3D.GenMeshCube(1, 1, 1);
+        var material = R3D.GetDefaultMaterial();
 
         // Generate random transforms and colors for instances
-        R3D_InstanceBuffer instances = R3D_LoadInstanceBuffer(INSTANCE_COUNT, R3D_InstanceFlags.R3D_INSTANCE_POSITION | R3D_InstanceFlags.R3D_INSTANCE_ROTATION | 
-                                                                                      R3D_InstanceFlags.R3D_INSTANCE_SCALE | R3D_InstanceFlags.R3D_INSTANCE_COLOR);
-        var positions = R3D_MapInstances<Vector3>(instances, R3D_InstanceFlags.R3D_INSTANCE_POSITION);
-        var rotations = R3D_MapInstances<Quaternion>(instances, R3D_InstanceFlags.R3D_INSTANCE_ROTATION);
-        var scales = R3D_MapInstances<Vector3>(instances, R3D_InstanceFlags.R3D_INSTANCE_SCALE);
-        var colors = R3D_MapInstances<Color>(instances, R3D_InstanceFlags.R3D_INSTANCE_COLOR);
+        var instances = R3D.LoadInstanceBuffer(INSTANCE_COUNT, InstanceFlags.Position | InstanceFlags.Rotation |
+                                                              InstanceFlags.Scale | InstanceFlags.Color);
+        var positions = R3D.MapInstances<Vector3>(instances, InstanceFlags.Position);
+        var rotations = R3D.MapInstances<Quaternion>(instances, InstanceFlags.Rotation);
+        var scales = R3D.MapInstances<Vector3>(instances, InstanceFlags.Scale);
+        var colors = R3D.MapInstances<Color>(instances, InstanceFlags.Color);
 
         for (int i = 0; i < INSTANCE_COUNT; i++)
         {
@@ -56,13 +55,13 @@ public static class Instanced
             );
         }
 
-        R3D_UnmapInstances(instances, R3D_InstanceFlags.R3D_INSTANCE_POSITION | R3D_InstanceFlags.R3D_INSTANCE_ROTATION | 
-                                      R3D_InstanceFlags.R3D_INSTANCE_SCALE | R3D_InstanceFlags.R3D_INSTANCE_COLOR);
+        R3D.UnmapInstances(instances, InstanceFlags.Position | InstanceFlags.Rotation |
+                                      InstanceFlags.Scale | InstanceFlags.Color);
 
         // Setup directional light
-        R3D_Light light = R3D_CreateLight(R3D_LightType.R3D_LIGHT_DIR);
-        R3D_SetLightDirection(light, new Vector3(0, -1, 0));
-        R3D_SetLightActive(light, true);
+        var light = R3D.CreateLight(LightType.Dir);
+        R3D.SetLightDirection(light, new Vector3(0, -1, 0));
+        R3D.SetLightActive(light, true);
 
         // Setup camera
         Camera3D camera = new Camera3D {
@@ -83,18 +82,18 @@ public static class Instanced
             BeginDrawing();
                 ClearBackground(Color.RayWhite);
 
-                R3D_Begin(camera);
-                    R3D_DrawMeshInstanced(mesh, material, instances, INSTANCE_COUNT);
-                R3D_End();
+                R3D.Begin(camera);
+                    R3D.DrawMeshInstanced(mesh, material, instances, INSTANCE_COUNT);
+                R3D.End();
 
                 DrawFPS(10, 10);
             EndDrawing();
         }
 
         // Cleanup
-        R3D_UnloadMaterial(material);
-        R3D_UnloadMesh(mesh);
-        R3D_Close();
+        R3D.UnloadMaterial(material);
+        R3D.UnloadMesh(mesh);
+        R3D.Close();
 
         CloseWindow();
 
