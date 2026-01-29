@@ -22,16 +22,5 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-
-    <ItemGroup>
-      <None Update="runtimes\win-x64\native\r3d.dll">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="enums\" />
-      <Folder Include="types\" />
-    </ItemGroup>
-
+    
 </Project>
