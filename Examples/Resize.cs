@@ -21,7 +21,7 @@ public static class Resize
         // Create sphere mesh and materials
         var sphere = R3D.GenMeshSphere(0.5f, 64, 64);
         var materials = new Material[5];
-        for (int i = 0; i < 5; i++)
+        for (var i = 0; i < 5; i++)
         {
             materials[i] = R3D.GetDefaultMaterial();
             materials[i].Albedo.Color = Color.FromHSV((float)i / 5 * 330, 1.0f, 1.0f);
@@ -33,7 +33,8 @@ public static class Resize
         R3D.SetLightActive(light, true);
 
         // Setup camera
-        Camera3D camera = new Camera3D {
+        var camera = new Camera3D
+        {
             Position = new Vector3(0, 2, 2),
             Target = Vector3.Zero,
             Up = Vector3.UnitY,
@@ -41,8 +42,8 @@ public static class Resize
         };
 
         // Current blit state
-        AspectMode aspect = AspectMode.Expand;
-        UpscaleMode upscale = UpscaleMode.Nearest;
+        var aspect = AspectMode.Expand;
+        var upscale = UpscaleMode.Nearest;
 
         // Main loop
         while (!WindowShouldClose())
@@ -50,13 +51,15 @@ public static class Resize
             UpdateCamera(ref camera, CameraMode.Orbital);
 
             // Toggle aspect keep
-            if (IsKeyPressed(KeyboardKey.R)) {
+            if (IsKeyPressed(KeyboardKey.R))
+            {
                 aspect = (AspectMode)(((int)aspect + 1) % 2);
                 R3D.SetAspectMode(aspect);
             }
 
             // Toggle linear filtering
-            if (IsKeyPressed(KeyboardKey.F)) {
+            if (IsKeyPressed(KeyboardKey.F))
+            {
                 upscale = (UpscaleMode)(((int)upscale + 1) % 4);
                 R3D.SetUpscaleMode(upscale);
             }
@@ -89,21 +92,25 @@ public static class Resize
 
     private static string GetAspectModeName(AspectMode mode)
     {
-        switch (mode) {
+        switch (mode)
+        {
             case AspectMode.Expand: return "EXPAND";
             case AspectMode.Keep: return "KEEP";
         }
+
         return "UNKNOWN";
     }
 
     private static string GetUpscaleModeName(UpscaleMode mode)
     {
-        switch (mode) {
+        switch (mode)
+        {
             case UpscaleMode.Nearest: return "NEAREST";
             case UpscaleMode.Linear: return "LINEAR";
             case UpscaleMode.Bicubic: return "BICUBIC";
             case UpscaleMode.Lanczos: return "LANCZOS";
         }
+
         return "UNKNOWN";
     }
 }

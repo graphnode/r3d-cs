@@ -31,17 +31,18 @@ public static class Bloom
         // Create cube mesh and material
         var cube = R3D.GenMeshCube(1.0f, 1.0f, 1.0f);
         var material = R3D.GetDefaultMaterial();
-        float hueCube = 0.0f;
+        var hueCube = 0.0f;
         material.Emission.Color = ColorFromHSV(hueCube, 1.0f, 1.0f);
         material.Emission.Energy = 1.0f;
         material.Albedo.Color = Color.Black;
 
         // Setup camera
-        Camera3D camera = new Camera3D {
+        var camera = new Camera3D
+        {
             Position = new Vector3(0, 3.5f, 5),
-            Target   = Vector3.Zero,
-            Up       = Vector3.UnitY,
-            FovY     = 60
+            Target = Vector3.Zero,
+            Up = Vector3.UnitY,
+            FovY = 60
         };
 
         // Main loop
@@ -51,7 +52,8 @@ public static class Bloom
             UpdateCamera(ref camera, CameraMode.Orbital);
 
             // Change cube color
-            if (IsKeyDown(KeyboardKey.C)) {
+            if (IsKeyDown(KeyboardKey.C))
+            {
                 hueCube = Raymath.Wrap(hueCube + 45.0f * delta, 0, 360);
                 material.Emission.Color = ColorFromHSV(hueCube, 1.0f, 1.0f);
             }
@@ -73,24 +75,23 @@ public static class Bloom
             R3D.SetEnvironmentEx((ref env) => env.Bloom.Levels = levels);
 
             // Draw scene
-            if (IsKeyPressed(KeyboardKey.Space)) {
+            if (IsKeyPressed(KeyboardKey.Space))
                 R3D.SetEnvironmentEx((ref env) => env.Bloom.Mode = (R3D_cs.Bloom)(((int)R3D.GetEnvironmentEx().Bloom.Mode + 1) % ((int)R3D_cs.Bloom.Screen + 1)));
-            }
 
             BeginDrawing();
-                ClearBackground(Color.RayWhite);
+            ClearBackground(Color.RayWhite);
 
-                R3D.Begin(camera);
-                    R3D.DrawMesh(cube, material, Vector3.Zero, 1.0f);
-                R3D.End();
+            R3D.Begin(camera);
+            R3D.DrawMesh(cube, material, Vector3.Zero, 1.0f);
+            R3D.End();
 
-                var env = R3D.GetEnvironmentEx();
-                
-                // Draw bloom info
-                DrawTextRight($"Mode: {GetBloomModeName()}", 10, 20, Color.Lime);
-                DrawTextRight($"Intensity: {env.Bloom.Intensity:.00}", 40, 20, Color.Lime);
-                DrawTextRight($"Filter Radius: {env.Bloom.FilterRadius:.00}", 70, 20, Color.Lime);
-                DrawTextRight($"Levels: {env.Bloom.Levels:.00}", 100, 20, Color.Lime);
+            var env = R3D.GetEnvironmentEx();
+
+            // Draw bloom info
+            DrawTextRight($"Mode: {GetBloomModeName()}", 10, 20, Color.Lime);
+            DrawTextRight($"Intensity: {env.Bloom.Intensity:.00}", 40, 20, Color.Lime);
+            DrawTextRight($"Filter Radius: {env.Bloom.FilterRadius:.00}", 70, 20, Color.Lime);
+            DrawTextRight($"Levels: {env.Bloom.Levels:.00}", 100, 20, Color.Lime);
 
             EndDrawing();
         }

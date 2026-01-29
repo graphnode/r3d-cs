@@ -27,13 +27,13 @@ public static class Instanced
 
         // Generate random transforms and colors for instances
         var instances = R3D.LoadInstanceBuffer(INSTANCE_COUNT, InstanceFlags.Position | InstanceFlags.Rotation |
-                                                              InstanceFlags.Scale | InstanceFlags.Color);
+                                                               InstanceFlags.Scale | InstanceFlags.Color);
         var positions = R3D.MapInstances<Vector3>(instances, InstanceFlags.Position);
         var rotations = R3D.MapInstances<Quaternion>(instances, InstanceFlags.Rotation);
         var scales = R3D.MapInstances<Vector3>(instances, InstanceFlags.Scale);
         var colors = R3D.MapInstances<Color>(instances, InstanceFlags.Color);
 
-        for (int i = 0; i < INSTANCE_COUNT; i++)
+        for (var i = 0; i < INSTANCE_COUNT; i++)
         {
             positions[i] = new Vector3(
                 (float)GetRandomValue(-50000, 50000) / 1000,
@@ -64,7 +64,8 @@ public static class Instanced
         R3D.SetLightActive(light, true);
 
         // Setup camera
-        Camera3D camera = new Camera3D {
+        var camera = new Camera3D
+        {
             Position = new Vector3(0, 2, 2),
             Target = Vector3.Zero,
             Up = Vector3.UnitY,

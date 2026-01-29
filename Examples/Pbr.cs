@@ -44,8 +44,8 @@ public static class Pbr
         // Load model
         R3D.SetTextureFilter(TextureFilter.Anisotropic4X);
         var model = R3D.LoadModel("resources/models/DamagedHelmet.glb");
-        Matrix4x4 modelMatrix = Matrix4x4.Identity;
-        float modelScale = 1.0f;
+        var modelMatrix = Matrix4x4.Identity;
+        var modelScale = 1.0f;
 
         // Setup camera
         var camera = new Camera3D
@@ -65,9 +65,9 @@ public static class Pbr
             // Rotate model with left mouse button
             if (IsMouseButtonDown(MouseButton.Left))
             {
-                float pitch = (GetMouseDelta().Y * 0.005f) / modelScale;
-                float yaw   = (GetMouseDelta().X * 0.005f) / modelScale;
-                var rotate  = Matrix4x4.CreateFromYawPitchRoll(yaw, pitch, 0.0f);
+                float pitch = GetMouseDelta().Y * 0.005f / modelScale;
+                float yaw = GetMouseDelta().X * 0.005f / modelScale;
+                var rotate = Matrix4x4.CreateFromYawPitchRoll(yaw, pitch, 0.0f);
                 modelMatrix *= rotate;
             }
 

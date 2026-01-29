@@ -12,17 +12,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\R3D-cs\R3D-cs.csproj" />
+        <ProjectReference Include="..\R3D-cs\R3D-cs.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Raylib-cs" Version="7.0.2" />
+        <PackageReference Include="Raylib-cs" Version="7.0.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="resources\**\*.*">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <None Update="resources\**\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
-    
+
 </Project>

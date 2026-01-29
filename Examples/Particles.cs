@@ -12,14 +12,6 @@ public static class Particles
 {
     private const int MAX_PARTICLES = 4096;
 
-    [StructLayout(LayoutKind.Sequential)]
-    private struct Particle
-    {
-        public Vector3 pos;
-        public Vector3 vel;
-        public float life;
-    }
-
     public static unsafe int Main()
     {
         // Initialize window
@@ -37,8 +29,8 @@ public static class Particles
         });
 
         // Generate a gradient as emission texture for our particles
-        Image image = GenImageGradientRadial(64, 64, 0.0f, Color.White, Color.Black);
-        Texture2D texture = LoadTextureFromImage(image);
+        var image = GenImageGradientRadial(64, 64, 0.0f, Color.White, Color.Black);
+        var texture = LoadTextureFromImage(image);
         UnloadImage(image);
 
         // Generate a quad mesh for our particles
@@ -57,7 +49,8 @@ public static class Particles
         var instances = R3D.LoadInstanceBuffer(MAX_PARTICLES, InstanceFlags.Position);
 
         // Setup camera
-        Camera3D camera = new Camera3D {
+        var camera = new Camera3D
+        {
             Position = new Vector3(-7, 7, -7),
             Target = new Vector3(0, 1, 0),
             Up = Vector3.UnitY,
@@ -66,9 +59,9 @@ public static class Particles
         };
 
         // CPU buffer for storing particles
-        Particle[] particles = new Particle[MAX_PARTICLES];
+        var particles = new Particle[MAX_PARTICLES];
         Span<Vector3> positions = stackalloc Vector3[MAX_PARTICLES];
-        int particleCount = 0;
+        var particleCount = 0;
 
         while (!WindowShouldClose())
         {
@@ -76,8 +69,9 @@ public static class Particles
             UpdateCamera(ref camera, CameraMode.Orbital);
 
             // Spawn particles
-            for (int i = 0; i < 10; i++) {
-                if (particleCount < MAX_PARTICLES) {
+            for (var i = 0; i < 10; i++)
+                if (particleCount < MAX_PARTICLES)
+                {
                     float angle = GetRandomValue(0, 360) * DEG2RAD;
                     particles[particleCount].pos = Vector3.Zero;
                     particles[particleCount].vel = new Vector3(
@@ -88,22 +82,24 @@ public static class Particles
                     particles[particleCount].life = 1.0f;
                     particleCount++;
                 }
-            }
 
             // Update particles
-            int alive = 0;
-            for (int i = 0; i < particleCount; i++) {
+            var alive = 0;
+            for (var i = 0; i < particleCount; i++)
+            {
                 particles[i].vel.Y -= 9.81f * dt;
                 particles[i].pos.X += particles[i].vel.X * dt;
                 particles[i].pos.Y += particles[i].vel.Y * dt;
                 particles[i].pos.Z += particles[i].vel.Z * dt;
                 particles[i].life -= dt * 0.5f;
-                if (particles[i].life > 0) {
+                if (particles[i].life > 0)
+                {
                     positions[alive] = particles[i].pos;
                     particles[alive] = particles[i];
                     alive++;
                 }
             }
+
             particleCount = alive;
 
             R3D.UploadInstances(instances, InstanceFlags.Position, 0, positions, particleCount);
@@ -124,5 +120,13 @@ public static class Particles
         CloseWindow();
 
         return 0;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct Particle
+    {
+        public Vector3 pos;
+        public Vector3 vel;
+        public float life;
     }
 }

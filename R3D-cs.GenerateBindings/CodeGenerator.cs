@@ -10,17 +10,17 @@ using static R3D_cs.GenerateBindings.TypeMapper;
 namespace R3D_cs.GenerateBindings;
 
 /// <summary>
-/// Generates C# binding code from parsed C++ headers.
+///     Generates C# binding code from parsed C++ headers.
 /// </summary>
 public class CodeGenerator(string outputDir)
 {
     private const string Namespace = "R3D_cs";
     private const string NativeLibName = "r3d";
-    
+
     /// <summary>
-    /// Generates all binding files from the parsed compilation.
+    ///     Generates all binding files from the parsed compilation.
     /// </summary>
-    public void Generate(CppCompilation compilation)
+    public void Generate(CppCompilation compilation, Version version)
     {
         // Clear output directories
         Console.WriteLine("Preparing output directories...");
@@ -42,13 +42,13 @@ public class CodeGenerator(string outputDir)
         Console.WriteLine($"  Generated {miscCount} misc files");
 
         Console.WriteLine("Generating interop file...");
-        int funcCount = GenerateInteropFile(compilation);
+        int funcCount = GenerateInteropFile(compilation, version);
         Console.WriteLine($"  Generated interop file with {funcCount} functions");
     }
 
     private int GenerateEnumsFiles(CppCompilation compilation)
     {
-        int count = 0;
+        var count = 0;
 
         foreach (var @enum in compilation.Enums)
         {
@@ -90,7 +90,7 @@ public class CodeGenerator(string outputDir)
                 if (itemName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                     itemName = itemName[prefix.Length..];
 
-                bool hasComment = CommentGenerator.Generate(sb, item.Comment, $"{@enum.Name}.{item.Name}", prefix: "    ");
+                bool hasComment = CommentGenerator.Generate(sb, item.Comment, $"{@enum.Name}.{item.Name}", "    ");
 
                 if (isBitflag)
                     sb.AppendLine($"    {itemName} = {item.Value},");
@@ -112,7 +112,7 @@ public class CodeGenerator(string outputDir)
 
     private int GenerateStructsFiles(CppCompilation compilation)
     {
-        int count = 0;
+        var count = 0;
 
         foreach (var @class in compilation.Classes)
         {
@@ -146,7 +146,7 @@ public class CodeGenerator(string outputDir)
                 if (fieldName.EndsWith("Callback", StringComparison.OrdinalIgnoreCase))
                     fieldType = "IntPtr";
 
-                CommentGenerator.Generate(sb, field.Comment, field.Name, prefix: "    ");
+                CommentGenerator.Generate(sb, field.Comment, field.Name, "    ");
 
                 if (isFixedBuffer)
                     sb.AppendLine($"    public fixed {fieldType} {fieldName}[{fixedSize}];");
@@ -167,7 +167,7 @@ public class CodeGenerator(string outputDir)
 
     private int GenerateMiscFiles(CppCompilation compilation)
     {
-        int count = 0;
+        var count = 0;
 
         foreach (var typedef in compilation.Typedefs)
         {
@@ -208,6 +208,7 @@ public class CodeGenerator(string outputDir)
                     File.WriteAllText(Path.Combine(outputDir, "types", $"{name}.g.cs"), sb.ToString());
                     count++;
                 }
+
                 continue;
             }
 
@@ -255,7 +256,7 @@ public class CodeGenerator(string outputDir)
                     if (optionName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                         optionName = optionName[prefix.Length..];
 
-                    bool hasComment = CommentGenerator.GenerateForMacro(sb, macro, macro.Name, prefix: "    ");
+                    bool hasComment = CommentGenerator.GenerateForMacro(sb, macro, macro.Name, "    ");
 
                     sb.AppendLine($"    {optionName} = {macro.Value},");
 
@@ -294,7 +295,7 @@ public class CodeGenerator(string outputDir)
         return count;
     }
 
-    private int GenerateInteropFile(CppCompilation compilation)
+    private int GenerateInteropFile(CppCompilation compilation, Version version)
     {
         var sb = new StringBuilder();
         GenerateHeader(sb,
@@ -303,10 +304,16 @@ public class CodeGenerator(string outputDir)
         sb.AppendLine("[SuppressUnmanagedCodeSecurity]");
         sb.AppendLine("public static unsafe partial class R3D");
         sb.AppendLine("{");
+        sb.AppendLine();
+        sb.AppendLine("    /// <summary>");
+        sb.AppendLine("    /// Used by DllImport to load the native library");
+        sb.AppendLine("    /// </summary>");
         sb.AppendLine($"    public const string NativeLibName = \"{NativeLibName}\";");
         sb.AppendLine();
+        sb.AppendLine($"    public const string R3D_VERSION = \"{version}\";");
+        sb.AppendLine();
 
-        int funcCount = 0;
+        var funcCount = 0;
 
         foreach (var function in compilation.Functions)
         {
@@ -315,9 +322,12 @@ public class CodeGenerator(string outputDir)
 
             string? name = function.Name;
             (string returnType, _, _, _) = MapType(function.ReturnType);
-            var hasStringParam = function.Parameters.Any(p => p.Type is CppPointerType { ElementType: CppQualifiedType { ElementType: CppPrimitiveType { Kind: CppPrimitiveKind.Char } } });
+            bool hasStringParam = function.Parameters.Any(p => p.Type is CppPointerType
+            {
+                ElementType: CppQualifiedType { ElementType: CppPrimitiveType { Kind: CppPrimitiveKind.Char } }
+            });
 
-            CommentGenerator.Generate(sb, function.Comment, name, prefix: "    ");
+            CommentGenerator.Generate(sb, function.Comment, name, "    ");
 
             sb.Append("    [LibraryImport(NativeLibName");
             sb.Append($", EntryPoint = \"{name}\"");
@@ -341,7 +351,7 @@ public class CodeGenerator(string outputDir)
                     sb.Append("[MarshalAs(UnmanagedType.I1)] ");
 
                 // Convert pointer parameters to ref/out where appropriate
-                var (modifier, finalType) = GetParameterModifier(param.Type, paramType, name);
+                (string? modifier, string finalType) = GetParameterModifier(param.Type, paramType, name);
                 if (modifier != null)
                     sb.Append($"{modifier} ");
 
@@ -372,12 +382,14 @@ public class CodeGenerator(string outputDir)
                 sb.AppendLine($"using {include};");
             sb.AppendLine();
         }
+
         if (other != null)
         {
             foreach (string line in other)
                 sb.AppendLine(line);
             sb.AppendLine();
         }
+
         sb.AppendLine($"namespace {Namespace};");
         sb.AppendLine();
     }
@@ -386,7 +398,7 @@ public class CodeGenerator(string outputDir)
     {
         if (sourceFile == null)
             return false;
-        
+
         // Normalize path separators for cross-platform compatibility
         char sep = Path.DirectorySeparatorChar;
         string normalized = sourceFile.Replace('/', sep).Replace('\\', sep);
@@ -396,14 +408,10 @@ public class CodeGenerator(string outputDir)
     private static void ClearDirectory(string directory)
     {
         if (Directory.Exists(directory))
-        {
             // Only delete generated files (*.g.cs), preserve hand-written files
-            foreach (var file in Directory.GetFiles(directory, "*.g.cs"))
+            foreach (string file in Directory.GetFiles(directory, "*.g.cs"))
                 File.Delete(file);
-        }
         else
-        {
             Directory.CreateDirectory(directory);
-        }
     }
 }

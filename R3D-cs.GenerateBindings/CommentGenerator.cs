@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -6,12 +7,15 @@ using CppAst;
 namespace R3D_cs.GenerateBindings;
 
 /// <summary>
-/// Generates C# XML documentation comments from C++ Doxygen-style comments.
+///     Generates C# XML documentation comments from C++ Doxygen-style comments.
 /// </summary>
 public static class CommentGenerator
 {
+    // Cache for file contents to avoid re-reading
+    private static readonly Dictionary<string, string[]> FileCache = new();
+
     /// <summary>
-    /// Generates XML documentation comments for C# from a CppAst comment.
+    ///     Generates XML documentation comments for C# from a CppAst comment.
     /// </summary>
     /// <param name="sb">StringBuilder to append the generated comments to.</param>
     /// <param name="comment">The CppAst comment to process.</param>
@@ -20,7 +24,7 @@ public static class CommentGenerator
     public static bool Generate(StringBuilder sb, CppComment? comment, string? originalName = null, string prefix = "")
     {
         var hasComment = false;
-        
+
         if (comment != null)
         {
             string? briefText = null;
@@ -34,7 +38,6 @@ public static class CommentGenerator
             var inParams = false;
 
             foreach (var child in comment.Children)
-            {
                 switch (child)
                 {
                     case CppCommentBlockCommand { CommandName: "brief" } cmd:
@@ -81,13 +84,11 @@ public static class CommentGenerator
                             foundBrief = true;
                         }
                         else if (!inParams)
-                        {
                             // Additional paragraphs after brief go into description
                             descriptionTexts.Add(paragraphText);
-                        }
+
                         break;
                 }
-            }
 
             // Generate <summary>
             if (!string.IsNullOrWhiteSpace(briefText))
@@ -101,6 +102,7 @@ public static class CommentGenerator
                     AppendMultilineText(sb, desc, prefix);
                     sb.AppendLine($"{prefix}/// </para>");
                 }
+
                 sb.AppendLine($"{prefix}/// </summary>");
                 hasComment = true;
             }
@@ -131,10 +133,7 @@ public static class CommentGenerator
                     AppendMultilineText(sb, warning, prefix);
                 }
 
-                foreach (string remark in remarkTexts)
-                {
-                    AppendMultilineText(sb, remark, prefix);
-                }
+                foreach (string remark in remarkTexts) AppendMultilineText(sb, remark, prefix);
 
                 sb.AppendLine($"{prefix}/// </remarks>");
                 hasComment = true;
@@ -151,7 +150,7 @@ public static class CommentGenerator
     }
 
     /// <summary>
-    /// Extracts all text content from a comment node recursively.
+    ///     Extracts all text content from a comment node recursively.
     /// </summary>
     private static string ExtractText(CppComment comment)
     {
@@ -175,15 +174,11 @@ public static class CommentGenerator
                 if (sb.Length > 0)
                 {
                     if (isListItem)
-                    {
                         // List items get their own line
                         sb.AppendLine();
-                    }
                     else if (!char.IsWhiteSpace(sb[^1]))
-                    {
                         // Regular text gets a space separator
                         sb.Append(' ');
-                    }
                 }
 
                 sb.Append(trimmedText);
@@ -192,24 +187,19 @@ public static class CommentGenerator
             case CppCommentInlineCommand inlineCmd:
                 // Handle inline commands like @c, @p, etc.
                 if (!string.IsNullOrEmpty(inlineCmd.CommandName))
-                {
                     foreach (string? arg in inlineCmd.Arguments)
                         sb.Append(arg);
-                }
                 break;
 
             default:
-                foreach (var child in comment.Children)
-                {
-                    ExtractTextRecursive(child, sb);
-                }
+                foreach (var child in comment.Children) ExtractTextRecursive(child, sb);
                 break;
         }
     }
 
     /// <summary>
-    /// Appends text that may contain multiple lines, prefixing each line appropriately.
-    /// Converts bullet lists (lines starting with - or *) to proper XML list elements.
+    ///     Appends text that may contain multiple lines, prefixing each line appropriately.
+    ///     Converts bullet lists (lines starting with - or *) to proper XML list elements.
     /// </summary>
     private static void AppendMultilineText(StringBuilder sb, string text, string prefix)
     {
@@ -244,18 +234,16 @@ public static class CommentGenerator
                     sb.AppendLine($"{prefix}/// </list>");
                     inList = false;
                 }
+
                 sb.AppendLine($"{prefix}/// {XmlEscape(trimmedLine)}");
             }
         }
 
-        if (inList)
-        {
-            sb.AppendLine($"{prefix}/// </list>");
-        }
+        if (inList) sb.AppendLine($"{prefix}/// </list>");
     }
 
     /// <summary>
-    /// Escapes special XML characters.
+    ///     Escapes special XML characters.
     /// </summary>
     private static string XmlEscape(string text)
     {
@@ -266,12 +254,9 @@ public static class CommentGenerator
             .Replace("\"", "&quot;");
     }
 
-    // Cache for file contents to avoid re-reading
-    private static readonly Dictionary<string, string[]> FileCache = new();
-
     /// <summary>
-    /// Generates XML documentation comments for a macro by extracting the comment from the source file.
-    /// Priority: inline comment (same line) > block comment (above line)
+    ///     Generates XML documentation comments for a macro by extracting the comment from the source file.
+    ///     Priority: inline comment (same line) > block comment (above line)
     /// </summary>
     /// <param name="sb">StringBuilder to append the generated comments to.</param>
     /// <param name="macro">The CppMacro to extract comments for.</param>
@@ -281,7 +266,7 @@ public static class CommentGenerator
     public static bool GenerateForMacro(StringBuilder sb, CppMacro macro, string? originalName = null, string prefix = "")
     {
         var hasComment = false;
-        
+
         if (!string.IsNullOrEmpty(macro.SourceFile))
         {
             // First try inline comment (same line) - has priority
@@ -310,7 +295,7 @@ public static class CommentGenerator
     }
 
     /// <summary>
-    /// Extracts an inline comment from the same line (e.g., /*&lt; Vector3 */ or // comment)
+    ///     Extracts an inline comment from the same line (e.g., /*&lt; Vector3 */ or // comment)
     /// </summary>
     private static string? ExtractInlineComment(string filePath, int lineNumber)
     {
@@ -330,10 +315,10 @@ public static class CommentGenerator
         string line = lines[lineIndex];
 
         // Look for /* ... */ style inline comment
-        int commentStart = line.IndexOf("/*");
+        int commentStart = line.IndexOf("/*", StringComparison.Ordinal);
         if (commentStart >= 0)
         {
-            int commentEnd = line.IndexOf("*/", commentStart + 2);
+            int commentEnd = line.IndexOf("*/", commentStart + 2, StringComparison.Ordinal);
             if (commentEnd > commentStart)
             {
                 string comment = line[(commentStart + 2)..commentEnd].Trim();
@@ -346,7 +331,7 @@ public static class CommentGenerator
         }
 
         // Look for // style inline comment
-        int slashComment = line.IndexOf("//");
+        int slashComment = line.IndexOf("//", StringComparison.Ordinal);
         if (slashComment >= 0)
         {
             string comment = line[(slashComment + 2)..].Trim();
@@ -361,7 +346,7 @@ public static class CommentGenerator
     }
 
     /// <summary>
-    /// Extracts the Doxygen comment block preceding a given line in a source file.
+    ///     Extracts the Doxygen comment block preceding a given line in a source file.
     /// </summary>
     private static string? ExtractBlockCommentAbove(string filePath, int lineNumber)
     {
@@ -422,10 +407,9 @@ public static class CommentGenerator
     }
 
     /// <summary>
-    /// Generates XML documentation from a raw Doxygen comment string.
+    ///     Generates XML documentation from a raw Doxygen comment string.
     /// </summary>
     /// <param name="sb">StringBuilder to append the generated comments to.</param>
-    /// <param name="originalName">The original name of the entity the comment is for.</param>
     /// <param name="rawComment">The raw comment string.</param>
     /// <param name="prefix">Line prefix for indentation.</param>
     /// <returns>True if a comment was generated, false otherwise.</returns>
@@ -452,6 +436,7 @@ public static class CommentGenerator
                     SaveCurrentSection(currentSection, currentText.ToString().Trim(), ref briefText, descriptionTexts, remarkTexts, warningTexts);
                     currentText.Clear();
                 }
+
                 continue;
             }
 
@@ -463,6 +448,7 @@ public static class CommentGenerator
                     SaveCurrentSection(currentSection, currentText.ToString().Trim(), ref briefText, descriptionTexts, remarkTexts, warningTexts);
                     currentText.Clear();
                 }
+
                 currentSection = "brief";
                 string text = trimmed.Length > 6 ? trimmed[6..].TrimStart() : "";
                 if (!string.IsNullOrEmpty(text))
@@ -475,6 +461,7 @@ public static class CommentGenerator
                     SaveCurrentSection(currentSection, currentText.ToString().Trim(), ref briefText, descriptionTexts, remarkTexts, warningTexts);
                     currentText.Clear();
                 }
+
                 currentSection = "note";
                 string text = trimmed.Length > 5 ? trimmed[5..].TrimStart() : "";
                 if (!string.IsNullOrEmpty(text))
@@ -487,6 +474,7 @@ public static class CommentGenerator
                     SaveCurrentSection(currentSection, currentText.ToString().Trim(), ref briefText, descriptionTexts, remarkTexts, warningTexts);
                     currentText.Clear();
                 }
+
                 currentSection = "warning";
                 string text = trimmed.Length > 8 ? trimmed[8..].TrimStart() : "";
                 if (!string.IsNullOrEmpty(text))
@@ -514,10 +502,7 @@ public static class CommentGenerator
         }
 
         // Save any remaining text
-        if (currentText.Length > 0)
-        {
-            SaveCurrentSection(currentSection, currentText.ToString().Trim(), ref briefText, descriptionTexts, remarkTexts, warningTexts);
-        }
+        if (currentText.Length > 0) SaveCurrentSection(currentSection, currentText.ToString().Trim(), ref briefText, descriptionTexts, remarkTexts, warningTexts);
 
         // Generate output
         if (!string.IsNullOrWhiteSpace(briefText))
@@ -530,6 +515,7 @@ public static class CommentGenerator
                 AppendMultilineText(sb, desc, prefix);
                 sb.AppendLine($"{prefix}/// </para>");
             }
+
             sb.AppendLine($"{prefix}/// </summary>");
         }
 
@@ -541,10 +527,8 @@ public static class CommentGenerator
                 sb.AppendLine($"{prefix}/// <b>Warning:</b>");
                 AppendMultilineText(sb, warning, prefix);
             }
-            foreach (string remark in remarkTexts)
-            {
-                AppendMultilineText(sb, remark, prefix);
-            }
+
+            foreach (string remark in remarkTexts) AppendMultilineText(sb, remark, prefix);
             sb.AppendLine($"{prefix}/// </remarks>");
         }
 

@@ -42,7 +42,8 @@ public static class Billboards
         var instances = R3D.LoadInstanceBuffer(64, InstanceFlags.Position | InstanceFlags.Scale);
         var positions = R3D.MapInstances<Vector3>(instances, InstanceFlags.Position);
         var scales = R3D.MapInstances<Vector3>(instances, InstanceFlags.Scale);
-        for (int i = 0; i < 64; i++) {
+        for (var i = 0; i < 64; i++)
+        {
             float scaleFactor = GetRandomValue(25, 50) / 10.0f;
             scales[i] = new Vector3(scaleFactor, scaleFactor, 1.0f);
             positions[i] = new Vector3(
@@ -51,6 +52,7 @@ public static class Billboards
                 GetRandomValue(-100, 100)
             );
         }
+
         R3D.UnmapInstances(instances, InstanceFlags.Position | InstanceFlags.Scale);
 
         // Setup directional light with shadows
@@ -62,7 +64,8 @@ public static class Billboards
         R3D.SetLightRange(light, 32.0f);
 
         // Setup camera
-        Camera3D camera = new Camera3D {
+        var camera = new Camera3D
+        {
             Position = new Vector3(0, 5, 0),
             Target = new Vector3(0, 5, -1),
             Up = Vector3.UnitY,

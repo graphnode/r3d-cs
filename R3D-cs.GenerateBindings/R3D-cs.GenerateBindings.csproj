@@ -13,10 +13,9 @@
         <!-- Workaround for issue https://github.com/microsoft/ClangSharp/issues/129 -->
         <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' AND '$(PackAsTool)' != 'true'">$(NETCoreSdkRuntimeIdentifier)</RuntimeIdentifier>
     </PropertyGroup>
-    
+
     <ItemGroup>
-      <PackageReference Include="CppAst" Version="0.24.0" />
-      <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
+        <PackageReference Include="CppAst" Version="0.24.0"/>
     </ItemGroup>
 
 </Project>

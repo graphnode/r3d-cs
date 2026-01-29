@@ -51,11 +51,12 @@ public static class Decal
         R3D.SetLightActive(light, true);
 
         // Setup camera
-        Camera3D camera = new Camera3D {
+        var camera = new Camera3D
+        {
             Position = new Vector3(0, 3, 3),
             Target = new Vector3(0, 0, 0),
             Up = new Vector3(0, 1, 0),
-            FovY = 60,
+            FovY = 60
         };
 
         // Capture mouse

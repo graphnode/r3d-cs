@@ -9,11 +9,11 @@ public static class Sun
 {
     private const int X_INSTANCES = 50;
     private const int Y_INSTANCES = 50;
-    private const int INSTANCE_COUNT = (X_INSTANCES * Y_INSTANCES);
+    private const int INSTANCE_COUNT = X_INSTANCES * Y_INSTANCES;
 
     public static int Main()
     {
-       // Initialize window
+        // Initialize window
         InitWindow(800, 450, "[r3d] - Sun example");
         SetTargetFPS(60);
 
@@ -29,17 +29,17 @@ public static class Sun
         // Create transforms for instanced spheres
         var instances = R3D.LoadInstanceBuffer(INSTANCE_COUNT, InstanceFlags.Position);
         var positions = R3D.MapInstances<Vector3>(instances, InstanceFlags.Position);
-        float spacing = 1.5f;
-        float offsetX = (X_INSTANCES * spacing) / 2.0f;
-        float offsetZ = (Y_INSTANCES * spacing) / 2.0f;
-        int idx = 0;
-        for (int x = 0; x < X_INSTANCES; x++) {
-            for (int y = 0; y < Y_INSTANCES; y++)
-            {
-                positions[idx] = new Vector3(x * spacing - offsetX, 0, y * spacing - offsetZ);
-                idx++;
-            }
+        var spacing = 1.5f;
+        float offsetX = X_INSTANCES * spacing / 2.0f;
+        float offsetZ = Y_INSTANCES * spacing / 2.0f;
+        var idx = 0;
+        for (var x = 0; x < X_INSTANCES; x++)
+        for (var y = 0; y < Y_INSTANCES; y++)
+        {
+            positions[idx] = new Vector3(x * spacing - offsetX, 0, y * spacing - offsetZ);
+            idx++;
         }
+
         R3D.UnmapInstances(instances, InstanceFlags.Position);
 
         // Setup environment
@@ -61,7 +61,8 @@ public static class Sun
         R3D.EnableShadow(light);
 
         // Setup camera
-        Camera3D camera = new Camera3D {
+        var camera = new Camera3D
+        {
             Position = new Vector3(0, 1, 0),
             Target = new Vector3(1, 1.25f, 1),
             Up = new Vector3(0, 1, 0),

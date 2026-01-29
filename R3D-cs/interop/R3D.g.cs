@@ -16,7 +16,13 @@ namespace R3D_cs;
 [SuppressUnmanagedCodeSecurity]
 public static unsafe partial class R3D
 {
+
+    /// <summary>
+    /// Used by DllImport to load the native library
+    /// </summary>
     public const string NativeLibName = "r3d";
+
+    public const string R3D_VERSION = "0.7";
 
     /// <summary>
     /// Loads a cubemap from an image file.
@@ -131,45 +137,6 @@ public static unsafe partial class R3D
     public static partial void UpdateAmbientMap(AmbientMap ambientMap, Cubemap cubemap);
 
     /// <summary>
-    /// Load an importer from a file.
-    /// <para>
-    /// Creates an importer instance from the specified file path. The file is parsed once and can be reused to extract multiple resources such as models and animations.
-    /// </para>
-    /// </summary>
-    /// <param name="filePath">Path to the asset file.</param>
-    /// <param name="flags">Importer behavior flags.</param>
-    /// <returns>Pointer to a new importer instance, or NULL on failure.</returns>
-    /// <seealso>R3D_LoadImporter</seealso>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadImporter", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial Importer* LoadImporter(string filePath, ImportFlags flags);
-
-    /// <summary>
-    /// Load an importer from a memory buffer.
-    /// <para>
-    /// Creates an importer instance from in-memory asset data. This is useful for embedded assets or streamed content.
-    /// </para>
-    /// </summary>
-    /// <param name="data">Pointer to the asset data.</param>
-    /// <param name="size">Size of the data buffer in bytes.</param>
-    /// <param name="hint">Optional file format hint (may be NULL).</param>
-    /// <param name="flags">Importer behavior flags.</param>
-    /// <returns>Pointer to a new importer instance, or NULL on failure.</returns>
-    /// <seealso>R3D_LoadImporterFromMemory</seealso>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadImporterFromMemory", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial Importer* LoadImporterFromMemory(void* data, uint size, string hint, ImportFlags flags);
-
-    /// <summary>
-    /// Destroy an importer instance.
-    /// <para>
-    /// Frees all resources associated with the importer. Any models or animations extracted from it remain valid.
-    /// </para>
-    /// </summary>
-    /// <param name="importer">Importer instance to destroy.</param>
-    /// <seealso>R3D_UnloadImporter</seealso>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadImporter")]
-    public static partial void UnloadImporter(Importer* importer);
-
-    /// <summary>
     /// Loads animations from a model file.
     /// </summary>
     /// <param name="filePath">Path to the model file containing animations.</param>
@@ -196,18 +163,6 @@ public static unsafe partial class R3D
     /// <seealso>R3D_LoadAnimationLibFromMemory</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAnimationLibFromMemory", StringMarshalling = StringMarshalling.Utf8)]
     public static partial AnimationLib LoadAnimationLibFromMemory(void* data, uint size, string hint);
-
-    /// <summary>
-    /// Loads animations from an existing importer.
-    /// </summary>
-    /// <param name="importer">Importer instance containing animation data.</param>
-    /// <returns>Pointer to an array of R3D_Animation, or NULL on failure.</returns>
-    /// <remarks>
-    /// Free the returned array using R3D_UnloadAnimationLib().
-    /// </remarks>
-    /// <seealso>R3D_LoadAnimationLibFromImporter</seealso>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAnimationLibFromImporter")]
-    public static partial AnimationLib LoadAnimationLibFromImporter(Importer* importer);
 
     /// <summary>
     /// Releases all resources associated with an animation library.
@@ -259,21 +214,9 @@ public static unsafe partial class R3D
     /// <param name="size">Size of the memory buffer in bytes.</param>
     /// <param name="hint">Optional format hint (can be NULL).</param>
     /// <returns>Return the loaded R3D_Skeleton.</returns>
-    /// <seealso>R3D_LoadSkeletonFromMemory</seealso>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSkeletonFromMemory", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial Skeleton LoadSkeletonFromMemory(void* data, uint size, string hint);
-
-    /// <summary>
-    /// Loads a skeleton hierarchy from an existing importer.
-    /// <para>
-    /// Extracts the skeleton data from a previously loaded importer instance.
-    /// </para>
-    /// </summary>
-    /// <param name="importer">Importer instance to extract the skeleton from.</param>
-    /// <returns>Return the loaded R3D_Skeleton.</returns>
-    /// <seealso>R3D_LoadSkeletonFromImporter</seealso>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSkeletonFromImporter")]
-    public static partial Skeleton LoadSkeletonFromImporter(Importer* importer);
+    /// <seealso>R3D_LoadSkeletonFromData</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSkeletonFromData", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial Skeleton LoadSkeletonFromData(void* data, uint size, string hint);
 
     /// <summary>
     /// Frees the memory allocated for a skeleton.
@@ -1614,19 +1557,6 @@ public static unsafe partial class R3D
     public static partial Model LoadModel(string filePath);
 
     /// <summary>
-    /// Load a 3D model from a file with import flags.
-    /// <para>
-    /// Extended version of R3D_LoadModel() allowing control over the import process through additional flags.
-    /// </para>
-    /// </summary>
-    /// <param name="filePath">Path to the 3D model file to load.</param>
-    /// <param name="flags">Importer behavior flags.</param>
-    /// <returns>Loaded model structure containing meshes and materials.</returns>
-    /// <seealso>R3D_LoadModelEx</seealso>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelEx", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial Model LoadModelEx(string filePath, ImportFlags flags);
-
-    /// <summary>
     /// Load a 3D model from memory buffer.
     /// <para>
     /// Loads a 3D model from a memory buffer containing the file data. Useful for loading models from embedded resources or network streams.
@@ -1644,34 +1574,20 @@ public static unsafe partial class R3D
     public static partial Model LoadModelFromMemory(void* data, uint size, string hint);
 
     /// <summary>
-    /// Load a 3D model from a memory buffer with import flags.
+    /// Create a model from a single mesh.
     /// <para>
-    /// Extended version of R3D_LoadModelFromMemory() allowing control over the import process through additional flags.
+    /// Creates a model structure containing a single mesh with a default material. This is useful for procedurally generated meshes or simple geometry.
     /// </para>
     /// </summary>
-    /// <param name="data">Pointer to the memory buffer containing the model data.</param>
-    /// <param name="size">Size of the data buffer in bytes.</param>
-    /// <param name="hint">Hint on the model format (can be NULL).</param>
-    /// <param name="flags">Importer behavior flags.</param>
-    /// <returns>Loaded model structure containing meshes and materials.</returns>
+    /// <param name="mesh">The mesh to be wrapped in a model structure.</param>
+    /// <returns>Model structure containing the specified mesh.</returns>
     /// <remarks>
-    /// External dependencies (e.g., textures or linked resources) are not supported. The model data must be fully self-contained.
+    /// <b>Warning:</b>
+    /// The model's bounding box calculation assumes that the mesh's bounding boxes has already been computed.
     /// </remarks>
-    /// <seealso>R3D_LoadModelFromMemoryEx</seealso>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelFromMemoryEx", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial Model LoadModelFromMemoryEx(void* data, uint size, string hint, ImportFlags flags);
-
-    /// <summary>
-    /// Load a 3D model from an existing importer.
-    /// <para>
-    /// Creates a model from a previously loaded importer instance. This avoids re-importing the source file.
-    /// </para>
-    /// </summary>
-    /// <param name="importer">Importer instance to extract the model from.</param>
-    /// <returns>Loaded model structure containing meshes and materials.</returns>
-    /// <seealso>R3D_LoadModelFromImporter</seealso>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelFromImporter")]
-    public static partial Model LoadModelFromImporter(Importer* importer);
+    /// <seealso>R3D_LoadModelFromMesh</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelFromMesh")]
+    public static partial Model LoadModelFromMesh(Mesh mesh);
 
     /// <summary>
     /// Unload a model and optionally its materials.

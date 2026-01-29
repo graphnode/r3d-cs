@@ -45,7 +45,8 @@ public static class Skybox
         });
 
         // Setup camera
-        Camera3D camera = new Camera3D {
+        var camera = new Camera3D
+        {
             Position = new Vector3(0, 0, 10),
             Target = Vector3.Zero,
             Up = Vector3.UnitY,
@@ -63,19 +64,20 @@ public static class Skybox
             BeginDrawing();
             ClearBackground(Color.RayWhite);
 
-            if (IsMouseButtonPressed(MouseButton.Left)) {
+            if (IsMouseButtonPressed(MouseButton.Left))
                 R3D.SetEnvironmentEx((ref env) =>
                 {
-                    if (env.Background.Sky.Texture == skyPanorama.Texture) {
+                    if (env.Background.Sky.Texture == skyPanorama.Texture)
+                    {
                         env.Background.Sky = skyProcedural;
                         env.Ambient.Map = ambientProcedural;
                     }
-                    else {
+                    else
+                    {
                         env.Background.Sky = skyPanorama;
                         env.Ambient.Map = ambientPanorama;
                     }
                 });
-            }
 
             // Draw sphere grid
             R3D.Begin(camera);

@@ -4,7 +4,7 @@ using System.Linq;
 namespace R3D_cs.GenerateBindings;
 
 /// <summary>
-/// String manipulation utilities for code generation.
+///     String manipulation utilities for code generation.
 /// </summary>
 public static class StringHelpers
 {
@@ -23,12 +23,15 @@ public static class StringHelpers
     ];
 
     /// <summary>
-    /// Strips the "R3D_" prefix from a name if present.
+    ///     Strips the "R3D_" prefix from a name if present.
     /// </summary>
-    public static string StripR3DPrefix(string name) => name.StartsWith("R3D_") ? name[4..] : name;
+    public static string StripR3DPrefix(string name)
+    {
+        return name.StartsWith("R3D_") ? name[4..] : name;
+    }
 
     /// <summary>
-    /// Converts a SCREAMING_SNAKE_CASE or snake_case string to PascalCase.
+    ///     Converts a SCREAMING_SNAKE_CASE or snake_case string to PascalCase.
     /// </summary>
     public static string ToPascalCase(string input)
     {
@@ -41,11 +44,12 @@ public static class StringHelpers
             else
                 parts[i] = char.ToUpper(parts[i][0]) + parts[i][1..];
         }
+
         return string.Join("", parts);
     }
 
     /// <summary>
-    /// Escapes a name if it's a C# keyword by prefixing with @.
+    ///     Escapes a name if it's a C# keyword by prefixing with @.
     /// </summary>
     public static string EscapeIdentifier(string name)
     {

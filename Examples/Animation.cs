@@ -2,12 +2,13 @@ using System.Numerics;
 using R3D_cs;
 using Raylib_cs;
 using static Raylib_cs.Raylib;
+using CubemapLayout = R3D_cs.CubemapLayout;
 
 namespace Examples;
 
 public static class Animation
 {
-    public static unsafe int Main()
+    public static int Main()
     {
         // Initialize window
         InitWindow(800, 450, "[r3d] - Animation example");
@@ -16,19 +17,20 @@ public static class Animation
         // Initialize R3D with FXAA
         R3D.Init(GetScreenWidth(), GetScreenHeight());
         R3D.SetAntiAliasing(AntiAliasing.Fxaa);
-        
-        var cubemap = R3D.LoadCubemap("resources/panorama/indoor.hdr", R3D_cs.CubemapLayout.AutoDetect);
+
+        var cubemap = R3D.LoadCubemap("resources/panorama/indoor.hdr", CubemapLayout.AutoDetect);
         var ambientMap = R3D.GenAmbientMap(cubemap, AmbientFlags.Illumination);
-        
+
         R3D.SetEnvironmentEx((ref env) =>
         {
             // Setup environment sky
             env.Background.SkyBlur = 0.3f;
+            env.Background.Energy = 0.6f;
             env.Background.Sky = cubemap;
-            
+
             // Setup environment ambient
             env.Ambient.Map = ambientMap;
-            env.Ambient.Energy = 0.25f;       
+            env.Ambient.Energy = 0.25f;
 
             // Setup tonemapping
             env.Tonemap.Mode = Tonemap.Filmic;
@@ -66,7 +68,8 @@ public static class Animation
         R3D.EnableShadow(light);
 
         // Setup camera
-        Camera3D camera = new Camera3D {
+        var camera = new Camera3D
+        {
             Position = new Vector3(0, 1.5f, 3.0f),
             Target = new Vector3(0, 0.75f, 0.0f),
             Up = Vector3.UnitY,

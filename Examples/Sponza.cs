@@ -33,7 +33,8 @@ public static class Sponza
 
         // Setup lights
         var lights = stackalloc Light[2];
-        for (int i = 0; i < 2; i++) {
+        for (var i = 0; i < 2; i++)
+        {
             lights[i] = R3D.CreateLight(LightType.Omni);
             R3D.SetLightPosition(lights[i], new Vector3(i == 0 ? -10.0f : 10.0f, 20.0f, 0.0f));
             R3D.SetLightActive(lights[i], true);
@@ -43,7 +44,8 @@ public static class Sponza
         }
 
         // Setup camera
-        Camera3D camera = new Camera3D {
+        var camera = new Camera3D
+        {
             Position = new Vector3(8.0f, 1.0f, 0.5f),
             Target = new Vector3(0.0f, 2.0f, -2.0f),
             Up = Vector3.UnitY,
@@ -59,37 +61,35 @@ public static class Sponza
             UpdateCamera(ref camera, CameraMode.Free);
 
             // Toggle SSAO
-            if (IsKeyPressed(KeyboardKey.One)) {
+            if (IsKeyPressed(KeyboardKey.One))
                 R3D.SetEnvironmentEx((ref env) => env.Ssao.Enabled = !R3D.GetEnvironmentEx().Ssao.Enabled);
-            }
 
             // Toggle SSIL
-            if (IsKeyPressed(KeyboardKey.Two)) {
+            if (IsKeyPressed(KeyboardKey.Two))
                 R3D.SetEnvironmentEx((ref env) => env.Ssil.Enabled = !R3D.GetEnvironmentEx().Ssil.Enabled);
-            }
 
             // Toggle SSR
-            if (IsKeyPressed(KeyboardKey.Three)) {
+            if (IsKeyPressed(KeyboardKey.Three))
                 R3D.SetEnvironmentEx((ref env) => env.Ssr.Enabled = !R3D.GetEnvironmentEx().Ssr.Enabled);
-            }
 
             // Toggle fog
-            if (IsKeyPressed(KeyboardKey.Four)) {
+            if (IsKeyPressed(KeyboardKey.Four))
                 R3D.SetEnvironmentEx((ref env) => env.Fog.Mode = R3D.GetEnvironmentEx().Fog.Mode == Fog.Disabled ? Fog.Exp : Fog.Disabled);
-            }
 
             // Toggle FXAA
-            if (IsKeyPressed(KeyboardKey.Five)) {
+            if (IsKeyPressed(KeyboardKey.Five))
                 R3D.SetAntiAliasing(R3D.GetAntiAliasing() == AntiAliasing.Disabled ? AntiAliasing.Fxaa : AntiAliasing.Disabled);
-            }
 
             // Cycle tonemapping
-            if (IsMouseButtonPressed(MouseButton.Left)) {
-                Tonemap mode = R3D.GetEnvironmentEx().Tonemap.Mode;
+            if (IsMouseButtonPressed(MouseButton.Left))
+            {
+                var mode = R3D.GetEnvironmentEx().Tonemap.Mode;
                 R3D.SetEnvironmentEx((ref env) => env.Tonemap.Mode = (Tonemap)(((int)mode + (int)Tonemap.Count - 1) % (int)Tonemap.Count));
             }
-            if (IsMouseButtonPressed(MouseButton.Right)) {
-                Tonemap mode = R3D.GetEnvironmentEx().Tonemap.Mode;
+
+            if (IsMouseButtonPressed(MouseButton.Right))
+            {
+                var mode = R3D.GetEnvironmentEx().Tonemap.Mode;
                 R3D.SetEnvironmentEx((ref env) => env.Tonemap.Mode = (Tonemap)(((int)mode + 1) % (int)Tonemap.Count));
             }
 

@@ -47,7 +47,8 @@ public static class Sprite
         R3D.SetLightActive(light, true);
 
         // Setup camera
-        Camera3D camera = new Camera3D() {
+        var camera = new Camera3D
+        {
             Position = new Vector3(0, 2, 5),
             Target = new Vector3(0, 0.5f, 0),
             Up = Vector3.UnitY,
@@ -55,16 +56,16 @@ public static class Sprite
         };
 
         // Bird data
-        Vector3 birdPos = new Vector3(0, 0.5f, 0);
+        var birdPos = new Vector3(0, 0.5f, 0);
 
         // Main loop
         while (!WindowShouldClose())
         {
             // Update bird position
-            Vector3 birdPrev = birdPos;
+            var birdPrev = birdPos;
             birdPos.X = 2.0f * MathF.Sin((float)GetTime());
             birdPos.Y = 1.0f + MathF.Cos((float)GetTime() * 4.0f) * 0.5f;
-            float birdDirX = (birdPos.X - birdPrev.X >= 0.0f) ? 1.0f : -1.0f;
+            float birdDirX = birdPos.X - birdPrev.X >= 0.0f ? 1.0f : -1.0f;
 
             // Update sprite UVs
             // We multiply by the sign of the X direction to invert the uvScale.x

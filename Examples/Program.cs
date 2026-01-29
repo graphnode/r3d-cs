@@ -14,28 +14,28 @@ public static class ExampleList
 {
     public static readonly ExampleInfo[] AllExamples =
     [
-        new ("Basic", Basic.Main),
-        new ("Probe", Probe.Main),
-        new ("Lights", Lights.Main),
-        new ("Pbr", Pbr.Main),
-        new ("Transparency", Transparency.Main),
-        new ("Skybox", Skybox.Main),
-        new ("Sponza", Sponza.Main),
-        new ("Sprite", Sprite.Main),
-        new ("Animation", Animation.Main),
-        new ("Bloom", Bloom.Main),
-        new ("Resize", Resize.Main),
-        new ("Particles", Particles.Main),
-        new ("Instanced", Instanced.Main),
-        new ("Billboards", Billboards.Main),
-        new ("Sun", Sun.Main),
-        new ("Dof", Dof.Main),
-        new ("Decal", Decal.Main),
+        new("Basic", Basic.Main),
+        new("Probe", Probe.Main),
+        new("Lights", Lights.Main),
+        new("Pbr", Pbr.Main),
+        new("Transparency", Transparency.Main),
+        new("Skybox", Skybox.Main),
+        new("Sponza", Sponza.Main),
+        new("Sprite", Sprite.Main),
+        new("Animation", Animation.Main),
+        new("Bloom", Bloom.Main),
+        new("Resize", Resize.Main),
+        new("Particles", Particles.Main),
+        new("Instanced", Instanced.Main),
+        new("Billboards", Billboards.Main),
+        new("Sun", Sun.Main),
+        new("Dof", Dof.Main),
+        new("Decal", Decal.Main)
     ];
 
-    public static ExampleInfo GetExample(string name)
+    public static ExampleInfo? GetExample(string name)
     {
-        var example = Array.Find(ExampleList.AllExamples, x =>
+        var example = Array.Find(AllExamples, x =>
             x.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
         );
         return example;
@@ -51,12 +51,10 @@ internal static class Program
         if (args.Length > 0)
         {
             var example = ExampleList.GetExample(args[0]);
-            example?.Main?.Invoke();
+            example?.Main.Invoke();
         }
         else
-        {
             RunExamples(ExampleList.AllExamples);
-        }
     }
 
     private static void RunExamples(ExampleInfo[] examples)
@@ -64,11 +62,8 @@ internal static class Program
         var configFlags = Enum.GetValues<ConfigFlags>();
         foreach (var example in examples)
         {
-            example?.Main?.Invoke();
-            foreach (var flag in configFlags)
-            {
-                Raylib.ClearWindowState(flag);
-            }
+            example.Main.Invoke();
+            foreach (var flag in configFlags) Raylib.ClearWindowState(flag);
         }
     }
 }

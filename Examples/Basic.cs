@@ -27,13 +27,14 @@ public static class Basic
         R3D.SetEnvironment(env);
 
         // Create light
-        Light light = R3D.CreateLight(LightType.Spot);
+        var light = R3D.CreateLight(LightType.Spot);
         R3D.LightLookAt(light, new Vector3(0, 10, 5), Vector3.Zero);
         R3D.EnableShadow(light);
         R3D.SetLightActive(light, true);
 
         // Setup camera
-        var camera = new Camera3D() {
+        var camera = new Camera3D
+        {
             Position = new Vector3(0, 2, 2),
             Target = Vector3.Zero,
             Up = new Vector3(0, 1, 0),

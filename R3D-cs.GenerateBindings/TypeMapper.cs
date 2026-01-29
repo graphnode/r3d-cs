@@ -4,12 +4,12 @@ using CppAst;
 namespace R3D_cs.GenerateBindings;
 
 /// <summary>
-/// Maps C/C++ types to C# types.
+///     Maps C/C++ types to C# types.
 /// </summary>
 public static class TypeMapper
 {
     /// <summary>
-    /// Types that should remain as pointers (opaque handles, optional parameters).
+    ///     Types that should remain as pointers (opaque handles, optional parameters).
     /// </summary>
     private static readonly HashSet<string> KeepAsPointerTypes =
     [
@@ -17,7 +17,7 @@ public static class TypeMapper
     ];
 
     /// <summary>
-    /// Maps a C++ type to its C# equivalent.
+    ///     Maps a C++ type to its C# equivalent.
     /// </summary>
     /// <returns>A tuple of (csType, isUnsafe, isFixedBuffer, fixedSize).</returns>
     public static (string csType, bool isUnsafe, bool isFixedBuffer, int fixedSize) MapType(CppType type)
@@ -94,7 +94,7 @@ public static class TypeMapper
     }
 
     /// <summary>
-    /// Determines if a pointer parameter should use ref/out modifiers instead of raw pointers.
+    ///     Determines if a pointer parameter should use ref/out modifiers instead of raw pointers.
     /// </summary>
     /// <returns>A tuple of (modifier, finalType) where modifier is "ref", "out", or null.</returns>
     public static (string? modifier, string finalType) GetParameterModifier(CppType type, string mappedType, string? functionName)

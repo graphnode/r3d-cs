@@ -40,7 +40,8 @@ public static class Transparency
         matSphere.Orm.Metalness = 0.75f;
 
         // Setup camera
-        Camera3D camera = new() {
+        Camera3D camera = new()
+        {
             Position = new Vector3(0, 2, 2),
             Target = Vector3.Zero,
             Up = Vector3.UnitY,

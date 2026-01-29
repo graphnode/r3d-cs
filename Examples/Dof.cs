@@ -10,7 +10,7 @@ public static class Dof
 {
     private const int X_INSTANCES = 10;
     private const int Y_INSTANCES = 10;
-    private const int INSTANCE_COUNT = (X_INSTANCES * Y_INSTANCES);
+    private const int INSTANCE_COUNT = X_INSTANCES * Y_INSTANCES;
 
     public static int Main()
     {
@@ -43,24 +43,26 @@ public static class Dof
         var matDefault = R3D.GetDefaultMaterial();
 
         // Generate instance matrices and colors
-        float spacing = 0.5f;
-        float offsetX = (X_INSTANCES * spacing) / 2.0f;
-        float offsetZ = (Y_INSTANCES * spacing) / 2.0f;
-        int idx = 0;
+        var spacing = 0.5f;
+        float offsetX = X_INSTANCES * spacing / 2.0f;
+        float offsetZ = Y_INSTANCES * spacing / 2.0f;
+        var idx = 0;
         var instances = R3D.LoadInstanceBuffer(INSTANCE_COUNT, InstanceFlags.Position | InstanceFlags.Color);
         var positions = R3D.MapInstances<Vector3>(instances, InstanceFlags.Position);
         var colors = R3D.MapInstances<Color>(instances, InstanceFlags.Color);
-        for (int x = 0; x < X_INSTANCES; x++) {
-            for (int y = 0; y < Y_INSTANCES; y++) {
-                positions[idx] = new Vector3(x * spacing - offsetX, 0, y * spacing - offsetZ);
-                colors[idx] = new Color(Random.Shared.Next(0, 256), Random.Shared.Next(0, 256), Random.Shared.Next(0, 256), 255);
-                idx++;
-            }
+        for (var x = 0; x < X_INSTANCES; x++)
+        for (var y = 0; y < Y_INSTANCES; y++)
+        {
+            positions[idx] = new Vector3(x * spacing - offsetX, 0, y * spacing - offsetZ);
+            colors[idx] = new Color(Random.Shared.Next(0, 256), Random.Shared.Next(0, 256), Random.Shared.Next(0, 256), 255);
+            idx++;
         }
+
         R3D.UnmapInstances(instances, InstanceFlags.Position | InstanceFlags.Color);
 
         // Setup camera
-        Camera3D camDefault = new Camera3D {
+        var camDefault = new Camera3D
+        {
             Position = new Vector3(0, 2, 2),
             Target = new Vector3(0, 0, 0),
             Up = new Vector3(0, 1, 0),
@@ -73,27 +75,26 @@ public static class Dof
             float delta = GetFrameTime();
 
             // Rotate camera
-            Matrix4x4 rotation = Matrix4x4.CreateFromAxisAngle(camDefault.Up, 0.1f * delta);
-            Vector3 view = camDefault.Position - camDefault.Target;
+            var rotation = Matrix4x4.CreateFromAxisAngle(camDefault.Up, 0.1f * delta);
+            var view = camDefault.Position - camDefault.Target;
             view = Vector3.Transform(view, rotation);
             camDefault.Position = camDefault.Target + view;
 
             // Adjust DoF based on mouse
-            Vector2 mousePos = GetMousePosition();
-            float focusPoint = 0.5f + (5.0f - (mousePos.Y / GetScreenHeight()) * 5.0f);
-            float focusScale = 0.5f + (5.0f - (mousePos.X / GetScreenWidth()) * 5.0f);
+            var mousePos = GetMousePosition();
+            float focusPoint = 0.5f + (5.0f - mousePos.Y / GetScreenHeight() * 5.0f);
+            float focusScale = 0.5f + (5.0f - mousePos.X / GetScreenWidth() * 5.0f);
             R3D.SetEnvironmentEx((ref env) => env.Dof.FocusPoint = focusPoint);
             R3D.SetEnvironmentEx((ref env) => env.Dof.FocusScale = focusScale);
 
             float mouseWheel = GetMouseWheelMove();
-            if (mouseWheel != 0.0f) {
+            if (mouseWheel != 0.0f)
+            {
                 float maxBlur = R3D.GetEnvironmentEx().Dof.MaxBlurSize;
                 R3D.SetEnvironmentEx((ref env) => env.Dof.MaxBlurSize = maxBlur + mouseWheel * 0.1f);
             }
 
-            if (IsKeyPressed(KeyboardKey.F1)) {
-                R3D.SetEnvironmentEx((ref env) => env.Dof.DebugMode = !R3D.GetEnvironmentEx().Dof.DebugMode);
-            }
+            if (IsKeyPressed(KeyboardKey.F1)) R3D.SetEnvironmentEx((ref env) => env.Dof.DebugMode = !R3D.GetEnvironmentEx().Dof.DebugMode);
 
             BeginDrawing();
                 ClearBackground(Color.Black);

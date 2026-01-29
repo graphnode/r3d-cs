@@ -2,18 +2,48 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+        <EnableDefaultItems>false</EnableDefaultItems>
         <RootNamespace>R3D_cs</RootNamespace>
+        <AssemblyName>R3D-cs</AssemblyName>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PublishAot>true</PublishAot>
         <InvariantGlobalization>true</InvariantGlobalization>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Title>R3D-cs</Title>
+        <Description>.NET/C# bindings for r3d, an advanced 3D rendering library for raylib (built on raylib-cs)</Description>
+        <RepositoryUrl>https://github.com/graphnode/r3d-cs/</RepositoryUrl>
+        <Authors>r3d-cs</Authors>
+        <PackageLicenseExpression>Zlib</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>logo/r3d-cs_256x256.png</PackageIcon>
+        <PackageTags>raylib r3d csharp gamedev</PackageTags>
+        <PackageProjectUrl>https://www.raylib.com/</PackageProjectUrl>
+        <PackProject>true</PackProject>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryType>git</RepositoryType>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Raylib-cs" Version="7.0.2" />
+        <None Include="Build.props"/>
+        <None Include="logo/r3d-cs_256x256.png" Pack="true" PackagePath="logo"/>
+        <None Include="../README.md" Pack="true" PackagePath=""/>
+        <None Include="../LICENSE" Pack="true" PackagePath=""/>
     </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Raylib-cs" Version="7.0.2"/>
+    </ItemGroup>
+
+    <Import Project="./Build.props"/>
 
     <ItemGroup>
         <Content Include="runtimes/**" Link="runtimes/%(RecursiveDir)/%(Filename)%(Extension)">
@@ -22,5 +52,11 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-    
+
+    <ItemGroup>
+        <Compile Include="enums\**\*.cs"/>
+        <Compile Include="interop\**\*.cs"/>
+        <Compile Include="types\**\*.cs"/>
+    </ItemGroup>
+
 </Project>
