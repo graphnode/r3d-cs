@@ -83,13 +83,14 @@ internal static class Program
         // Step 2: Parse C header
         Console.WriteLine("Parsing C header...");
         string headerPath = Path.Combine(repoPath, "include", "r3d", "r3d.h");
+        string includePath = Path.Combine(repoPath, "include");
         string raylibInclude = Path.Combine(repoPath, "external", "raylib", "src");
 
         if (!File.Exists(headerPath)) throw new FileNotFoundException($"Header file not found: {headerPath}");
 
         var parserOptions = new CppParserOptions
         {
-            IncludeFolders = { raylibInclude },
+            IncludeFolders = { includePath, raylibInclude },
             ParseMacros = false,
             ParserKind = CppParserKind.C,
             ParseCommentAttribute = true,
@@ -115,11 +116,32 @@ internal static class Program
         Console.WriteLine($"  Output: {outputDir}");
         Console.WriteLine();
 
-        string versionString = branch.TrimStart('v', 'V');
-        var version = new Version(versionString);
+        // Resolve version: CLI option > branch/tag name > latest tag before commit > fallback
+        // When on a branch (not a tag), append the commit hash as a prerelease suffix
+        string versionString;
+        if (options.Version != null)
+        {
+            versionString = options.Version;
+            Console.WriteLine($"  Using specified version: {versionString}");
+        }
+        else if (Version.TryParse(branch.TrimStart('v', 'V'), out var branchVersion))
+        {
+            versionString = branchVersion.ToString();
+            Console.WriteLine($"  Version from tag: {versionString}");
+        }
+        else if (RepositoryManager.GetLatestVersionFromTags(repoPath) is { } tagVersion)
+        {
+            versionString = $"{tagVersion}-{commitSha}";
+            Console.WriteLine($"  Version from latest tag: {versionString} (branch: {branch})");
+        }
+        else
+        {
+            versionString = $"0.0.0-{commitSha}";
+            Console.WriteLine($"  Using fallback version: {versionString} (no tags found)");
+        }
 
         var generator = new CodeGenerator(outputDir);
-        generator.Generate(compilation, version);
+        generator.Generate(compilation, versionString);
     }
 
     private static Options? ParseArguments(string[] args)
@@ -203,6 +225,17 @@ internal static class Program
                     options.LocalRepo = args[++i];
                     break;
 
+                case "-v":
+                case "--version":
+                    if (i + 1 >= args.Length)
+                    {
+                        Console.WriteLine("Error: --version requires a value");
+                        return null;
+                    }
+
+                    options.Version = args[++i];
+                    break;
+
                 default:
                     Console.WriteLine($"Unknown argument: {args[i]}");
                     Console.WriteLine("Use --help for usage information.");
@@ -221,18 +254,21 @@ internal static class Program
         Console.WriteLine("  -l, --local <path>   Use existing local repository (skips cloning)");
         Console.WriteLine("  -b, --branch <name>  Git branch to use when cloning");
         Console.WriteLine("  -t, --tag <name>     Git tag to use when cloning");
+        Console.WriteLine("  -v, --version <ver>  Override version for generated bindings (e.g., 0.8.0, 0.8.0-alpha)");
         Console.WriteLine("  -r, --repo <url>     Repository URL (default: https://github.com/Bigfoot71/r3d/)");
         Console.WriteLine("  -o, --output <dir>   Output directory for generated files");
         Console.WriteLine("  --force-clone        Delete cached repo and clone fresh");
         Console.WriteLine("  --clean              Remove cached repository and exit");
         Console.WriteLine();
         Console.WriteLine("By default, the generator clones the latest version tag from the repository.");
+        Console.WriteLine("Version is resolved in order: --version flag > tag name > latest tag before commit > 0.0.0");
         Console.WriteLine();
         Console.WriteLine("Examples:");
         Console.WriteLine("  R3D-cs.GenerateBindings                    # Use cached repo or clone latest tag");
         Console.WriteLine("  R3D-cs.GenerateBindings -l ../r3d          # Use local r3d repository");
         Console.WriteLine("  R3D-cs.GenerateBindings --force-clone      # Force fresh clone of latest tag");
-        Console.WriteLine("  R3D-cs.GenerateBindings -b master          # Clone master branch");
+        Console.WriteLine("  R3D-cs.GenerateBindings -b master          # Clone master branch (uses latest tag for version)");
+        Console.WriteLine("  R3D-cs.GenerateBindings -b master -v 0.8.0-dev # Clone master with explicit version");
         Console.WriteLine("  R3D-cs.GenerateBindings -t 0.7 --force-clone  # Clone specific tag");
         Console.WriteLine("  R3D-cs.GenerateBindings --clean            # Clear cached repository");
         Console.WriteLine();
@@ -251,5 +287,6 @@ internal static class Program
         public required string OutputDir { get; set; }
         public string? LocalRepo { get; set; }
         public bool ForceClone { get; set; }
+        public string? Version { get; set; } // explicit version override (e.g., "0.8.0" or "0.8.0-alpha")
     }
 }

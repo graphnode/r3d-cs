@@ -25,6 +25,12 @@ public unsafe struct Model
     public Mesh* Meshes;
 
     /// <summary>
+    /// Array of meshes data in RAM (optional, can be NULL).
+    /// </summary>
+    /// <seealso>meshData</seealso>
+    public MeshData* MeshData;
+
+    /// <summary>
     /// Array of materials used by the model.
     /// </summary>
     /// <seealso>materials</seealso>

@@ -22,7 +22,7 @@ public static unsafe partial class R3D
     /// </summary>
     public const string NativeLibName = "r3d";
 
-    public const string R3D_VERSION = "0.7";
+    public const string R3D_VERSION = "0.7.0-alpha.33f10e7";
 
     /// <summary>
     /// Loads a cubemap from an image file.
@@ -137,6 +137,45 @@ public static unsafe partial class R3D
     public static partial void UpdateAmbientMap(AmbientMap ambientMap, Cubemap cubemap);
 
     /// <summary>
+    /// Load an importer from a file.
+    /// <para>
+    /// Creates an importer instance from the specified file path. The file is parsed once and can be reused to extract multiple resources such as models and animations.
+    /// </para>
+    /// </summary>
+    /// <param name="filePath">Path to the asset file.</param>
+    /// <param name="flags">Importer behavior flags.</param>
+    /// <returns>Pointer to a new importer instance, or NULL on failure.</returns>
+    /// <seealso>R3D_LoadImporter</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadImporter", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial Importer* LoadImporter(string filePath, ImportFlags flags);
+
+    /// <summary>
+    /// Load an importer from a memory buffer.
+    /// <para>
+    /// Creates an importer instance from in-memory asset data. This is useful for embedded assets or streamed content.
+    /// </para>
+    /// </summary>
+    /// <param name="data">Pointer to the asset data.</param>
+    /// <param name="size">Size of the data buffer in bytes.</param>
+    /// <param name="hint">Optional file format hint (may be NULL).</param>
+    /// <param name="flags">Importer behavior flags.</param>
+    /// <returns>Pointer to a new importer instance, or NULL on failure.</returns>
+    /// <seealso>R3D_LoadImporterFromMemory</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadImporterFromMemory", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial Importer* LoadImporterFromMemory(void* data, uint size, string hint, ImportFlags flags);
+
+    /// <summary>
+    /// Destroy an importer instance.
+    /// <para>
+    /// Frees all resources associated with the importer. Any models or animations extracted from it remain valid.
+    /// </para>
+    /// </summary>
+    /// <param name="importer">Importer instance to destroy.</param>
+    /// <seealso>R3D_UnloadImporter</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadImporter")]
+    public static partial void UnloadImporter(Importer* importer);
+
+    /// <summary>
     /// Loads animations from a model file.
     /// </summary>
     /// <param name="filePath">Path to the model file containing animations.</param>
@@ -163,6 +202,18 @@ public static unsafe partial class R3D
     /// <seealso>R3D_LoadAnimationLibFromMemory</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAnimationLibFromMemory", StringMarshalling = StringMarshalling.Utf8)]
     public static partial AnimationLib LoadAnimationLibFromMemory(void* data, uint size, string hint);
+
+    /// <summary>
+    /// Loads animations from an existing importer.
+    /// </summary>
+    /// <param name="importer">Importer instance containing animation data.</param>
+    /// <returns>Pointer to an array of R3D_Animation, or NULL on failure.</returns>
+    /// <remarks>
+    /// Free the returned array using R3D_UnloadAnimationLib().
+    /// </remarks>
+    /// <seealso>R3D_LoadAnimationLibFromImporter</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAnimationLibFromImporter")]
+    public static partial AnimationLib LoadAnimationLibFromImporter(Importer* importer);
 
     /// <summary>
     /// Releases all resources associated with an animation library.
@@ -214,9 +265,21 @@ public static unsafe partial class R3D
     /// <param name="size">Size of the memory buffer in bytes.</param>
     /// <param name="hint">Optional format hint (can be NULL).</param>
     /// <returns>Return the loaded R3D_Skeleton.</returns>
-    /// <seealso>R3D_LoadSkeletonFromData</seealso>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSkeletonFromData", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial Skeleton LoadSkeletonFromData(void* data, uint size, string hint);
+    /// <seealso>R3D_LoadSkeletonFromMemory</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSkeletonFromMemory", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial Skeleton LoadSkeletonFromMemory(void* data, uint size, string hint);
+
+    /// <summary>
+    /// Loads a skeleton hierarchy from an existing importer.
+    /// <para>
+    /// Extracts the skeleton data from a previously loaded importer instance.
+    /// </para>
+    /// </summary>
+    /// <param name="importer">Importer instance to extract the skeleton from.</param>
+    /// <returns>Return the loaded R3D_Skeleton.</returns>
+    /// <seealso>R3D_LoadSkeletonFromImporter</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSkeletonFromImporter")]
+    public static partial Skeleton LoadSkeletonFromImporter(Importer* importer);
 
     /// <summary>
     /// Frees the memory allocated for a skeleton.
@@ -1156,6 +1219,25 @@ public static unsafe partial class R3D
     public static partial MeshData GenMeshDataCubeEx(float width, float height, float length, int resX, int resY, int resZ);
 
     /// <summary>
+    /// Generate a slope mesh by cutting a cube with a plane.
+    /// <para>
+    /// Creates a slope mesh by slicing a cube with a plane that passes through the origin. The plane is defined by its normal vector, and the portion of the cube on the side opposite to the normal direction is kept. This allows creating ramps, wedges, and angled surfaces with arbitrary orientations.
+    /// </para>
+    /// </summary>
+    /// <param name="width">Width of the base cube along the X axis.</param>
+    /// <param name="height">Height of the base cube along the Y axis.</param>
+    /// <param name="length">Length of the base cube along the Z axis.</param>
+    /// <param name="slopeNormal">Normal vector of the cutting plane. The mesh keeps the portion of the cube in the direction opposite to this normal. Example: {-1, 0, 0} creates a ramp rising towards +X. {0, 1, 0} creates a wedge with the slope facing up. {-1.0, 1.0, 0} creates a 45° diagonal slope.</param>
+    /// <returns>Generated slope mesh structure.</returns>
+    /// <remarks>
+    /// The normal vector will be automatically normalized internally.
+    /// The cutting plane always passes through the center of the cube (origin).
+    /// </remarks>
+    /// <seealso>R3D_GenMeshDataSlope</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshDataSlope")]
+    public static partial MeshData GenMeshDataSlope(float width, float height, float length, Vector3 slopeNormal);
+
+    /// <summary>
     /// Generate a sphere mesh with specified parameters.
     /// <para>
     /// Creates a UV sphere mesh centered at the origin using latitude-longitude subdivision. Higher ring and slice counts produce smoother spheres but with more vertices.
@@ -1197,6 +1279,21 @@ public static unsafe partial class R3D
     /// <seealso>R3D_GenMeshDataCylinder</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshDataCylinder")]
     public static partial MeshData GenMeshDataCylinder(float bottomRadius, float topRadius, float height, int slices);
+
+    /// <summary>
+    /// Generate a capsule mesh with specified parameters.
+    /// <para>
+    /// Creates a capsule mesh centered at the origin, extending along the Y axis. The capsule consists of a cylindrical body with hemispherical caps on both ends. The total height of the capsule is height + 2 * radius.
+    /// </para>
+    /// </summary>
+    /// <param name="radius">Radius of the capsule (both cylindrical body and hemispherical caps).</param>
+    /// <param name="height">Height of the cylindrical portion along the Y axis.</param>
+    /// <param name="rings">Total number of latitudinal subdivisions for both hemispheres combined.</param>
+    /// <param name="slices">Number of radial subdivisions around the shape.</param>
+    /// <returns>Generated mesh structure.</returns>
+    /// <seealso>R3D_GenMeshDataCapsule</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshDataCapsule")]
+    public static partial MeshData GenMeshDataCapsule(float radius, float height, int rings, int slices);
 
     /// <summary>
     /// Generate a torus mesh with specified parameters.
@@ -1449,6 +1546,18 @@ public static unsafe partial class R3D
     public static partial Mesh GenMeshCubeEx(float width, float height, float length, int resX, int resY, int resZ);
 
     /// <summary>
+    /// Generate a slope mesh.
+    /// </summary>
+    /// <param name="width">Width along X axis.</param>
+    /// <param name="height">Height along Y axis.</param>
+    /// <param name="length">Length along Z axis.</param>
+    /// <param name="slopeNormal">Direction of the slope.</param>
+    /// <returns>Mesh ready for rendering.</returns>
+    /// <seealso>R3D_GenMeshSlope</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshSlope")]
+    public static partial Mesh GenMeshSlope(float width, float height, float length, Vector3 slopeNormal);
+
+    /// <summary>
     /// Generate a sphere mesh.
     /// </summary>
     /// <param name="radius">Sphere radius.</param>
@@ -1481,6 +1590,18 @@ public static unsafe partial class R3D
     /// <seealso>R3D_GenMeshCylinder</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshCylinder")]
     public static partial Mesh GenMeshCylinder(float bottomRadius, float topRadius, float height, int slices);
+
+    /// <summary>
+    /// Generate a capsule mesh.
+    /// </summary>
+    /// <param name="radius">Capsule radius.</param>
+    /// <param name="height">Height along Y axis.</param>
+    /// <param name="rings">Number of latitude divisions.</param>
+    /// <param name="slices">Number of longitude divisions.</param>
+    /// <returns>Mesh ready for rendering.</returns>
+    /// <seealso>R3D_GenMeshCapsule</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshCapsule")]
+    public static partial Mesh GenMeshCapsule(float radius, float height, int rings, int slices);
 
     /// <summary>
     /// Generate a torus mesh.
@@ -1557,6 +1678,19 @@ public static unsafe partial class R3D
     public static partial Model LoadModel(string filePath);
 
     /// <summary>
+    /// Load a 3D model from a file with import flags.
+    /// <para>
+    /// Extended version of R3D_LoadModel() allowing control over the import process through additional flags.
+    /// </para>
+    /// </summary>
+    /// <param name="filePath">Path to the 3D model file to load.</param>
+    /// <param name="flags">Importer behavior flags.</param>
+    /// <returns>Loaded model structure containing meshes and materials.</returns>
+    /// <seealso>R3D_LoadModelEx</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelEx", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial Model LoadModelEx(string filePath, ImportFlags flags);
+
+    /// <summary>
     /// Load a 3D model from memory buffer.
     /// <para>
     /// Loads a 3D model from a memory buffer containing the file data. Useful for loading models from embedded resources or network streams.
@@ -1574,20 +1708,34 @@ public static unsafe partial class R3D
     public static partial Model LoadModelFromMemory(void* data, uint size, string hint);
 
     /// <summary>
-    /// Create a model from a single mesh.
+    /// Load a 3D model from a memory buffer with import flags.
     /// <para>
-    /// Creates a model structure containing a single mesh with a default material. This is useful for procedurally generated meshes or simple geometry.
+    /// Extended version of R3D_LoadModelFromMemory() allowing control over the import process through additional flags.
     /// </para>
     /// </summary>
-    /// <param name="mesh">The mesh to be wrapped in a model structure.</param>
-    /// <returns>Model structure containing the specified mesh.</returns>
+    /// <param name="data">Pointer to the memory buffer containing the model data.</param>
+    /// <param name="size">Size of the data buffer in bytes.</param>
+    /// <param name="hint">Hint on the model format (can be NULL).</param>
+    /// <param name="flags">Importer behavior flags.</param>
+    /// <returns>Loaded model structure containing meshes and materials.</returns>
     /// <remarks>
-    /// <b>Warning:</b>
-    /// The model's bounding box calculation assumes that the mesh's bounding boxes has already been computed.
+    /// External dependencies (e.g., textures or linked resources) are not supported. The model data must be fully self-contained.
     /// </remarks>
-    /// <seealso>R3D_LoadModelFromMesh</seealso>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelFromMesh")]
-    public static partial Model LoadModelFromMesh(Mesh mesh);
+    /// <seealso>R3D_LoadModelFromMemoryEx</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelFromMemoryEx", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial Model LoadModelFromMemoryEx(void* data, uint size, string hint, ImportFlags flags);
+
+    /// <summary>
+    /// Load a 3D model from an existing importer.
+    /// <para>
+    /// Creates a model from a previously loaded importer instance. This avoids re-importing the source file.
+    /// </para>
+    /// </summary>
+    /// <param name="importer">Importer instance to extract the model from.</param>
+    /// <returns>Loaded model structure containing meshes and materials.</returns>
+    /// <seealso>R3D_LoadModelFromImporter</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelFromImporter")]
+    public static partial Model LoadModelFromImporter(Importer* importer);
 
     /// <summary>
     /// Unload a model and optionally its materials.
@@ -1906,6 +2054,393 @@ public static unsafe partial class R3D
     /// <seealso>R3D_SetEnvironment</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetEnvironment")]
     public static partial void SetEnvironment(Environment* env);
+
+    /// <summary>
+    /// Check if capsule intersects with box
+    /// </summary>
+    /// <param name="capsule">Capsule shape</param>
+    /// <param name="box">Bounding box</param>
+    /// <returns>true if collision detected</returns>
+    /// <seealso>R3D_CheckCollisionCapsuleBox</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_CheckCollisionCapsuleBox")]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool CheckCollisionCapsuleBox(Capsule capsule, BoundingBox box);
+
+    /// <summary>
+    /// Check if capsule intersects with sphere
+    /// </summary>
+    /// <param name="capsule">Capsule shape</param>
+    /// <param name="center">Sphere center</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <returns>true if collision detected</returns>
+    /// <seealso>R3D_CheckCollisionCapsuleSphere</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_CheckCollisionCapsuleSphere")]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool CheckCollisionCapsuleSphere(Capsule capsule, Vector3 center, float radius);
+
+    /// <summary>
+    /// Check if two capsules intersect
+    /// </summary>
+    /// <param name="a">First capsule</param>
+    /// <param name="b">Second capsule</param>
+    /// <returns>true if collision detected</returns>
+    /// <seealso>R3D_CheckCollisionCapsules</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_CheckCollisionCapsules")]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool CheckCollisionCapsules(Capsule a, Capsule b);
+
+    /// <summary>
+    /// Check if capsule intersects with mesh
+    /// </summary>
+    /// <param name="capsule">Capsule shape</param>
+    /// <param name="mesh">Mesh data</param>
+    /// <param name="transform">Mesh transform</param>
+    /// <returns>true if collision detected</returns>
+    /// <seealso>R3D_CheckCollisionCapsuleMesh</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_CheckCollisionCapsuleMesh")]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool CheckCollisionCapsuleMesh(Capsule capsule, MeshData mesh, Matrix4x4 transform);
+
+    /// <summary>
+    /// Check penetration between capsule and box
+    /// </summary>
+    /// <param name="capsule">Capsule shape</param>
+    /// <param name="box">Bounding box</param>
+    /// <returns>Penetration information.</returns>
+    /// <seealso>R3D_CheckPenetrationCapsuleBox</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_CheckPenetrationCapsuleBox")]
+    public static partial Penetration CheckPenetrationCapsuleBox(Capsule capsule, BoundingBox box);
+
+    /// <summary>
+    /// Check penetration between capsule and sphere
+    /// </summary>
+    /// <param name="capsule">Capsule shape</param>
+    /// <param name="center">Sphere center</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <returns>Penetration information.</returns>
+    /// <seealso>R3D_CheckPenetrationCapsuleSphere</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_CheckPenetrationCapsuleSphere")]
+    public static partial Penetration CheckPenetrationCapsuleSphere(Capsule capsule, Vector3 center, float radius);
+
+    /// <summary>
+    /// Check penetration between two capsules
+    /// </summary>
+    /// <param name="a">First capsule</param>
+    /// <param name="b">Second capsule</param>
+    /// <returns>Penetration information.</returns>
+    /// <seealso>R3D_CheckPenetrationCapsules</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_CheckPenetrationCapsules")]
+    public static partial Penetration CheckPenetrationCapsules(Capsule a, Capsule b);
+
+    /// <summary>
+    /// Calculate slide velocity along surface
+    /// </summary>
+    /// <param name="velocity">Original velocity</param>
+    /// <param name="normal">Surface normal (must be normalized)</param>
+    /// <returns>Velocity sliding along surface (perpendicular component removed)</returns>
+    /// <seealso>R3D_SlideVelocity</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SlideVelocity")]
+    public static partial Vector3 SlideVelocity(Vector3 velocity, Vector3 normal);
+
+    /// <summary>
+    /// Calculate bounce velocity after collision
+    /// </summary>
+    /// <param name="velocity">Incoming velocity</param>
+    /// <param name="normal">Surface normal (must be normalized)</param>
+    /// <param name="bounciness">Coefficient of restitution (0=no bounce, 1=perfect bounce)</param>
+    /// <returns>Reflected velocity</returns>
+    /// <seealso>R3D_BounceVelocity</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_BounceVelocity")]
+    public static partial Vector3 BounceVelocity(Vector3 velocity, Vector3 normal, float bounciness);
+
+    /// <summary>
+    /// Slide sphere along box surface, resolving collisions
+    /// </summary>
+    /// <param name="center">Sphere center position</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <param name="velocity">Desired movement vector</param>
+    /// <param name="box">Obstacle bounding box</param>
+    /// <param name="outNormal">Optional: receives collision normal if collision occurred</param>
+    /// <returns>Actual movement applied (may be reduced/redirected by collision)</returns>
+    /// <seealso>R3D_SlideSphereBox</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SlideSphereBox")]
+    public static partial Vector3 SlideSphereBox(Vector3 center, float radius, Vector3 velocity, BoundingBox box, ref Vector3 outNormal);
+
+    /// <summary>
+    /// Slide sphere along mesh surface, resolving collisions
+    /// </summary>
+    /// <param name="center">Sphere center position</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <param name="velocity">Desired movement vector</param>
+    /// <param name="mesh">Mesh data to collide against</param>
+    /// <param name="transform">Mesh world transform</param>
+    /// <param name="outNormal">Optional: receives collision normal if collision occurred</param>
+    /// <returns>Actual movement applied (may be reduced/redirected by collision)</returns>
+    /// <seealso>R3D_SlideSphereMesh</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SlideSphereMesh")]
+    public static partial Vector3 SlideSphereMesh(Vector3 center, float radius, Vector3 velocity, MeshData mesh, Matrix4x4 transform, ref Vector3 outNormal);
+
+    /// <summary>
+    /// Slide capsule along box surface, resolving collisions
+    /// </summary>
+    /// <param name="capsule">Capsule shape</param>
+    /// <param name="velocity">Desired movement vector</param>
+    /// <param name="box">Obstacle bounding box</param>
+    /// <param name="outNormal">Optional: receives collision normal if collision occurred</param>
+    /// <returns>Actual movement applied (may be reduced/redirected by collision)</returns>
+    /// <seealso>R3D_SlideCapsuleBox</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SlideCapsuleBox")]
+    public static partial Vector3 SlideCapsuleBox(Capsule capsule, Vector3 velocity, BoundingBox box, ref Vector3 outNormal);
+
+    /// <summary>
+    /// Slide capsule along mesh surface, resolving collisions
+    /// </summary>
+    /// <param name="capsule">Capsule shape</param>
+    /// <param name="velocity">Desired movement vector</param>
+    /// <param name="mesh">Mesh data to collide against</param>
+    /// <param name="transform">Mesh world transform</param>
+    /// <param name="outNormal">Optional: receives collision normal if collision occurred</param>
+    /// <returns>Actual movement applied (may be reduced/redirected by collision)</returns>
+    /// <seealso>R3D_SlideCapsuleMesh</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SlideCapsuleMesh")]
+    public static partial Vector3 SlideCapsuleMesh(Capsule capsule, Vector3 velocity, MeshData mesh, Matrix4x4 transform, ref Vector3 outNormal);
+
+    /// <summary>
+    /// Push sphere out of box if penetrating
+    /// </summary>
+    /// <param name="center">Sphere center (modified in place if penetrating)</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <param name="box">Obstacle box</param>
+    /// <param name="outPenetration">Optional: receives penetration depth</param>
+    /// <returns>true if depenetration occurred</returns>
+    /// <seealso>R3D_DepenetrateSphereBox</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_DepenetrateSphereBox")]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool DepenetrateSphereBox(ref Vector3 center, float radius, BoundingBox box, ref float outPenetration);
+
+    /// <summary>
+    /// Push capsule out of box if penetrating
+    /// </summary>
+    /// <param name="capsule">Capsule shape (modified in place if penetrating)</param>
+    /// <param name="box">Obstacle box</param>
+    /// <param name="outPenetration">Optional: receives penetration depth</param>
+    /// <returns>true if depenetration occurred</returns>
+    /// <seealso>R3D_DepenetrateCapsuleBox</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_DepenetrateCapsuleBox")]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool DepenetrateCapsuleBox(ref Capsule capsule, BoundingBox box, ref float outPenetration);
+
+    /// <summary>
+    /// Cast a ray against mesh geometry
+    /// </summary>
+    /// <param name="ray">Ray to cast</param>
+    /// <param name="mesh">Mesh data to test against</param>
+    /// <param name="transform">Mesh world transform</param>
+    /// <returns>Ray collision info (hit, distance, point, normal)</returns>
+    /// <seealso>R3D_RaycastMesh</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_RaycastMesh")]
+    public static partial RayCollision RaycastMesh(Ray ray, MeshData mesh, Matrix4x4 transform);
+
+    /// <summary>
+    /// Cast a ray against a model (tests all meshes)
+    /// </summary>
+    /// <param name="ray">Ray to cast</param>
+    /// <param name="model">Model to test against (must have valid meshData)</param>
+    /// <param name="transform">Model world transform</param>
+    /// <returns>Ray collision info for closest hit (hit=false if no meshData)</returns>
+    /// <seealso>R3D_RaycastModel</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_RaycastModel")]
+    public static partial RayCollision RaycastModel(Ray ray, Model model, Matrix4x4 transform);
+
+    /// <summary>
+    /// Sweep sphere against single point
+    /// </summary>
+    /// <param name="center">Sphere center position</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <param name="velocity">Movement vector (direction and magnitude)</param>
+    /// <param name="point">Point to test against</param>
+    /// <returns>Sweep collision info (hit, time, point, normal)</returns>
+    /// <seealso>R3D_SweepSpherePoint</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SweepSpherePoint")]
+    public static partial SweepCollision SweepSpherePoint(Vector3 center, float radius, Vector3 velocity, Vector3 point);
+
+    /// <summary>
+    /// Sweep sphere against line segment
+    /// </summary>
+    /// <param name="center">Sphere center position</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <param name="velocity">Movement vector (direction and magnitude)</param>
+    /// <param name="a">Segment start point</param>
+    /// <param name="b">Segment end point</param>
+    /// <returns>Sweep collision info (hit, time, point, normal)</returns>
+    /// <seealso>R3D_SweepSphereSegment</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SweepSphereSegment")]
+    public static partial SweepCollision SweepSphereSegment(Vector3 center, float radius, Vector3 velocity, Vector3 a, Vector3 b);
+
+    /// <summary>
+    /// Sweep sphere against triangle plane (no edge/vertex clipping)
+    /// </summary>
+    /// <param name="center">Sphere center position</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <param name="velocity">Movement vector (direction and magnitude)</param>
+    /// <param name="a">Triangle vertex A</param>
+    /// <param name="b">Triangle vertex B</param>
+    /// <param name="c">Triangle vertex C</param>
+    /// <returns>Sweep collision info (hit, time, point, normal)</returns>
+    /// <seealso>R3D_SweepSphereTrianglePlane</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SweepSphereTrianglePlane")]
+    public static partial SweepCollision SweepSphereTrianglePlane(Vector3 center, float radius, Vector3 velocity, Vector3 a, Vector3 b, Vector3 c);
+
+    /// <summary>
+    /// Sweep sphere against triangle with edge/vertex handling
+    /// </summary>
+    /// <param name="center">Sphere center position</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <param name="velocity">Movement vector (direction and magnitude)</param>
+    /// <param name="a">Triangle vertex A</param>
+    /// <param name="b">Triangle vertex B</param>
+    /// <param name="c">Triangle vertex C</param>
+    /// <returns>Sweep collision info (hit, time, point, normal)</returns>
+    /// <seealso>R3D_SweepSphereTriangle</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SweepSphereTriangle")]
+    public static partial SweepCollision SweepSphereTriangle(Vector3 center, float radius, Vector3 velocity, Vector3 a, Vector3 b, Vector3 c);
+
+    /// <summary>
+    /// Sweep sphere along velocity vector
+    /// </summary>
+    /// <param name="center">Sphere center position</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <param name="velocity">Movement vector (direction and magnitude)</param>
+    /// <param name="box">Obstacle bounding box</param>
+    /// <returns>Sweep collision info (hit, distance, point, normal)</returns>
+    /// <seealso>R3D_SweepSphereBox</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SweepSphereBox")]
+    public static partial SweepCollision SweepSphereBox(Vector3 center, float radius, Vector3 velocity, BoundingBox box);
+
+    /// <summary>
+    /// Sweep sphere along velocity vector against mesh geometry
+    /// </summary>
+    /// <param name="center">Sphere center position</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <param name="velocity">Movement vector (direction and magnitude)</param>
+    /// <param name="mesh">Mesh data to test against</param>
+    /// <param name="transform">Mesh world transform</param>
+    /// <returns>Sweep collision info (hit, time, point, normal)</returns>
+    /// <seealso>R3D_SweepSphereMesh</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SweepSphereMesh")]
+    public static partial SweepCollision SweepSphereMesh(Vector3 center, float radius, Vector3 velocity, MeshData mesh, Matrix4x4 transform);
+
+    /// <summary>
+    /// Sweep capsule along velocity vector
+    /// </summary>
+    /// <param name="capsule">Capsule shape to sweep</param>
+    /// <param name="velocity">Movement vector (direction and magnitude)</param>
+    /// <param name="box">Obstacle bounding box</param>
+    /// <returns>Sweep collision info (hit, distance, point, normal)</returns>
+    /// <seealso>R3D_SweepCapsuleBox</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SweepCapsuleBox")]
+    public static partial SweepCollision SweepCapsuleBox(Capsule capsule, Vector3 velocity, BoundingBox box);
+
+    /// <summary>
+    /// Sweep capsule along velocity vector against mesh geometry
+    /// </summary>
+    /// <param name="capsule">Capsule shape to sweep</param>
+    /// <param name="velocity">Movement vector (direction and magnitude)</param>
+    /// <param name="mesh">Mesh data to test against</param>
+    /// <param name="transform">Mesh world transform</param>
+    /// <returns>Sweep collision info (hit, time, point, normal)</returns>
+    /// <seealso>R3D_SweepCapsuleMesh</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SweepCapsuleMesh")]
+    public static partial SweepCollision SweepCapsuleMesh(Capsule capsule, Vector3 velocity, MeshData mesh, Matrix4x4 transform);
+
+    /// <summary>
+    /// Check if sphere is grounded against a box
+    /// </summary>
+    /// <param name="center">Sphere center</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <param name="checkDistance">How far below to check</param>
+    /// <param name="ground">Ground box to test against</param>
+    /// <param name="outGround">Optional: receives raycast hit info</param>
+    /// <returns>true if grounded within checkDistance</returns>
+    /// <seealso>R3D_IsSphereGroundedBox</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsSphereGroundedBox")]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool IsSphereGroundedBox(Vector3 center, float radius, float checkDistance, BoundingBox ground, ref RayCollision outGround);
+
+    /// <summary>
+    /// Check if sphere is grounded against mesh geometry
+    /// </summary>
+    /// <param name="center">Sphere center</param>
+    /// <param name="radius">Sphere radius</param>
+    /// <param name="checkDistance">How far below to check</param>
+    /// <param name="mesh">Mesh data to test against</param>
+    /// <param name="transform">Mesh world transform</param>
+    /// <param name="outGround">Optional: receives raycast hit info</param>
+    /// <returns>true if grounded within checkDistance</returns>
+    /// <seealso>R3D_IsSphereGroundedMesh</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsSphereGroundedMesh")]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool IsSphereGroundedMesh(Vector3 center, float radius, float checkDistance, MeshData mesh, Matrix4x4 transform, ref RayCollision outGround);
+
+    /// <summary>
+    /// Check if capsule is grounded against a box
+    /// </summary>
+    /// <param name="capsule">Character capsule</param>
+    /// <param name="checkDistance">How far below to check (e.g., 0.1)</param>
+    /// <param name="ground">Ground box to test against</param>
+    /// <param name="outGround">Optional: receives raycast hit info</param>
+    /// <returns>true if grounded within checkDistance</returns>
+    /// <seealso>R3D_IsCapsuleGroundedBox</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsCapsuleGroundedBox")]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool IsCapsuleGroundedBox(Capsule capsule, float checkDistance, BoundingBox ground, ref RayCollision outGround);
+
+    /// <summary>
+    /// Check if capsule is grounded against mesh geometry
+    /// </summary>
+    /// <param name="capsule">Character capsule</param>
+    /// <param name="checkDistance">How far below to check</param>
+    /// <param name="mesh">Mesh data to test against</param>
+    /// <param name="transform">Mesh world transform</param>
+    /// <param name="outGround">Optional: receives raycast hit info</param>
+    /// <returns>true if grounded within checkDistance</returns>
+    /// <seealso>R3D_IsCapsuleGroundedMesh</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsCapsuleGroundedMesh")]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool IsCapsuleGroundedMesh(Capsule capsule, float checkDistance, MeshData mesh, Matrix4x4 transform, ref RayCollision outGround);
+
+    /// <summary>
+    /// Find closest point on line segment to given point
+    /// </summary>
+    /// <param name="point">Query point</param>
+    /// <param name="start">Segment start</param>
+    /// <param name="end">Segment end</param>
+    /// <returns>Closest point on segment [start, end]</returns>
+    /// <seealso>R3D_ClosestPointOnSegment</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ClosestPointOnSegment")]
+    public static partial Vector3 ClosestPointOnSegment(Vector3 point, Vector3 start, Vector3 end);
+
+    /// <summary>
+    /// Find closest point on triangle to given point
+    /// </summary>
+    /// <param name="p">Query point</param>
+    /// <param name="a">Triangle vertex A</param>
+    /// <param name="b">Triangle vertex B</param>
+    /// <param name="c">Triangle vertex C</param>
+    /// <returns>Closest point on triangle surface</returns>
+    /// <seealso>R3D_ClosestPointOnTriangle</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ClosestPointOnTriangle")]
+    public static partial Vector3 ClosestPointOnTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c);
+
+    /// <summary>
+    /// Find closest point on box surface to given point
+    /// </summary>
+    /// <param name="point">Query point</param>
+    /// <param name="box">Bounding box</param>
+    /// <returns>Closest point on/in box (clamped to box bounds)</returns>
+    /// <seealso>R3D_ClosestPointOnBox</seealso>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ClosestPointOnBox")]
+    public static partial Vector3 ClosestPointOnBox(Vector3 point, BoundingBox box);
 
     /// <summary>
     /// Creates a new light of the specified type.

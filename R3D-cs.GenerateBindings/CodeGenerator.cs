@@ -20,7 +20,7 @@ public class CodeGenerator(string outputDir)
     /// <summary>
     ///     Generates all binding files from the parsed compilation.
     /// </summary>
-    public void Generate(CppCompilation compilation, Version version)
+    public void Generate(CppCompilation compilation, string version)
     {
         // Clear output directories
         Console.WriteLine("Preparing output directories...");
@@ -295,7 +295,7 @@ public class CodeGenerator(string outputDir)
         return count;
     }
 
-    private int GenerateInteropFile(CppCompilation compilation, Version version)
+    private int GenerateInteropFile(CppCompilation compilation, string version)
     {
         var sb = new StringBuilder();
         GenerateHeader(sb,

@@ -135,6 +135,30 @@ public static class RepositoryManager
     }
 
     /// <summary>
+    ///     Gets the latest version tag at or before the current commit.
+    /// </summary>
+    /// <param name="repoPath">The path to the repository.</param>
+    /// <returns>The version if found, null otherwise.</returns>
+    public static Version? GetLatestVersionFromTags(string repoPath)
+    {
+        try
+        {
+            // Get the most recent tag reachable from HEAD
+            string tag = RunGit($"-C \"{repoPath}\" describe --tags --abbrev=0").Trim();
+            string versionString = tag.TrimStart('v', 'V');
+
+            if (Version.TryParse(versionString, out var version))
+                return version;
+        }
+        catch
+        {
+            // No tags found or git command failed
+        }
+
+        return null;
+    }
+
+    /// <summary>
     ///     Fetches the latest semver tag from a remote repository.
     /// </summary>
     /// <param name="repoUrl">The repository URL to query.</param>
