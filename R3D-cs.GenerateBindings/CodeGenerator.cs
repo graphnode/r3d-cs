@@ -42,7 +42,7 @@ public class CodeGenerator(string outputDir)
         Console.WriteLine($"  Generated {miscCount} misc files");
 
         Console.WriteLine("Generating interop file...");
-        int funcCount = GenerateInteropFile(compilation, version);
+        int funcCount = GenerateInteropFiles(compilation, version);
         Console.WriteLine($"  Generated interop file with {funcCount} functions");
     }
 
@@ -295,78 +295,98 @@ public class CodeGenerator(string outputDir)
         return count;
     }
 
-    private int GenerateInteropFile(CppCompilation compilation, string version)
+    private int GenerateInteropFiles(CppCompilation compilation, string version)
     {
-        var sb = new StringBuilder();
-        GenerateHeader(sb,
-            ["System", "System.Numerics", "System.Runtime.CompilerServices", "System.Runtime.InteropServices", "System.Security", "Raylib_cs", "static Raylib_cs.Raylib"],
-            ["[assembly: DisableRuntimeMarshalling]"]);
-        sb.AppendLine("[SuppressUnmanagedCodeSecurity]");
-        sb.AppendLine("public static unsafe partial class R3D");
-        sb.AppendLine("{");
-        sb.AppendLine();
-        sb.AppendLine("    /// <summary>");
-        sb.AppendLine("    /// Used by DllImport to load the native library");
-        sb.AppendLine("    /// </summary>");
-        sb.AppendLine($"    public const string NativeLibName = \"{NativeLibName}\";");
-        sb.AppendLine();
-        sb.AppendLine($"    public const string R3D_VERSION = \"{version}\";");
-        sb.AppendLine();
-
         var funcCount = 0;
 
-        foreach (var function in compilation.Functions)
+        var functions =  compilation.Functions
+            .Where(f => IsR3DSource(f.SourceFile))
+            .GroupBy(f => Path.GetFileNameWithoutExtension(f.SourceFile));
+
+        foreach (var group in functions)
         {
-            if (!IsR3DSource(function.SourceFile))
-                continue;
-
-            string? name = function.Name;
-            (string returnType, _, _, _) = MapType(function.ReturnType);
-            bool hasStringParam = function.Parameters.Any(p => p.Type is CppPointerType
+            var sb = new StringBuilder();
+            if (group.Key == "r3d_core")
             {
-                ElementType: CppQualifiedType { ElementType: CppPrimitiveType { Kind: CppPrimitiveKind.Char } }
-            });
-
-            CommentGenerator.Generate(sb, function.Comment, name, "    ");
-
-            sb.Append("    [LibraryImport(NativeLibName");
-            sb.Append($", EntryPoint = \"{name}\"");
-            if (hasStringParam)
-                sb.Append(", StringMarshalling = StringMarshalling.Utf8");
-            sb.AppendLine(")]");
-
-            if (returnType == "bool")
-                sb.AppendLine("    [return: MarshalAs(UnmanagedType.I1)]");
-
-            sb.Append($"    public static partial {StripR3DPrefix(returnType)} {StripR3DPrefix(name)}(");
-            for (var i = 0; i < function.Parameters.Count; i++)
+                GenerateHeader(sb,
+                    ["System", "System.Numerics", "System.Runtime.CompilerServices", "System.Runtime.InteropServices", "System.Security", "Raylib_cs", "static Raylib_cs.Raylib"],
+                    ["[assembly: DisableRuntimeMarshalling]"]
+                );
+            }
+            else
             {
-                if (i > 0)
-                    sb.Append(", ");
-
-                var param = function.Parameters[i];
-                (string paramType, _, _, _) = MapType(param.Type);
-
-                if (paramType == "bool")
-                    sb.Append("[MarshalAs(UnmanagedType.I1)] ");
-
-                // Convert pointer parameters to ref/out where appropriate
-                (string? modifier, string finalType) = GetParameterModifier(param.Type, paramType, name);
-                if (modifier != null)
-                    sb.Append($"{modifier} ");
-
-                sb.Append($"{StripR3DPrefix(finalType)} {EscapeIdentifier(StripR3DPrefix(param.Name))}");
+                GenerateHeader(sb,
+                    ["System", "System.Numerics", "System.Runtime.CompilerServices", "System.Runtime.InteropServices", "System.Security", "Raylib_cs", "static Raylib_cs.Raylib"]
+                );
             }
 
-            sb.AppendLine(");");
+            sb.AppendLine($"// {group.Key}.h;");
             sb.AppendLine();
+            sb.AppendLine("[SuppressUnmanagedCodeSecurity]");
+            sb.AppendLine("public static unsafe partial class R3D");
+            sb.AppendLine("{");
+            sb.AppendLine();
+            if (group.Key == "r3d_core")
+            {
+                sb.AppendLine("    /// <summary>");
+                sb.AppendLine("    /// Used by DllImport to load the native library");
+                sb.AppendLine("    /// </summary>");
+                sb.AppendLine($"    public const string NativeLibName = \"{NativeLibName}\";");
+                sb.AppendLine();
+                sb.AppendLine($"    public const string R3D_VERSION = \"{version}\";");
+                sb.AppendLine();
+            }
 
-            funcCount++;
+            foreach (var function in group)
+            {
+                string? name = function.Name;
+                (string returnType, _, _, _) = MapType(function.ReturnType);
+                bool hasStringParam = function.Parameters.Any(p => p.Type is CppPointerType
+                {
+                    ElementType: CppQualifiedType { ElementType: CppPrimitiveType { Kind: CppPrimitiveKind.Char } }
+                });
+
+                CommentGenerator.Generate(sb, function.Comment, name, "    ");
+
+                sb.Append("    [LibraryImport(NativeLibName");
+                sb.Append($", EntryPoint = \"{name}\"");
+                if (hasStringParam)
+                    sb.Append(", StringMarshalling = StringMarshalling.Utf8");
+                sb.AppendLine(")]");
+
+                if (returnType == "bool")
+                    sb.AppendLine("    [return: MarshalAs(UnmanagedType.I1)]");
+
+                sb.Append($"    public static partial {StripR3DPrefix(returnType)} {StripR3DPrefix(name)}(");
+                for (var i = 0; i < function.Parameters.Count; i++)
+                {
+                    if (i > 0)
+                        sb.Append(", ");
+
+                    var param = function.Parameters[i];
+                    (string paramType, _, _, _) = MapType(param.Type);
+
+                    if (paramType == "bool")
+                        sb.Append("[MarshalAs(UnmanagedType.I1)] ");
+
+                    // Convert pointer parameters to ref/out where appropriate
+                    (string? modifier, string finalType) = GetParameterModifier(param.Type, paramType, name);
+                    if (modifier != null)
+                        sb.Append($"{modifier} ");
+
+                    sb.Append($"{StripR3DPrefix(finalType)} {EscapeIdentifier(StripR3DPrefix(param.Name))}");
+                }
+
+                sb.AppendLine(");");
+                sb.AppendLine();
+
+                funcCount++;
+            }
+
+            sb.AppendLine("}");
+
+            File.WriteAllText(Path.Combine(outputDir, "interop", $"R3D.{group.Key.Replace("r3d_", "")}.g.cs"), sb.ToString());
         }
-
-        sb.AppendLine("}");
-
-        File.WriteAllText(Path.Combine(outputDir, "interop", "R3D.g.cs"), sb.ToString());
 
         return funcCount;
     }

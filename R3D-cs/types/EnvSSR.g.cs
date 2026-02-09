@@ -19,46 +19,40 @@ namespace R3D_cs;
 public struct EnvSSR
 {
     /// <summary>
-    /// Maximum ray marching iterations (default: 64)
+    /// Maximum ray marching steps (default: 32)
     /// </summary>
     /// <seealso>maxRaySteps</seealso>
     public int MaxRaySteps;
 
     /// <summary>
-    /// Refinement steps for intersection (default: 8)
+    /// Binary search refinement steps (default: 4)
     /// </summary>
-    /// <seealso>binarySearchSteps</seealso>
-    public int BinarySearchSteps;
+    /// <seealso>binarySteps</seealso>
+    public int BinarySteps;
 
     /// <summary>
-    /// Maximum ray distance in view space (default: 8.0)
+    /// Ray step size (default: 0.125)
     /// </summary>
-    /// <seealso>rayMarchLength</seealso>
-    public float RayMarchLength;
+    /// <seealso>stepSize</seealso>
+    public float StepSize;
 
     /// <summary>
     /// Depth tolerance for valid hits (default: 0.2)
     /// </summary>
-    /// <seealso>depthThickness</seealso>
-    public float DepthThickness;
+    /// <seealso>thickness</seealso>
+    public float Thickness;
 
     /// <summary>
-    /// Negative margin to prevent false negatives (default: 0.005)
+    /// Maximum ray distance (default: 4.0)
     /// </summary>
-    /// <seealso>depthTolerance</seealso>
-    public float DepthTolerance;
+    /// <seealso>maxDistance</seealso>
+    public float MaxDistance;
 
     /// <summary>
-    /// Screen edge fade start [0-1] (default: 0.7)
+    /// Screen edge fade start [0,1] (default: 0.25)
     /// </summary>
-    /// <seealso>edgeFadeStart</seealso>
-    public float EdgeFadeStart;
-
-    /// <summary>
-    /// Screen edge fade end [0-1] (default: 1.0)
-    /// </summary>
-    /// <seealso>edgeFadeEnd</seealso>
-    public float EdgeFadeEnd;
+    /// <seealso>edgeFade</seealso>
+    public float EdgeFade;
 
     /// <summary>
     /// Enable/disable SSR (default: false)

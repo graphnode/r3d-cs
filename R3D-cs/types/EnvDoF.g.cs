@@ -42,10 +42,4 @@ public struct EnvDoF
     /// <seealso>maxBlurSize</seealso>
     public float MaxBlurSize;
 
-    /// <summary>
-    /// Color-coded visualization: green=near, blue=far (default: false)
-    /// </summary>
-    /// <seealso>debugMode</seealso>
-    public bool DebugMode;
-
 }

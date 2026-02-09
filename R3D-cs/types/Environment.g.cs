@@ -43,16 +43,16 @@ public struct Environment
     public EnvSSIL Ssil;
 
     /// <summary>
-    /// Bloom glow effect
-    /// </summary>
-    /// <seealso>bloom</seealso>
-    public EnvBloom Bloom;
-
-    /// <summary>
     /// Screen space reflections
     /// </summary>
     /// <seealso>ssr</seealso>
     public EnvSSR Ssr;
+
+    /// <summary>
+    /// Bloom glow effect
+    /// </summary>
+    /// <seealso>bloom</seealso>
+    public EnvBloom Bloom;
 
     /// <summary>
     /// Atmospheric fog

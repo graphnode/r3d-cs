@@ -7,7 +7,7 @@ namespace Examples;
 
 public static class Basic
 {
-    public static unsafe int Main()
+    public static int Main()
     {
         // Initialize window
         InitWindow(800, 450, "[r3d] - Basic example");
@@ -22,9 +22,7 @@ public static class Basic
         var material = R3D.GetDefaultMaterial();
 
         // Setup environment
-        var env = R3D.GetEnvironment();
-        env->Ambient.Color = new Color(10, 10, 10, 255);
-        R3D.SetEnvironment(env);
+        R3D.SetEnvironmentEx((ref env) => env.Ambient.Color = new Color(10, 10, 10, 255));
 
         // Create light
         var light = R3D.CreateLight(LightType.Spot);

@@ -16,7 +16,7 @@ namespace R3D_cs;
 /// </summary>
 /// <seealso>R3D_Material</seealso>
 [StructLayout(LayoutKind.Sequential)]
-public struct Material
+public unsafe struct Material
 {
     /// <summary>
     /// Albedo map
@@ -43,6 +43,36 @@ public struct Material
     public OrmMap Orm;
 
     /// <summary>
+    /// UV offset (default: {0.0f, 0.0f})
+    /// </summary>
+    /// <seealso>uvOffset</seealso>
+    public Vector2 UvOffset;
+
+    /// <summary>
+    /// UV scale (default: {1.0f, 1.0f})
+    /// </summary>
+    /// <seealso>uvScale</seealso>
+    public Vector2 UvScale;
+
+    /// <summary>
+    /// Alpha cutoff threshold (default: 0.01f)
+    /// </summary>
+    /// <seealso>alphaCutoff</seealso>
+    public float AlphaCutoff;
+
+    /// <summary>
+    /// Depth test configuration (default: standard)
+    /// </summary>
+    /// <seealso>depth</seealso>
+    public DepthState Depth;
+
+    /// <summary>
+    /// Stencil test configuration (default: disabled)
+    /// </summary>
+    /// <seealso>stencil</seealso>
+    public StencilState Stencil;
+
+    /// <summary>
     /// Transparency mode (default: DISABLED)
     /// </summary>
     /// <seealso>transparencyMode</seealso>
@@ -67,21 +97,15 @@ public struct Material
     public CullMode CullMode;
 
     /// <summary>
-    /// UV offset (default: {0.0f, 0.0f})
+    /// If true, material does not participate in lighting (default: false)
     /// </summary>
-    /// <seealso>uvOffset</seealso>
-    public Vector2 UvOffset;
+    /// <seealso>unlit</seealso>
+    public bool Unlit;
 
     /// <summary>
-    /// UV scale (default: {1.0f, 1.0f})
+    /// Custom shader applied to the material (default: NULL)
     /// </summary>
-    /// <seealso>uvScale</seealso>
-    public Vector2 UvScale;
-
-    /// <summary>
-    /// Alpha cutoff threshold (default: 0.01f)
-    /// </summary>
-    /// <seealso>alphaCutoff</seealso>
-    public float AlphaCutoff;
+    /// <seealso>shader</seealso>
+    public SurfaceShader* Shader;
 
 }

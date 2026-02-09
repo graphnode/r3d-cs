@@ -41,4 +41,7 @@ public enum OutputMode
 
     /// <seealso>R3D_OutputMode.R3D_OUTPUT_BLOOM</seealso>
     Bloom,
+
+    /// <seealso>R3D_OutputMode.R3D_OUTPUT_DOF</seealso>
+    Dof,
 }

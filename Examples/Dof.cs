@@ -30,7 +30,6 @@ public static class Dof
             env.Dof.FocusPoint = 2.0f;
             env.Dof.FocusScale = 3.0f;
             env.Dof.MaxBlurSize = 20.0f;
-            env.Dof.DebugMode = false;
         });
 
         // Create directional light
@@ -94,7 +93,8 @@ public static class Dof
                 R3D.SetEnvironmentEx((ref env) => env.Dof.MaxBlurSize = maxBlur + mouseWheel * 0.1f);
             }
 
-            if (IsKeyPressed(KeyboardKey.F1)) R3D.SetEnvironmentEx((ref env) => env.Dof.DebugMode = !R3D.GetEnvironmentEx().Dof.DebugMode);
+            if (IsKeyPressed(KeyboardKey.F1))
+                R3D.SetOutputMode(R3D.GetOutputMode() == OutputMode.Scene ? OutputMode.Dof : OutputMode.Scene);
 
             BeginDrawing();
                 ClearBackground(Color.Black);
@@ -107,7 +107,7 @@ public static class Dof
                 // Display DoF values
                 var env = R3D.GetEnvironmentEx();
                 string dofText = $"Focus Point: {env.Dof.FocusPoint:F2}\nFocus Scale: {env.Dof.FocusScale:F2}\n" +
-                                 $"Max Blur Size: {env.Dof.MaxBlurSize:F2}\nDebug Mode: {env.Dof.DebugMode}";
+                                 $"Max Blur Size: {env.Dof.MaxBlurSize:F2}\nDebug Mode: {R3D.GetOutputMode() == OutputMode.Scene}";
                 DrawText(dofText, 10, 30, 20, new Color(255, 255, 255, 127));
 
                 // Display instructions

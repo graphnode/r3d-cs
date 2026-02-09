@@ -19,7 +19,7 @@ namespace R3D_cs;
 /// </remarks>
 /// <seealso>R3D_Decal</seealso>
 [StructLayout(LayoutKind.Sequential)]
-public struct Decal
+public unsafe struct Decal
 {
     /// <summary>
     /// Albedo map (if the texture is undefined, implicitly treat `applyColor` as false, with alpha = 1.0)
@@ -80,5 +80,11 @@ public struct Decal
     /// </summary>
     /// <seealso>applyColor</seealso>
     public bool ApplyColor;
+
+    /// <summary>
+    /// Custom shader applied to the decal (default: NULL)
+    /// </summary>
+    /// <seealso>shader</seealso>
+    public SurfaceShader* Shader;
 
 }

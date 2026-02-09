@@ -25,6 +25,8 @@ public static class ExampleList
         new("Animation", Animation.Main),
         new("Bloom", Bloom.Main),
         new("Resize", Resize.Main),
+        new("Shader", Shader.Main),
+        new("Kinematics", Kinematics.Main),
         new("Particles", Particles.Main),
         new("Instanced", Instanced.Main),
         new("Billboards", Billboards.Main),

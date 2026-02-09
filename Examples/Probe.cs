@@ -26,12 +26,11 @@ public static class Probe
         {
             // Setup environment sky
             env.Background.SkyBlur = 0.3f;
-            env.Background.Energy = 0.6f;
             env.Background.Sky = cubemap;
 
             // Setup environment ambient
             env.Ambient.Map = ambientMap;
-            env.Ambient.Energy = 0.25f;
+            env.Ambient.Energy = 0.2f;
 
             // Setup tonemapping
             env.Tonemap.Mode = Tonemap.Filmic;
@@ -85,8 +84,6 @@ public static class Probe
                     }
 
                 R3D.End();
-                
-                DrawFPS(10, 10);
 
             EndDrawing();
         }
