@@ -485,3 +485,6 @@ $RECYCLE.BIN/
 R3D-cs/runtimes/*/native/*.dll
 R3D-cs/runtimes/*/native/*.so
 R3D-cs/runtimes/*/native/*.dylib
+
+# Claude local settings
+.claude/*.local.json

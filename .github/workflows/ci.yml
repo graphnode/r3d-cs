@@ -8,7 +8,7 @@ on:
     branches: [master]
 
 env:
-  R3D_UPSTREAM_REF: "v0.8"
+  R3D_UPSTREAM_REF: "master"
 
 jobs:
   build-native:
