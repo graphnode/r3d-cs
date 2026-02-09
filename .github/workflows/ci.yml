@@ -20,8 +20,6 @@ jobs:
             rid: win-x64
           - os: ubuntu-latest
             rid: linux-x64
-          - os: macos-latest
-            rid: osx-x64
 
     runs-on: ${{ matrix.os }}
     name: Build native (${{ matrix.rid }})
@@ -53,10 +51,6 @@ jobs:
             libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
             libwayland-dev libxkbcommon-dev wayland-protocols \
             libgl1-mesa-dev
-
-      - name: Install deps (macOS)
-        if: matrix.rid == 'osx-x64'
-        run: brew install ninja
 
       - name: Setup MSVC (Windows)
         if: matrix.rid == 'win-x64'
@@ -126,50 +120,6 @@ jobs:
                 clean="${needed%%\.so\.*}.so"
                 echo "  Replacing NEEDED $needed -> $clean"
                 patchelf --replace-needed "$needed" "$clean" "$lib"
-              fi
-            done
-          done
-
-          echo "--- Staged files ---"
-          ls -la
-
-      - name: Stage native libs (macOS)
-        if: matrix.rid == 'osx-x64'
-        run: |
-          staging="staging/runtimes/osx-x64/native"
-          mkdir -p "$staging"
-
-          # Find and copy all .dylib files
-          find r3d-upstream/build -name '*.dylib*' -type f | while read -r lib; do
-            cp -v "$lib" "$staging/"
-          done
-
-          # Rename versioned dylibs to unversioned
-          cd "$staging"
-          for f in *.dylib.*; do
-            [ -e "$f" ] || continue
-            # e.g. libfoo.5.dylib -> libfoo.dylib
-            # Handle both libfoo.dylib.5 and libfoo.5.dylib patterns
-            base=$(echo "$f" | sed -E 's/\.[0-9]+\.dylib$/.dylib/; s/\.dylib\.[0-9.]+$/.dylib/')
-            if [ "$f" != "$base" ]; then
-              echo "Renaming $f -> $base"
-              mv "$f" "$base"
-            fi
-          done
-
-          # Fix install names to use @loader_path/
-          for lib in *.dylib; do
-            echo "Patching $lib"
-            # Fix the library's own install name
-            install_name_tool -id "@loader_path/$lib" "$lib"
-
-            # Fix references to other libraries in this directory
-            otool -L "$lib" | tail -n +2 | awk '{print $1}' | while read -r dep; do
-              dep_base=$(basename "$dep")
-              # If the dep is one of our staged libs, rewrite it
-              if [ -f "$dep_base" ] && [[ "$dep" != @* ]]; then
-                echo "  Rewriting dep $dep -> @loader_path/$dep_base"
-                install_name_tool -change "$dep" "@loader_path/$dep_base" "$lib"
               fi
             done
           done

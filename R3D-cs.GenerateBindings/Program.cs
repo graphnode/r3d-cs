@@ -1,292 +1,101 @@
 using System;
+using System.CommandLine;
 using System.IO;
-using System.Runtime.CompilerServices;
 using CppAst;
 
 namespace R3D_cs.GenerateBindings;
 
-/// <summary>
-///     Entry point for the R3D C# bindings generator.
-/// </summary>
 internal static class Program
 {
-    private const string DefaultRepoUrl = "https://github.com/Bigfoot71/r3d/";
-
-    private static void Main(string[] args)
+    private static int Main(string[] args)
     {
-        Console.WriteLine("╔══════════════════════════════════════════╗");
-        Console.WriteLine("║     R3D C# Bindings Generator            ║");
-        Console.WriteLine("╚══════════════════════════════════════════╝");
-        Console.WriteLine();
-
-        // Parse arguments
-        var options = ParseArguments(args);
-        if (options == null)
-            return;
-
-        try
+        Option<string> pathOption = new("--path", "-p")
         {
-            Run(options);
-            Console.WriteLine();
-            Console.WriteLine("Generation completed successfully!");
-        }
-        catch (Exception ex)
+            Description = "Path to local r3d repository with the header files to parse",
+            Required = true,
+        };
+
+        Option<string> versionOption = new("--version", "-v")
         {
-            Console.WriteLine();
-            Console.WriteLine($"Error: {ex.Message}");
-            if (ex.InnerException != null)
-                Console.WriteLine($"  Inner: {ex.InnerException.Message}");
-            Environment.Exit(1);
-        }
-    }
+            Description = "Version for generated bindings (e.g., 0.8.0, 0.8.0-dev)",
+            Required = true,
+        };
 
-    private static void Run(Options options)
-    {
-        string repoPath;
-
-        // Step 1: Ensure repository is available
-        if (options.LocalRepo != null)
+        Option<string> outputOption = new("--output", "-o")
         {
-            // Use local repository
-            repoPath = Path.GetFullPath(options.LocalRepo);
-            Console.WriteLine($"Using local repository: {repoPath}");
+            Description = "Output directory for generated files (default: ../R3D-cs)",
+            DefaultValueFactory = _ => "../R3D-cs",
+        };
 
-            if (!Directory.Exists(repoPath))
-                throw new DirectoryNotFoundException($"Local repository not found: {repoPath}");
-        }
-        else
+        RootCommand rootCommand = new("Sample app for System.CommandLine")
         {
-            // Resolve git ref (use latest tag if not specified)
-            bool isAutoDetectedLatest = options.GitRef == null;
-            string gitRef = options.GitRef ?? RepositoryManager.GetLatestTag(options.RepoUrl)
-                ?? throw new Exception("No version tags found in repository. Use --branch or --tag to specify a ref.");
-
-            // Clone or use cached repository
-            Console.WriteLine($"Repository: {options.RepoUrl}");
-            Console.WriteLine($"Git ref: {gitRef}{(isAutoDetectedLatest ? " (latest)" : "")}");
-            Console.WriteLine();
-
-            // Delete existing repo if force clone requested
-            if (options.ForceClone)
+            Description = "Generates C# bindings for the R3D C API",
+            Options = { pathOption, versionOption, outputOption },
+        };
+        rootCommand.SetAction(parseResult =>
+        {
+            try
             {
-                RepositoryManager.DeleteRepository();
+                string repoPath = Path.GetFullPath(parseResult.GetValue(pathOption) ?? string.Empty);
+                string version = parseResult.GetValue(versionOption) ?? string.Empty;
+                string outputDir = parseResult.GetValue(outputOption) ?? string.Empty;
+
+                Console.WriteLine($"Repository path: {repoPath}");
+                Console.WriteLine($"Version: {version}");
                 Console.WriteLine();
+
+                if (!Directory.Exists(repoPath))
+                    throw new DirectoryNotFoundException($"Repository path not found: {repoPath}");
+
+                // Parse C header
+                Console.WriteLine("Parsing C header...");
+                string headerPath = Path.Combine(repoPath, "include", "r3d", "r3d.h");
+                string includePath = Path.Combine(repoPath, "include");
+                string raylibInclude = Path.Combine(repoPath, "external", "raylib", "src");
+
+                if (!File.Exists(headerPath))
+                    throw new FileNotFoundException($"Header file not found: {headerPath}");
+
+                var parserOptions = new CppParserOptions
+                {
+                    IncludeFolders = { includePath, raylibInclude },
+                    ParseMacros = false,
+                    ParserKind = CppParserKind.C,
+                    ParseCommentAttribute = true,
+                    ParseComments = true
+                };
+
+                var compilation = CppParser.ParseFile(headerPath, parserOptions);
+
+                if (compilation.HasErrors)
+                {
+                    Console.WriteLine("Parser errors:");
+                    foreach (var message in compilation.Diagnostics.Messages)
+                        Console.WriteLine($"  {message.Text}");
+                    throw new Exception("Failed to parse header file");
+                }
+
+                Console.WriteLine($"  Parsed successfully: {compilation.Functions.Count} functions, {compilation.Classes.Count} structs, {compilation.Enums.Count} enums");
+                Console.WriteLine();
+
+                // Generate bindings
+                Console.WriteLine("Generating C# bindings...");
+                Console.WriteLine($"  Output: {outputDir}");
+                Console.WriteLine();
+
+                var generator = new CodeGenerator(outputDir);
+                generator.Generate(compilation, version);
             }
-
-            repoPath = RepositoryManager.EnsureRepository(options.RepoUrl, gitRef, isAutoDetectedLatest);
-        }
-
-        (string commitSha, string branch) = RepositoryManager.GetRepositoryInfo(repoPath);
-        Console.WriteLine($"  Commit: {commitSha} ({branch})");
-        Console.WriteLine();
-
-        // Step 2: Parse C header
-        Console.WriteLine("Parsing C header...");
-        string headerPath = Path.Combine(repoPath, "include", "r3d", "r3d.h");
-        string includePath = Path.Combine(repoPath, "include");
-        string raylibInclude = Path.Combine(repoPath, "external", "raylib", "src");
-
-        if (!File.Exists(headerPath)) throw new FileNotFoundException($"Header file not found: {headerPath}");
-
-        var parserOptions = new CppParserOptions
-        {
-            IncludeFolders = { includePath, raylibInclude },
-            ParseMacros = false,
-            ParserKind = CppParserKind.C,
-            ParseCommentAttribute = true,
-            ParseComments = true
-        };
-
-        var compilation = CppParser.ParseFile(headerPath, parserOptions);
-
-        if (compilation.HasErrors)
-        {
-            Console.WriteLine("Parser errors:");
-            foreach (var message in compilation.Diagnostics.Messages)
-                Console.WriteLine($"  {message.Text}");
-            throw new Exception("Failed to parse header file");
-        }
-
-        Console.WriteLine($"  Parsed successfully: {compilation.Functions.Count} functions, {compilation.Classes.Count} structs, {compilation.Enums.Count} enums");
-        Console.WriteLine();
-
-        // Step 3: Generate bindings
-        Console.WriteLine("Generating C# bindings...");
-        string outputDir = Path.GetFullPath(options.OutputDir);
-        Console.WriteLine($"  Output: {outputDir}");
-        Console.WriteLine();
-
-        // Resolve version: CLI option > branch/tag name > latest tag before commit > fallback
-        // When on a branch (not a tag), append the commit hash as a prerelease suffix
-        string versionString;
-        if (options.Version != null)
-        {
-            versionString = options.Version;
-            Console.WriteLine($"  Using specified version: {versionString}");
-        }
-        else if (Version.TryParse(branch.TrimStart('v', 'V'), out var branchVersion))
-        {
-            versionString = branchVersion.ToString();
-            Console.WriteLine($"  Version from tag: {versionString}");
-        }
-        else if (RepositoryManager.GetLatestVersionFromTags(repoPath) is { } tagVersion)
-        {
-            versionString = $"{tagVersion}-{commitSha}";
-            Console.WriteLine($"  Version from latest tag: {versionString} (branch: {branch})");
-        }
-        else
-        {
-            versionString = $"0.0.0-{commitSha}";
-            Console.WriteLine($"  Using fallback version: {versionString} (no tags found)");
-        }
-
-        var generator = new CodeGenerator(outputDir);
-        generator.Generate(compilation, versionString);
-    }
-
-    private static Options? ParseArguments(string[] args)
-    {
-        var options = new Options
-        {
-            RepoUrl = DefaultRepoUrl,
-            GitRef = null, // Will be resolved to latest tag if not specified
-            OutputDir = Path.GetFullPath("../R3D-cs", GetProjectDirectory())
-        };
-
-        for (var i = 0; i < args.Length; i++)
-            switch (args[i])
+            catch (Exception ex)
             {
-                case "-h":
-                case "--help":
-                    PrintHelp();
-                    return null;
-
-                case "-b":
-                case "--branch":
-                    if (i + 1 >= args.Length)
-                    {
-                        Console.WriteLine("Error: --branch requires a value");
-                        return null;
-                    }
-
-                    options.GitRef = args[++i];
-                    break;
-
-                case "-t":
-                case "--tag":
-                    if (i + 1 >= args.Length)
-                    {
-                        Console.WriteLine("Error: --tag requires a value");
-                        return null;
-                    }
-
-                    options.GitRef = args[++i];
-                    break;
-
-                case "-r":
-                case "--repo":
-                    if (i + 1 >= args.Length)
-                    {
-                        Console.WriteLine("Error: --repo requires a value");
-                        return null;
-                    }
-
-                    options.RepoUrl = args[++i];
-                    break;
-
-                case "-o":
-                case "--output":
-                    if (i + 1 >= args.Length)
-                    {
-                        Console.WriteLine("Error: --output requires a value");
-                        return null;
-                    }
-
-                    options.OutputDir = args[++i];
-                    break;
-
-                case "--clean":
-                    // Delete the cached repository and exit
-                    RepositoryManager.DeleteRepository();
-                    return null;
-
-                case "--force-clone":
-                    options.ForceClone = true;
-                    break;
-
-                case "-l":
-                case "--local":
-                    if (i + 1 >= args.Length)
-                    {
-                        Console.WriteLine("Error: --local requires a path");
-                        return null;
-                    }
-
-                    options.LocalRepo = args[++i];
-                    break;
-
-                case "-v":
-                case "--version":
-                    if (i + 1 >= args.Length)
-                    {
-                        Console.WriteLine("Error: --version requires a value");
-                        return null;
-                    }
-
-                    options.Version = args[++i];
-                    break;
-
-                default:
-                    Console.WriteLine($"Unknown argument: {args[i]}");
-                    Console.WriteLine("Use --help for usage information.");
-                    return null;
+                Console.WriteLine(ex.Message);
+                return 1;
             }
 
-        return options;
-    }
+            return 0;
+        });
 
-    private static void PrintHelp()
-    {
-        Console.WriteLine("Usage: R3D-cs.GenerateBindings [options]");
-        Console.WriteLine();
-        Console.WriteLine("Options:");
-        Console.WriteLine("  -h, --help           Show this help message");
-        Console.WriteLine("  -l, --local <path>   Use existing local repository (skips cloning)");
-        Console.WriteLine("  -b, --branch <name>  Git branch to use when cloning");
-        Console.WriteLine("  -t, --tag <name>     Git tag to use when cloning");
-        Console.WriteLine("  -v, --version <ver>  Override version for generated bindings (e.g., 0.8.0, 0.8.0-alpha)");
-        Console.WriteLine("  -r, --repo <url>     Repository URL (default: https://github.com/Bigfoot71/r3d/)");
-        Console.WriteLine("  -o, --output <dir>   Output directory for generated files");
-        Console.WriteLine("  --force-clone        Delete cached repo and clone fresh");
-        Console.WriteLine("  --clean              Remove cached repository and exit");
-        Console.WriteLine();
-        Console.WriteLine("By default, the generator clones the latest version tag from the repository.");
-        Console.WriteLine("Version is resolved in order: --version flag > tag name > latest tag before commit > 0.0.0");
-        Console.WriteLine();
-        Console.WriteLine("Examples:");
-        Console.WriteLine("  R3D-cs.GenerateBindings                    # Use cached repo or clone latest tag");
-        Console.WriteLine("  R3D-cs.GenerateBindings -l ../r3d          # Use local r3d repository");
-        Console.WriteLine("  R3D-cs.GenerateBindings --force-clone      # Force fresh clone of latest tag");
-        Console.WriteLine("  R3D-cs.GenerateBindings -b master          # Clone master branch (uses latest tag for version)");
-        Console.WriteLine("  R3D-cs.GenerateBindings -b master -v 0.8.0-dev # Clone master with explicit version");
-        Console.WriteLine("  R3D-cs.GenerateBindings -t 0.7 --force-clone  # Clone specific tag");
-        Console.WriteLine("  R3D-cs.GenerateBindings --clean            # Clear cached repository");
-        Console.WriteLine();
-        Console.WriteLine($"Repository is cached at: {RepositoryManager.GetRepositoryPath()}");
-    }
-
-    private static string GetProjectDirectory([CallerFilePath] string? path = null)
-    {
-        return Path.GetDirectoryName(path)!;
-    }
-
-    private class Options
-    {
-        public required string RepoUrl { get; set; }
-        public string? GitRef { get; set; } // null = use latest tag
-        public required string OutputDir { get; set; }
-        public string? LocalRepo { get; set; }
-        public bool ForceClone { get; set; }
-        public string? Version { get; set; } // explicit version override (e.g., "0.8.0" or "0.8.0-alpha")
+        var parseResult = rootCommand.Parse(args);
+        return parseResult.Invoke();
     }
 }
