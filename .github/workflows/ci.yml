@@ -2,10 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [master]
     tags: ["v*"]
-  pull_request:
-    branches: [master]
 
 env:
   R3D_UPSTREAM_REF: "master"
