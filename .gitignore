@@ -480,3 +480,8 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Native shared libraries (built by CI)
+R3D-cs/runtimes/*/native/*.dll
+R3D-cs/runtimes/*/native/*.so
+R3D-cs/runtimes/*/native/*.dylib

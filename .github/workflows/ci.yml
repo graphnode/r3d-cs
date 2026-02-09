@@ -1,0 +1,239 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+    tags: ["v*"]
+  pull_request:
+    branches: [master]
+
+env:
+  R3D_UPSTREAM_REF: "v0.8"
+
+jobs:
+  build-native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+          - os: ubuntu-latest
+            rid: linux-x64
+          - os: macos-latest
+            rid: osx-x64
+
+    runs-on: ${{ matrix.os }}
+    name: Build native (${{ matrix.rid }})
+
+    steps:
+      - name: Checkout R3D-cs
+        uses: actions/checkout@v4
+
+      - name: Clone r3d upstream
+        uses: actions/checkout@v4
+        with:
+          repository: Bigfoot71/r3d
+          ref: ${{ env.R3D_UPSTREAM_REF }}
+          submodules: recursive
+          path: r3d-upstream
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # --- Platform-specific deps ---
+
+      - name: Install deps (Linux)
+        if: matrix.rid == 'linux-x64'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build patchelf \
+            libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
+            libwayland-dev libxkbcommon-dev wayland-protocols \
+            libgl1-mesa-dev
+
+      - name: Install deps (macOS)
+        if: matrix.rid == 'osx-x64'
+        run: brew install ninja
+
+      - name: Setup MSVC (Windows)
+        if: matrix.rid == 'win-x64'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install Ninja (Windows)
+        if: matrix.rid == 'win-x64'
+        run: choco install ninja -y
+
+      # --- CMake configure & build ---
+
+      - name: CMake configure
+        run: >
+          cmake -S r3d-upstream -B r3d-upstream/build
+          -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DBUILD_SHARED_LIBS=ON
+          -DR3D_RAYLIB_VENDORED=ON
+          -DR3D_ASSIMP_VENDORED=ON
+          -DR3D_BUILD_EXAMPLES=OFF
+
+      - name: CMake build
+        run: cmake --build r3d-upstream/build --config Release
+
+      # --- Collect native libs ---
+
+      - name: Stage native libs (Windows)
+        if: matrix.rid == 'win-x64'
+        shell: pwsh
+        run: |
+          $staging = "staging/runtimes/win-x64/native"
+          New-Item -ItemType Directory -Force -Path $staging
+          Get-ChildItem -Path r3d-upstream/build -Recurse -Include "*.dll" | ForEach-Object {
+            Write-Host "Copying $($_.FullName)"
+            Copy-Item $_.FullName -Destination $staging
+          }
+          Write-Host "--- Staged files ---"
+          Get-ChildItem $staging
+
+      - name: Stage native libs (Linux)
+        if: matrix.rid == 'linux-x64'
+        run: |
+          staging="staging/runtimes/linux-x64/native"
+          mkdir -p "$staging"
+
+          # Find and copy all .so files (including versioned ones like .so.5)
+          find r3d-upstream/build -name '*.so*' -type f | while read -r lib; do
+            cp -v "$lib" "$staging/"
+          done
+
+          # Rename versioned sonames to unversioned
+          cd "$staging"
+          for f in *.so.*; do
+            [ -e "$f" ] || continue
+            base="${f%%\.so\.*}.so"
+            echo "Renaming $f -> $base"
+            mv "$f" "$base"
+          done
+
+          # Fix sonames and NEEDED entries with patchelf
+          for lib in *.so; do
+            echo "Patching $lib"
+            patchelf --set-soname "$lib" "$lib"
+            # Fix any versioned NEEDED entries
+            patchelf --print-needed "$lib" | while read -r needed; do
+              if [[ "$needed" == *.so.* ]]; then
+                clean="${needed%%\.so\.*}.so"
+                echo "  Replacing NEEDED $needed -> $clean"
+                patchelf --replace-needed "$needed" "$clean" "$lib"
+              fi
+            done
+          done
+
+          echo "--- Staged files ---"
+          ls -la
+
+      - name: Stage native libs (macOS)
+        if: matrix.rid == 'osx-x64'
+        run: |
+          staging="staging/runtimes/osx-x64/native"
+          mkdir -p "$staging"
+
+          # Find and copy all .dylib files
+          find r3d-upstream/build -name '*.dylib*' -type f | while read -r lib; do
+            cp -v "$lib" "$staging/"
+          done
+
+          # Rename versioned dylibs to unversioned
+          cd "$staging"
+          for f in *.dylib.*; do
+            [ -e "$f" ] || continue
+            # e.g. libfoo.5.dylib -> libfoo.dylib
+            # Handle both libfoo.dylib.5 and libfoo.5.dylib patterns
+            base=$(echo "$f" | sed -E 's/\.[0-9]+\.dylib$/.dylib/; s/\.dylib\.[0-9.]+$/.dylib/')
+            if [ "$f" != "$base" ]; then
+              echo "Renaming $f -> $base"
+              mv "$f" "$base"
+            fi
+          done
+
+          # Fix install names to use @loader_path/
+          for lib in *.dylib; do
+            echo "Patching $lib"
+            # Fix the library's own install name
+            install_name_tool -id "@loader_path/$lib" "$lib"
+
+            # Fix references to other libraries in this directory
+            otool -L "$lib" | tail -n +2 | awk '{print $1}' | while read -r dep; do
+              dep_base=$(basename "$dep")
+              # If the dep is one of our staged libs, rewrite it
+              if [ -f "$dep_base" ] && [[ "$dep" != @* ]]; then
+                echo "  Rewriting dep $dep -> @loader_path/$dep_base"
+                install_name_tool -change "$dep" "@loader_path/$dep_base" "$lib"
+              fi
+            done
+          done
+
+          echo "--- Staged files ---"
+          ls -la
+
+      - name: Upload native artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-${{ matrix.rid }}
+          path: staging/runtimes/
+          if-no-files-found: error
+
+  pack-and-publish:
+    needs: build-native
+    runs-on: ubuntu-latest
+    name: Pack & Publish NuGet
+
+    steps:
+      - name: Checkout R3D-cs
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Download native artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: R3D-cs/runtimes
+          pattern: native-*
+          merge-multiple: true
+
+      - name: List runtime contents
+        run: find R3D-cs/runtimes -type f | sort
+
+      - name: Determine version
+        id: version
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+          else
+            SHORT_SHA="${GITHUB_SHA::7}"
+            VERSION="0.0.0-dev.${SHORT_SHA}"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Version: $VERSION"
+
+      - name: Build
+        run: dotnet build R3D-cs/R3D-cs.csproj -c Release -p:Version=${{ steps.version.outputs.version }}
+
+      - name: Pack
+        run: dotnet pack R3D-cs/R3D-cs.csproj -c Release -p:Version=${{ steps.version.outputs.version }} -o artifacts/
+
+      - name: Upload NuGet package
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package
+          path: artifacts/*.nupkg
+
+      - name: Publish to NuGet
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: dotnet nuget push artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
