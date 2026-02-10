@@ -4,9 +4,6 @@ on:
   push:
     tags: ["v*"]
 
-env:
-  R3D_UPSTREAM_REF: "master"
-
 jobs:
   build-native:
     strategy:
@@ -27,11 +24,26 @@ jobs:
         with:
           lfs: true
 
+      - name: Read upstream config
+        id: upstream
+        shell: bash
+        run: |
+          source .r3d-upstream
+          REF="${R3D_UPSTREAM_COMMIT:-$R3D_UPSTREAM_TAG}"
+          if [ -z "$REF" ]; then
+            echo "::error::No upstream ref configured in .r3d-upstream"
+            exit 1
+          fi
+          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+          echo "Upstream ref: $REF"
+          echo "Upstream tag: $R3D_UPSTREAM_TAG"
+          echo "Version: $R3D_VERSION"
+
       - name: Clone r3d upstream
         uses: actions/checkout@v4
         with:
           repository: Bigfoot71/r3d
-          ref: ${{ env.R3D_UPSTREAM_REF }}
+          ref: ${{ steps.upstream.outputs.ref }}
           submodules: recursive
           path: r3d-upstream
 
@@ -161,25 +173,22 @@ jobs:
       - name: List runtime contents
         run: find R3D-cs/runtimes -type f | sort
 
-      - name: Determine version
+      - name: Read upstream version
         id: version
+        shell: bash
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
-            # Tagged release: extract version from tag (e.g., v0.8.0 -> 0.8.0)
-            VERSION="${GITHUB_REF#refs/tags/v}"
-          else
-            # Non-tagged build: use last tag as base + auto-incrementing dev number
-            LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "0.8.0")
-            VERSION="${LAST_TAG}-dev.${{ github.run_number }}"
-          fi
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "Publishing version: $VERSION"
+          source .r3d-upstream
+          # PackageVersion supports full SemVer 2.0 with +metadata
+          # Version (assembly) needs just the numeric part
+          echo "package_version=$R3D_VERSION" >> "$GITHUB_OUTPUT"
+          echo "version=${R3D_VERSION%%+*}" >> "$GITHUB_OUTPUT"
+          echo "Publishing version: $R3D_VERSION"
 
       - name: Build
-        run: dotnet build R3D-cs/R3D-cs.csproj -c Release -p:Version=${{ steps.version.outputs.version }} -p:PackageVersion=${{ steps.version.outputs.version }}
+        run: dotnet build R3D-cs/R3D-cs.csproj -c Release -p:Version=${{ steps.version.outputs.version }} -p:PackageVersion=${{ steps.version.outputs.package_version }}
 
       - name: Pack
-        run: dotnet pack R3D-cs/R3D-cs.csproj -c Release -p:Version=${{ steps.version.outputs.version }} -p:PackageVersion=${{ steps.version.outputs.version }} -o artifacts/
+        run: dotnet pack R3D-cs/R3D-cs.csproj -c Release -p:Version=${{ steps.version.outputs.version }} -p:PackageVersion=${{ steps.version.outputs.package_version }} -o artifacts/
 
       - name: Upload NuGet package
         uses: actions/upload-artifact@v4

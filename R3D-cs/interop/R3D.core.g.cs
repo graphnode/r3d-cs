@@ -24,7 +24,7 @@ public static unsafe partial class R3D
     /// </summary>
     public const string NativeLibName = "r3d";
 
-    public const string R3D_VERSION = "0.8.0-dev";
+    public const string R3D_VERSION = "0.8.0";
 
     /// <summary>
     /// Initializes the rendering engine.
