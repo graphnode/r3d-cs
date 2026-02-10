@@ -1,10 +1,10 @@
-![R3D-cs Logo](R3D-cs/logo/r3d-cs_256x256.png "R3D-cs Logo")
+![R3D-cs Logo](https://media.githubusercontent.com/media/graphnode/r3d-cs/master/R3D-cs/logo/r3d-cs_256x256.png "R3D-cs Logo")
 
 # R3D-cs
 
-[![CI](https://img.shields.io/github/actions/workflow/status/graphnode/r3d-cs/ci.yml?branch=master&label=build)](https://github.com/graphnode/r3d-cs/actions)
-[![NuGet](https://img.shields.io/nuget/v/R3D-cs?label=nuget)](https://www.nuget.org/packages/R3D-cs)
-[![NuGet Downloads](https://img.shields.io/nuget/dt/R3D-cs)](https://www.nuget.org/packages/R3D-cs)
+[![CI](https://img.shields.io/github/actions/workflow/status/graphnode/r3d-cs/ci.yml)](https://github.com/graphnode/r3d-cs/actions)
+[![NuGet](https://img.shields.io/nuget/v/r3d-cs?color=0b6cff)](https://www.nuget.org/packages/R3D-cs)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/r3d-cs?color=9b4f97)](https://www.nuget.org/packages/R3D-cs)
 
 .NET/C# bindings for [r3d](https://github.com/Bigfoot71/r3d), an advanced 3D rendering library built on top of raylib.
 
