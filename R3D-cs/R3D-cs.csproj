@@ -51,6 +51,7 @@
             <Pack>true</Pack>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Remove="runtimes/**/.gitkeep" />
     </ItemGroup>
 
     <ItemGroup>
