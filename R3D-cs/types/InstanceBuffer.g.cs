@@ -19,7 +19,7 @@ namespace R3D_cs;
 public unsafe struct InstanceBuffer
 {
     /// <seealso>buffers</seealso>
-    public fixed uint Buffers[4];
+    public fixed uint Buffers[5];
 
     /// <seealso>capacity</seealso>
     public int Capacity;

@@ -39,6 +39,18 @@ public static unsafe partial class R3D
     ///             <description>ORM: Occlusion 1.0, Roughness 1.0, Metalness 0.0</description>
     ///         </item>
     ///         <item>
+    ///             <description>UV: Offset (0, 0), Scale (1, 1)</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Alpha Cutoff: 0.01</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Depth: Standard depth test (LESS)</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Stencil: Disabled (ALWAYS)</description>
+    ///         </item>
+    ///         <item>
     ///             <description>Transparency: Disabled</description>
     ///         </item>
     ///         <item>
@@ -49,6 +61,12 @@ public static unsafe partial class R3D
     ///         </item>
     ///         <item>
     ///             <description>Cull: Back</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Unlit: false</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Shader: null</description>
     ///         </item>
     ///     </list>
     /// </remarks>
@@ -78,13 +96,32 @@ public static unsafe partial class R3D
                 Roughness = 1.0f,
                 Metalness = 0.0f
             },
+            UvOffset = Vector2.Zero,
+            UvScale = Vector2.One,
+            AlphaCutoff = 0.01f,
+            Depth = new DepthState
+            {
+                Mode = CompareMode.Less,
+                OffsetFactor = 0.0f,
+                OffsetUnits = 0.0f,
+                RangeNear = 0.0f,
+                RangeFar = 1.0f
+            },
+            Stencil = new StencilState
+            {
+                Mode = CompareMode.Always,
+                Ref = 0x00,
+                Mask = 0xFF,
+                OpFail = StencilOp.StencilKeep,
+                OpZFail = StencilOp.StencilKeep,
+                OpPass = StencilOp.StencilReplace
+            },
             TransparencyMode = TransparencyMode.Disabled,
             BillboardMode = BillboardMode.Disabled,
             BlendMode = BlendMode.Mix,
             CullMode = CullMode.Back,
-            UvOffset = Vector2.Zero,
-            UvScale = Vector2.One,
-            AlphaCutoff = 0.01f
+            Unlit = false,
+            Shader = null
         };
 
     /// <summary>
@@ -132,7 +169,22 @@ public static unsafe partial class R3D
     ///             <description>ORM: Occlusion 1.0, Roughness 1.0, Metalness 0.0</description>
     ///         </item>
     ///         <item>
+    ///             <description>UV: Offset (0, 0), Scale (1, 1)</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Alpha Cutoff: 0.01</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Normal Threshold: 0</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Fade Width: 0</description>
+    ///         </item>
+    ///         <item>
     ///             <description>ApplyColor: true</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Shader: null</description>
     ///         </item>
     ///     </list>
     /// </remarks>
@@ -167,7 +219,8 @@ public static unsafe partial class R3D
             AlphaCutoff = 0.01f,
             NormalThreshold = 0,
             FadeWidth = 0,
-            ApplyColor = true
+            ApplyColor = true,
+            Shader = null
         };
 
     /// <summary>
@@ -239,7 +292,7 @@ public static unsafe partial class R3D
     /// </example>
     public static Span<T> MapInstances<T>(InstanceBuffer buffer, InstanceFlags flag) where T : unmanaged
     {
-        return new Span<T>((void*)MapInstances(buffer, flag), buffer.Capacity * Unsafe.SizeOf<T>());
+        return new Span<T>((void*)MapInstances(buffer, flag), buffer.Capacity);
     }
 
     /// <summary>

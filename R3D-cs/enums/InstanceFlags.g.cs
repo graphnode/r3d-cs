@@ -30,4 +30,8 @@ public enum InstanceFlags
     /// <summary>Color</summary>
     /// <seealso>R3D_INSTANCE_COLOR</seealso>
     Color = (1<<3),
+
+    /// <summary>Vector4</summary>
+    /// <seealso>R3D_INSTANCE_CUSTOM</seealso>
+    Custom = (1<<4),
 }

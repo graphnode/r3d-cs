@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using R3D_cs;
 using Raylib_cs;
@@ -41,7 +42,7 @@ public static class Shader
 
         // Load a screen shader
         ScreenShader* screenShader = R3D.LoadScreenShader("resources/shaders/screen.glsl");
-        R3D.SetScreenShaderChain(ref *screenShader, 1);
+        R3D.SetScreenShaderChain(&screenShader, 1);
 
         // Create light
         var light = R3D.CreateLight(LightType.Spot);
@@ -71,7 +72,8 @@ public static class Shader
                 R3D.SetSurfaceShaderUniform(ref *material.Shader, "u_time", &time);
 
                 R3D.Begin(camera);
-                    R3D.DrawMesh(plane, R3D.MATERIAL_BASE, new Vector3(0, -0.5f, 0), 1.0f);
+                    var planeMaterial = R3D.GetDefaultMaterial();
+                    R3D.DrawMesh(plane, planeMaterial, new Vector3(0, -0.5f, 0), 1.0f);
                     R3D.DrawMesh(torus, material, Vector3.Zero, 1.0f);
                 R3D.End();
 

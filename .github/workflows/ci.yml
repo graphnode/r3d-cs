@@ -161,13 +161,15 @@ jobs:
         id: version
         run: |
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            # Tagged release: extract version from tag (e.g., v0.8.0 -> 0.8.0)
             VERSION="${GITHUB_REF#refs/tags/v}"
           else
-            SHORT_SHA="${GITHUB_SHA::7}"
-            VERSION="0.0.0-dev.${SHORT_SHA}"
+            # Non-tagged build: use last tag as base + auto-incrementing dev number
+            LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "0.8.0")
+            VERSION="${LAST_TAG}-dev.${{ github.run_number }}"
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "Version: $VERSION"
+          echo "Publishing version: $VERSION"
 
       - name: Build
         run: dotnet build R3D-cs/R3D-cs.csproj -c Release -p:Version=${{ steps.version.outputs.version }}

@@ -58,9 +58,9 @@ public static unsafe partial class R3D
     /// Supported types: bool, int, float, ivec2, ivec3, ivec4, vec2, vec3, vec4, mat2, mat3, mat4
     /// </para>
     /// </summary>
-    /// <param name="shader">Target screen shader.</param>
-    /// <param name="name">Name of the uniform.</param>
-    /// <param name="value">Pointer to the uniform value.</param>
+    /// <param name="shader">Target screen shader. May be NULL. In that case, the call is ignored and a warning is logged.</param>
+    /// <param name="name">Name of the uniform. Must not be NULL.</param>
+    /// <param name="value">Pointer to the uniform value. Must not be NULL.</param>
     /// <remarks>
     /// <b>Warning:</b>
     /// Boolean values are read as 4 bytes.
@@ -78,8 +78,8 @@ public static unsafe partial class R3D
     /// Supported samplers: sampler1D, sampler2D, sampler3D, samplerCube
     /// </para>
     /// </summary>
-    /// <param name="shader">Target screen shader.</param>
-    /// <param name="name">Name of the sampler uniform.</param>
+    /// <param name="shader">Target screen shader. May be NULL. In that case, the call is ignored and a warning is logged.</param>
+    /// <param name="name">Name of the sampler uniform. Must not be NULL.</param>
     /// <param name="texture">Texture to bind to the sampler.</param>
     /// <seealso>R3D_SetScreenShaderSampler</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetScreenShaderSampler", StringMarshalling = StringMarshalling.Utf8)]
@@ -101,6 +101,6 @@ public static unsafe partial class R3D
     /// <param name="count">Number of shaders in the array.</param>
     /// <seealso>R3D_SetScreenShaderChain</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetScreenShaderChain")]
-    public static partial void SetScreenShaderChain(ref ScreenShader shaders, int count);
+    public static partial void SetScreenShaderChain(ScreenShader** shaders, int count);
 
 }

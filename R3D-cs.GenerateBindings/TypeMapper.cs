@@ -142,6 +142,10 @@ public static class TypeMapper
             return ("out", baseType);
         }
 
+        // Pointer-to-pointer types (e.g., Type**) should remain as-is (not converted to ref)
+        if (mappedType.EndsWith("**"))
+            return (null, mappedType);
+
         // Other struct/type pointers become ref parameters
         if (mappedType.EndsWith('*'))
         {

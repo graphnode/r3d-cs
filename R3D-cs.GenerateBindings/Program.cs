@@ -1,6 +1,7 @@
 using System;
 using System.CommandLine;
 using System.IO;
+using System.Linq;
 using CppAst;
 
 namespace R3D_cs.GenerateBindings;
@@ -23,8 +24,24 @@ internal static class Program
 
         Option<string> outputOption = new("--output", "-o")
         {
-            Description = "Output directory for generated files (default: ../R3D-cs)",
-            DefaultValueFactory = _ => "../R3D-cs",
+            Description = "Output directory for generated files (default: <solution>/R3D-cs)",
+            DefaultValueFactory = _ =>
+            {
+                // Find solution root by looking for .sln file
+                string currentDir = Directory.GetCurrentDirectory();
+                string? solutionRoot = currentDir;
+
+                // Walk up directory tree to find .sln file
+                while (solutionRoot != null && !Directory.GetFiles(solutionRoot, "*.sln").Any())
+                {
+                    solutionRoot = Directory.GetParent(solutionRoot)?.FullName;
+                }
+
+                if (solutionRoot == null)
+                    throw new DirectoryNotFoundException("Could not find solution root (no .sln file found in parent directories)");
+
+                return Path.Combine(solutionRoot, "R3D-cs");
+            },
         };
 
         RootCommand rootCommand = new("Sample app for System.CommandLine")
