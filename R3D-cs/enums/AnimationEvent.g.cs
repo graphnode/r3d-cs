@@ -6,18 +6,24 @@ namespace R3D_cs;
 /// <summary>
 /// Types of events that an animation player can emit.
 /// </summary>
-/// <seealso>R3D_AnimationEvent</seealso>
+/// <remarks>
+/// Native: <c>R3D_AnimationEvent</c>
+/// </remarks>
 public enum AnimationEvent
 {
     /// <summary>
     /// Animation has finished playing (non-looping).
     /// </summary>
-    /// <seealso>R3D_AnimationEvent.R3D_ANIM_EVENT_FINISHED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_AnimationEvent.R3D_ANIM_EVENT_FINISHED</c>
+    /// </remarks>
     AnimEventFinished,
 
     /// <summary>
     /// Animation has completed a loop.
     /// </summary>
-    /// <seealso>R3D_AnimationEvent.R3D_ANIM_EVENT_LOOPED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_AnimationEvent.R3D_ANIM_EVENT_LOOPED</c>
+    /// </remarks>
     AnimEventLooped,
 }

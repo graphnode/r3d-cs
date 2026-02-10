@@ -9,24 +9,32 @@ namespace R3D_cs;
 /// Determines how often the shadow maps are refreshed.
 /// </para>
 /// </summary>
-/// <seealso>R3D_ShadowUpdateMode</seealso>
+/// <remarks>
+/// Native: <c>R3D_ShadowUpdateMode</c>
+/// </remarks>
 public enum ShadowUpdateMode
 {
     /// <summary>
     /// Shadow maps update only when explicitly requested.
     /// </summary>
-    /// <seealso>R3D_ShadowUpdateMode.R3D_SHADOW_UPDATE_MANUAL</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowUpdateMode.R3D_SHADOW_UPDATE_MANUAL</c>
+    /// </remarks>
     Manual,
 
     /// <summary>
     /// Shadow maps update at defined time intervals.
     /// </summary>
-    /// <seealso>R3D_ShadowUpdateMode.R3D_SHADOW_UPDATE_INTERVAL</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowUpdateMode.R3D_SHADOW_UPDATE_INTERVAL</c>
+    /// </remarks>
     Interval,
 
     /// <summary>
     /// Shadow maps update every frame for real-time accuracy.
     /// </summary>
-    /// <seealso>R3D_ShadowUpdateMode.R3D_SHADOW_UPDATE_CONTINUOUS</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowUpdateMode.R3D_SHADOW_UPDATE_CONTINUOUS</c>
+    /// </remarks>
     Continuous,
 }

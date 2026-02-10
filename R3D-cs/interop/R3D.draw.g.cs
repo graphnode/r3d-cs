@@ -24,7 +24,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="camera">Camera used to render the scene.</param>
-    /// <seealso>R3D_Begin</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Begin</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_Begin")]
     public static partial void Begin(Camera3D camera);
 
@@ -36,7 +38,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="target">Render texture to render into.</param>
     /// <param name="camera">Camera used to render the scene.</param>
-    /// <seealso>R3D_BeginEx</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_BeginEx</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_BeginEx")]
     public static partial void BeginEx(RenderTexture2D target, Camera3D camera);
 
@@ -46,7 +50,9 @@ public static unsafe partial class R3D
     /// This function is the one that actually performs the full rendering of the described scene. It carries out culling, sorting, shadow rendering, scene rendering, and screen / post-processing effects.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_End</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_End</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_End")]
     public static partial void End();
 
@@ -57,7 +63,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="aabb">Bounding box used as the cluster-level frustum test.</param>
-    /// <seealso>R3D_BeginCluster</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_BeginCluster</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_BeginCluster")]
     public static partial void BeginCluster(BoundingBox aabb);
 
@@ -67,7 +75,9 @@ public static unsafe partial class R3D
     /// Stops submitting draw calls to the active cluster.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_EndCluster</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_EndCluster</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_EndCluster")]
     public static partial void EndCluster();
 
@@ -77,7 +87,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawMesh</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawMesh</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawMesh")]
     public static partial void DrawMesh(Mesh mesh, Material material, Vector3 position, float scale);
 
@@ -87,7 +99,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawMeshEx</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawMeshEx</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawMeshEx")]
     public static partial void DrawMeshEx(Mesh mesh, Material material, Vector3 position, Quaternion rotation, Vector3 scale);
 
@@ -97,7 +111,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawMeshPro</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawMeshPro</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawMeshPro")]
     public static partial void DrawMeshPro(Mesh mesh, Material material, Matrix4x4 transform);
 
@@ -110,7 +126,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawMeshInstanced</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawMeshInstanced</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawMeshInstanced")]
     public static partial void DrawMeshInstanced(Mesh mesh, Material material, InstanceBuffer instances, int count);
 
@@ -123,7 +141,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawMeshInstancedEx</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawMeshInstancedEx</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawMeshInstancedEx")]
     public static partial void DrawMeshInstancedEx(Mesh mesh, Material material, InstanceBuffer instances, int count, Matrix4x4 transform);
 
@@ -133,7 +153,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawModel</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawModel</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawModel")]
     public static partial void DrawModel(Model model, Vector3 position, float scale);
 
@@ -143,7 +165,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawModelEx</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawModelEx</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawModelEx")]
     public static partial void DrawModelEx(Model model, Vector3 position, Quaternion rotation, Vector3 scale);
 
@@ -153,7 +177,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawModelPro</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawModelPro</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawModelPro")]
     public static partial void DrawModelPro(Model model, Matrix4x4 transform);
 
@@ -166,7 +192,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawModelInstanced</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawModelInstanced</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawModelInstanced")]
     public static partial void DrawModelInstanced(Model model, InstanceBuffer instances, int count);
 
@@ -179,7 +207,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawModelInstancedEx</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawModelInstancedEx</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawModelInstancedEx")]
     public static partial void DrawModelInstancedEx(Model model, InstanceBuffer instances, int count, Matrix4x4 transform);
 
@@ -192,7 +222,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawAnimatedModel</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawAnimatedModel</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawAnimatedModel")]
     public static partial void DrawAnimatedModel(Model model, AnimationPlayer player, Vector3 position, float scale);
 
@@ -205,7 +237,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawAnimatedModelEx</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawAnimatedModelEx</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawAnimatedModelEx")]
     public static partial void DrawAnimatedModelEx(Model model, AnimationPlayer player, Vector3 position, Quaternion rotation, Vector3 scale);
 
@@ -215,7 +249,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawAnimatedModelPro</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawAnimatedModelPro</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawAnimatedModelPro")]
     public static partial void DrawAnimatedModelPro(Model model, AnimationPlayer player, Matrix4x4 transform);
 
@@ -228,7 +264,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawAnimatedModelInstanced</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawAnimatedModelInstanced</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawAnimatedModelInstanced")]
     public static partial void DrawAnimatedModelInstanced(Model model, AnimationPlayer player, InstanceBuffer instances, int count);
 
@@ -241,7 +279,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawAnimatedModelInstancedEx</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawAnimatedModelInstancedEx</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawAnimatedModelInstancedEx")]
     public static partial void DrawAnimatedModelInstancedEx(Model model, AnimationPlayer player, InstanceBuffer instances, int count, Matrix4x4 transform);
 
@@ -251,7 +291,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawDecal</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawDecal</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawDecal")]
     public static partial void DrawDecal(Decal decal, Vector3 position, float scale);
 
@@ -261,7 +303,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawDecalEx</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawDecalEx</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawDecalEx")]
     public static partial void DrawDecalEx(Decal decal, Vector3 position, Quaternion rotation, Vector3 scale);
 
@@ -271,7 +315,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawDecalPro</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawDecalPro</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawDecalPro")]
     public static partial void DrawDecalPro(Decal decal, Matrix4x4 transform);
 
@@ -284,7 +330,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawDecalInstanced</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawDecalInstanced</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawDecalInstanced")]
     public static partial void DrawDecalInstanced(Decal decal, InstanceBuffer instances, int count);
 
@@ -297,7 +345,9 @@ public static unsafe partial class R3D
     /// The command is executed during R3D_End().
     /// </para>
     /// </summary>
-    /// <seealso>R3D_DrawDecalInstancedEx</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DrawDecalInstancedEx</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawDecalInstancedEx")]
     public static partial void DrawDecalInstancedEx(Decal decal, InstanceBuffer instances, int count, Matrix4x4 transform);
 

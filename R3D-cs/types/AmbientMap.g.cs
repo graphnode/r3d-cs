@@ -27,26 +27,34 @@ namespace R3D_cs;
 /// Both textures are derived from the same source cubemap, but serve different shading purposes.
 /// </para>
 /// </summary>
-/// <seealso>R3D_AmbientMap</seealso>
+/// <remarks>
+/// Native: <c>R3D_AmbientMap</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct AmbientMap
 {
     /// <summary>
     /// Components generated for this map
     /// </summary>
-    /// <seealso>flags</seealso>
+    /// <remarks>
+    /// Native: <c>flags</c>
+    /// </remarks>
     public AmbientFlags Flags;
 
     /// <summary>
     /// Diffuse IBL cubemap (may be 0 if not generated)
     /// </summary>
-    /// <seealso>irradiance</seealso>
+    /// <remarks>
+    /// Native: <c>irradiance</c>
+    /// </remarks>
     public uint Irradiance;
 
     /// <summary>
     /// Specular prefiltered cubemap (may be 0 if not generated)
     /// </summary>
-    /// <seealso>prefilter</seealso>
+    /// <remarks>
+    /// Native: <c>prefilter</c>
+    /// </remarks>
     public uint Prefilter;
 
 }

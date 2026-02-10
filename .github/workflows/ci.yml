@@ -37,7 +37,6 @@ jobs:
           echo "ref=$REF" >> "$GITHUB_OUTPUT"
           echo "Upstream ref: $REF"
           echo "Upstream tag: $R3D_UPSTREAM_TAG"
-          echo "Version: $R3D_VERSION"
 
       - name: Clone r3d upstream
         uses: actions/checkout@v4
@@ -173,16 +172,17 @@ jobs:
       - name: List runtime contents
         run: find R3D-cs/runtimes -type f | sort
 
-      - name: Read upstream version
+      - name: Derive version from git tag
         id: version
         shell: bash
         run: |
-          source .r3d-upstream
+          # Strip the leading 'v' from the tag (e.g. v0.8.1 -> 0.8.1)
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
           # PackageVersion supports full SemVer 2.0 with +metadata
           # Version (assembly) needs just the numeric part
-          echo "package_version=$R3D_VERSION" >> "$GITHUB_OUTPUT"
-          echo "version=${R3D_VERSION%%+*}" >> "$GITHUB_OUTPUT"
-          echo "Publishing version: $R3D_VERSION"
+          echo "package_version=$TAG_VERSION" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG_VERSION%%[-+]*}" >> "$GITHUB_OUTPUT"
+          echo "Publishing version: $TAG_VERSION"
 
       - name: Build
         run: dotnet build R3D-cs/R3D-cs.csproj -c Release -p:Version=${{ steps.version.outputs.version }} -p:PackageVersion=${{ steps.version.outputs.package_version }}

@@ -11,32 +11,42 @@ namespace R3D_cs;
 /// <summary>
 /// Penetration information from an overlap test
 /// </summary>
-/// <seealso>R3D_Penetration</seealso>
+/// <remarks>
+/// Native: <c>R3D_Penetration</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct Penetration
 {
     /// <summary>
     /// Whether shapes are overlapping
     /// </summary>
-    /// <seealso>collides</seealso>
+    /// <remarks>
+    /// Native: <c>collides</c>
+    /// </remarks>
     public bool Collides;
 
     /// <summary>
     /// Penetration depth
     /// </summary>
-    /// <seealso>depth</seealso>
+    /// <remarks>
+    /// Native: <c>depth</c>
+    /// </remarks>
     public float Depth;
 
     /// <summary>
     /// Collision normal (direction to resolve penetration)
     /// </summary>
-    /// <seealso>normal</seealso>
+    /// <remarks>
+    /// Native: <c>normal</c>
+    /// </remarks>
     public Vector3 Normal;
 
     /// <summary>
     /// Minimum Translation Vector (normal * depth)
     /// </summary>
-    /// <seealso>mtv</seealso>
+    /// <remarks>
+    /// Native: <c>mtv</c>
+    /// </remarks>
     public Vector3 Mtv;
 
 }

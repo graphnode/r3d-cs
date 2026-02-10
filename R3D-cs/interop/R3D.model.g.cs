@@ -25,7 +25,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="filePath">Path to the 3D model file to load.</param>
     /// <returns>Loaded model structure containing meshes and materials.</returns>
-    /// <seealso>R3D_LoadModel</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadModel</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModel", StringMarshalling = StringMarshalling.Utf8)]
     public static partial Model LoadModel(string filePath);
 
@@ -38,7 +40,9 @@ public static unsafe partial class R3D
     /// <param name="filePath">Path to the 3D model file to load.</param>
     /// <param name="flags">Importer behavior flags.</param>
     /// <returns>Loaded model structure containing meshes and materials.</returns>
-    /// <seealso>R3D_LoadModelEx</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadModelEx</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelEx", StringMarshalling = StringMarshalling.Utf8)]
     public static partial Model LoadModelEx(string filePath, ImportFlags flags);
 
@@ -54,8 +58,8 @@ public static unsafe partial class R3D
     /// <returns>Loaded model structure containing meshes and materials.</returns>
     /// <remarks>
     /// External dependencies (e.g., textures or linked resources) are not supported. The model data must be fully self-contained. Use embedded formats like .glb to ensure compatibility.
+    /// Native: <c>R3D_LoadModelFromMemory</c>
     /// </remarks>
-    /// <seealso>R3D_LoadModelFromMemory</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelFromMemory", StringMarshalling = StringMarshalling.Utf8)]
     public static partial Model LoadModelFromMemory(void* data, uint size, string hint);
 
@@ -72,8 +76,8 @@ public static unsafe partial class R3D
     /// <returns>Loaded model structure containing meshes and materials.</returns>
     /// <remarks>
     /// External dependencies (e.g., textures or linked resources) are not supported. The model data must be fully self-contained.
+    /// Native: <c>R3D_LoadModelFromMemoryEx</c>
     /// </remarks>
-    /// <seealso>R3D_LoadModelFromMemoryEx</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelFromMemoryEx", StringMarshalling = StringMarshalling.Utf8)]
     public static partial Model LoadModelFromMemoryEx(void* data, uint size, string hint, ImportFlags flags);
 
@@ -85,9 +89,11 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="importer">Importer instance to extract the model from.</param>
     /// <returns>Loaded model structure containing meshes and materials.</returns>
-    /// <seealso>R3D_LoadModelFromImporter</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadModelFromImporter</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadModelFromImporter")]
-    public static partial Model LoadModelFromImporter(Importer* importer);
+    public static partial Model LoadModelFromImporter(Importer importer);
 
     /// <summary>
     /// Unload a model and optionally its materials.
@@ -97,7 +103,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="model">The model to be unloaded.</param>
     /// <param name="unloadMaterials">If true, also unloads all materials associated with the model. Set to false if textures are still being used elsewhere to avoid freeing shared resources.</param>
-    /// <seealso>R3D_UnloadModel</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadModel</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadModel")]
     public static partial void UnloadModel(Model model, [MarshalAs(UnmanagedType.I1)] bool unloadMaterials);
 

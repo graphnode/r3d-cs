@@ -9,18 +9,24 @@ namespace R3D_cs;
 /// Controls how often probe captures are refreshed.
 /// </para>
 /// </summary>
-/// <seealso>R3D_ProbeUpdateMode</seealso>
+/// <remarks>
+/// Native: <c>R3D_ProbeUpdateMode</c>
+/// </remarks>
 public enum ProbeUpdateMode
 {
     /// <summary>
     /// Updated only when its state or content changes
     /// </summary>
-    /// <seealso>R3D_ProbeUpdateMode.R3D_PROBE_UPDATE_ONCE</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ProbeUpdateMode.R3D_PROBE_UPDATE_ONCE</c>
+    /// </remarks>
     Once,
 
     /// <summary>
     /// Updated during every frames
     /// </summary>
-    /// <seealso>R3D_ProbeUpdateMode.R3D_PROBE_UPDATE_ALWAYS</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ProbeUpdateMode.R3D_PROBE_UPDATE_ALWAYS</c>
+    /// </remarks>
     Always,
 }

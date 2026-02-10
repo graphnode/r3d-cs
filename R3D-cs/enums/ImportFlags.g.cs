@@ -14,19 +14,21 @@ namespace R3D_cs;
 /// These flags define how the importer processes the source asset.
 /// </para>
 /// </summary>
-/// <seealso>R3D_ImportFlags</seealso>
+/// <remarks>
+/// Native: <c>R3D_ImportFlags</c>
+/// </remarks>
 [Flags]
 public enum ImportFlags : uint
 {
     /// <summary>
     /// When enabled, raw mesh data is preserved in RAM after model import.
     /// </summary>
-    /// <seealso>R3D_IMPORT_MESH_DATA</seealso>
+    /// <remarks>Native: <c>R3D_IMPORT_MESH_DATA</c></remarks>
     MeshData = (1<<0),
 
     /// <summary>
     /// When disabled, a faster import preset is used, suitable for runtime.
     /// </summary>
-    /// <seealso>R3D_IMPORT_QUALITY</seealso>
+    /// <remarks>Native: <c>R3D_IMPORT_QUALITY</c></remarks>
     Quality = (1<<1),
 }

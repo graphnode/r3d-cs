@@ -14,20 +14,26 @@ namespace R3D_cs;
 /// Holds multiple animations that can be applied to compatible models or skeletons. Typically loaded together from a single 3D model file (e.g., GLTF, FBX) containing several animation clips.
 /// </para>
 /// </summary>
-/// <seealso>R3D_AnimationLib</seealso>
+/// <remarks>
+/// Native: <c>R3D_AnimationLib</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct AnimationLib
 {
     /// <summary>
     /// Array of animations included in this library.
     /// </summary>
-    /// <seealso>animations</seealso>
+    /// <remarks>
+    /// Native: <c>animations</c>
+    /// </remarks>
     public Animation* Animations;
 
     /// <summary>
     /// Number of animations contained in the library.
     /// </summary>
-    /// <seealso>count</seealso>
+    /// <remarks>
+    /// Native: <c>count</c>
+    /// </remarks>
     public int Count;
 
 }

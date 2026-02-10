@@ -11,38 +11,50 @@ namespace R3D_cs;
 /// <summary>
 /// Background and skybox configuration.
 /// </summary>
-/// <seealso>R3D_EnvBackground</seealso>
+/// <remarks>
+/// Native: <c>R3D_EnvBackground</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EnvBackground
 {
     /// <summary>
     /// Background color when there is no skybox
     /// </summary>
-    /// <seealso>color</seealso>
+    /// <remarks>
+    /// Native: <c>color</c>
+    /// </remarks>
     public Color Color;
 
     /// <summary>
     /// Energy multiplier applied to background (skybox or color)
     /// </summary>
-    /// <seealso>energy</seealso>
+    /// <remarks>
+    /// Native: <c>energy</c>
+    /// </remarks>
     public float Energy;
 
     /// <summary>
     /// Sky blur factor [0,1], based on mipmaps, very fast
     /// </summary>
-    /// <seealso>skyBlur</seealso>
+    /// <remarks>
+    /// Native: <c>skyBlur</c>
+    /// </remarks>
     public float SkyBlur;
 
     /// <summary>
     /// Skybox asset (used if ID is non-zero)
     /// </summary>
-    /// <seealso>sky</seealso>
+    /// <remarks>
+    /// Native: <c>sky</c>
+    /// </remarks>
     public Cubemap Sky;
 
     /// <summary>
     /// Skybox rotation (pitch, yaw, roll as quaternion)
     /// </summary>
-    /// <seealso>rotation</seealso>
+    /// <remarks>
+    /// Native: <c>rotation</c>
+    /// </remarks>
     public Quaternion Rotation;
 
 }

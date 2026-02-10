@@ -9,30 +9,40 @@ namespace R3D_cs;
 /// Different blending methods for the bloom glow effect.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Bloom</seealso>
+/// <remarks>
+/// Native: <c>R3D_Bloom</c>
+/// </remarks>
 public enum Bloom
 {
     /// <summary>
     /// No bloom effect applied
     /// </summary>
-    /// <seealso>R3D_Bloom.R3D_BLOOM_DISABLED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Bloom.R3D_BLOOM_DISABLED</c>
+    /// </remarks>
     Disabled,
 
     /// <summary>
     /// Linear interpolation blend between scene and bloom
     /// </summary>
-    /// <seealso>R3D_Bloom.R3D_BLOOM_MIX</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Bloom.R3D_BLOOM_MIX</c>
+    /// </remarks>
     Mix,
 
     /// <summary>
     /// Additive blending, intensifying bright regions
     /// </summary>
-    /// <seealso>R3D_Bloom.R3D_BLOOM_ADDITIVE</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Bloom.R3D_BLOOM_ADDITIVE</c>
+    /// </remarks>
     Additive,
 
     /// <summary>
     /// Screen blending for softer highlight enhancement
     /// </summary>
-    /// <seealso>R3D_Bloom.R3D_BLOOM_SCREEN</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Bloom.R3D_BLOOM_SCREEN</c>
+    /// </remarks>
     Screen,
 }

@@ -25,9 +25,11 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="filePath">Path to the shader source file.</param>
     /// <returns>Pointer to the loaded screen shader, or NULL on failure.</returns>
-    /// <seealso>R3D_LoadScreenShader</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadScreenShader</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadScreenShader", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial ScreenShader* LoadScreenShader(string filePath);
+    public static partial ScreenShader LoadScreenShader(string filePath);
 
     /// <summary>
     /// Loads a screen shader from a source code string in memory.
@@ -37,17 +39,21 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="code">Null-terminated shader source code.</param>
     /// <returns>Pointer to the loaded screen shader, or NULL on failure.</returns>
-    /// <seealso>R3D_LoadScreenShaderFromMemory</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadScreenShaderFromMemory</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadScreenShaderFromMemory", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial ScreenShader* LoadScreenShaderFromMemory(string code);
+    public static partial ScreenShader LoadScreenShaderFromMemory(string code);
 
     /// <summary>
     /// Unloads and destroys a screen shader.
     /// </summary>
     /// <param name="shader">Screen shader to unload.</param>
-    /// <seealso>R3D_UnloadScreenShader</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadScreenShader</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadScreenShader")]
-    public static partial void UnloadScreenShader(ref ScreenShader shader);
+    public static partial void UnloadScreenShader(ScreenShader shader);
 
     /// <summary>
     /// Sets a uniform value for the current frame.
@@ -64,10 +70,10 @@ public static unsafe partial class R3D
     /// <remarks>
     /// <b>Warning:</b>
     /// Boolean values are read as 4 bytes.
+    /// Native: <c>R3D_SetScreenShaderUniform</c>
     /// </remarks>
-    /// <seealso>R3D_SetScreenShaderUniform</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetScreenShaderUniform", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial void SetScreenShaderUniform(ref ScreenShader shader, string name, void* value);
+    public static partial void SetScreenShaderUniform(ScreenShader shader, string name, void* value);
 
     /// <summary>
     /// Sets a texture sampler for the current frame.
@@ -81,9 +87,11 @@ public static unsafe partial class R3D
     /// <param name="shader">Target screen shader. May be NULL. In that case, the call is ignored and a warning is logged.</param>
     /// <param name="name">Name of the sampler uniform. Must not be NULL.</param>
     /// <param name="texture">Texture to bind to the sampler.</param>
-    /// <seealso>R3D_SetScreenShaderSampler</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetScreenShaderSampler</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetScreenShaderSampler", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial void SetScreenShaderSampler(ref ScreenShader shader, string name, Texture2D texture);
+    public static partial void SetScreenShaderSampler(ScreenShader shader, string name, Texture2D texture);
 
     /// <summary>
     /// Sets the list of screen shaders to execute at the end of the frame.
@@ -99,8 +107,10 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="shaders">Array of pointers to R3D_ScreenShader objects.</param>
     /// <param name="count">Number of shaders in the array.</param>
-    /// <seealso>R3D_SetScreenShaderChain</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetScreenShaderChain</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetScreenShaderChain")]
-    public static partial void SetScreenShaderChain(ScreenShader** shaders, int count);
+    public static partial void SetScreenShaderChain(ScreenShader* shaders, int count);
 
 }

@@ -14,44 +14,58 @@ namespace R3D_cs;
 /// Controls how fragments interact with the stencil buffer during rendering. The stencil buffer can be used for effects like x-ray vision, outlines, portals, and masking.
 /// </para>
 /// </summary>
-/// <seealso>R3D_StencilState</seealso>
+/// <remarks>
+/// Native: <c>R3D_StencilState</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct StencilState
 {
     /// <summary>
     /// Comparison function for stencil test (default: ALWAYS)
     /// </summary>
-    /// <seealso>mode</seealso>
+    /// <remarks>
+    /// Native: <c>mode</c>
+    /// </remarks>
     public CompareMode Mode;
 
     /// <summary>
     /// Reference value (0-255) for comparison and replace operations (default: 0x00)
     /// </summary>
-    /// <seealso>ref</seealso>
+    /// <remarks>
+    /// Native: <c>ref</c>
+    /// </remarks>
     public byte Ref;
 
     /// <summary>
     /// Bit mask applied to both reference and stencil values during comparison (default: 0xFF)
     /// </summary>
-    /// <seealso>mask</seealso>
+    /// <remarks>
+    /// Native: <c>mask</c>
+    /// </remarks>
     public byte Mask;
 
     /// <summary>
     /// Operation when stencil test fails (default: KEEP)
     /// </summary>
-    /// <seealso>opFail</seealso>
+    /// <remarks>
+    /// Native: <c>opFail</c>
+    /// </remarks>
     public StencilOp OpFail;
 
     /// <summary>
     /// Operation when stencil test passes but depth test fails (default: KEEP)
     /// </summary>
-    /// <seealso>opZFail</seealso>
+    /// <remarks>
+    /// Native: <c>opZFail</c>
+    /// </remarks>
     public StencilOp OpZFail;
 
     /// <summary>
     /// Operation when both stencil and depth tests pass (default: REPLACE)
     /// </summary>
-    /// <seealso>opPass</seealso>
+    /// <remarks>
+    /// Native: <c>opPass</c>
+    /// </remarks>
     public StencilOp OpPass;
 
 }

@@ -121,7 +121,7 @@ public static unsafe partial class R3D
             BlendMode = BlendMode.Mix,
             CullMode = CullMode.Back,
             Unlit = false,
-            Shader = null
+            Shader = default
         };
 
     /// <summary>
@@ -220,7 +220,7 @@ public static unsafe partial class R3D
             NormalThreshold = 0,
             FadeWidth = 0,
             ApplyColor = true,
-            Shader = null
+            Shader = default
         };
 
     /// <summary>
@@ -336,5 +336,40 @@ public static unsafe partial class R3D
     public static void LookAt(this Light light, Vector3 position, Vector3 target)
     {
         LightLookAt(light, position, target);
+    }
+
+    // ---- Generic uniform convenience overloads ----
+
+    /// <summary>
+    ///     Sets a uniform value on a screen shader using a typed ref instead of void*.
+    /// </summary>
+    /// <typeparam name="T">The unmanaged uniform type (e.g., float, Vector2, Matrix4x4).</typeparam>
+    /// <param name="shader">Target screen shader.</param>
+    /// <param name="name">Name of the uniform.</param>
+    /// <param name="value">Reference to the uniform value.</param>
+    public static void SetScreenShaderUniform<T>(ScreenShader shader, string name, ref T value) where T : unmanaged
+    {
+        SetScreenShaderUniform(shader, name, Unsafe.AsPointer(ref value));
+    }
+
+    /// <summary>
+    ///     Sets a uniform value on a surface shader using a typed ref instead of void*.
+    /// </summary>
+    /// <typeparam name="T">The unmanaged uniform type (e.g., float, Vector2, Matrix4x4).</typeparam>
+    /// <param name="shader">Target surface shader.</param>
+    /// <param name="name">Name of the uniform.</param>
+    /// <param name="value">Reference to the uniform value.</param>
+    public static void SetSurfaceShaderUniform<T>(SurfaceShader shader, string name, ref T value) where T : unmanaged
+    {
+        SetSurfaceShaderUniform(shader, name, Unsafe.AsPointer(ref value));
+    }
+
+    /// <summary>
+    ///     Sets the screen shader chain from a span of shaders.
+    /// </summary>
+    public static void SetScreenShaderChain(ReadOnlySpan<ScreenShader> shaders)
+    {
+        fixed (ScreenShader* ptr = shaders)
+            SetScreenShaderChain(ptr, shaders.Length);
     }
 }

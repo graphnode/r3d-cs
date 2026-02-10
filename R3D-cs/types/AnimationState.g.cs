@@ -14,38 +14,50 @@ namespace R3D_cs;
 /// Tracks the current time, blending weight, speed, play/pause state, and looping behavior.
 /// </para>
 /// </summary>
-/// <seealso>R3D_AnimationState</seealso>
+/// <remarks>
+/// Native: <c>R3D_AnimationState</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct AnimationState
 {
     /// <summary>
     /// Current playback time in animation ticks.
     /// </summary>
-    /// <seealso>currentTime</seealso>
+    /// <remarks>
+    /// Native: <c>currentTime</c>
+    /// </remarks>
     public float CurrentTime;
 
     /// <summary>
     /// Blending weight; any positive value is valid.
     /// </summary>
-    /// <seealso>weight</seealso>
+    /// <remarks>
+    /// Native: <c>weight</c>
+    /// </remarks>
     public float Weight;
 
     /// <summary>
     /// Playback speed; can be negative for reverse playback.
     /// </summary>
-    /// <seealso>speed</seealso>
+    /// <remarks>
+    /// Native: <c>speed</c>
+    /// </remarks>
     public float Speed;
 
     /// <summary>
     /// Whether the animation is currently playing.
     /// </summary>
-    /// <seealso>play</seealso>
+    /// <remarks>
+    /// Native: <c>play</c>
+    /// </remarks>
     public bool Play;
 
     /// <summary>
     /// True to enable looping playback.
     /// </summary>
-    /// <seealso>loop</seealso>
+    /// <remarks>
+    /// Native: <c>loop</c>
+    /// </remarks>
     public bool Loop;
 
 }

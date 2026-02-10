@@ -14,17 +14,19 @@ namespace R3D_cs;
 /// buffers: One VBO per attribute (indexed by flag order). capcity: Maximum number of instances. flags: Enabled attribute mask.
 /// </para>
 /// </summary>
-/// <seealso>R3D_InstanceBuffer</seealso>
+/// <remarks>
+/// Native: <c>R3D_InstanceBuffer</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct InstanceBuffer
 {
-    /// <seealso>buffers</seealso>
+    /// <remarks>Native: <c>buffers</c></remarks>
     public fixed uint Buffers[5];
 
-    /// <seealso>capacity</seealso>
+    /// <remarks>Native: <c>capacity</c></remarks>
     public int Capacity;
 
-    /// <seealso>flags</seealso>
+    /// <remarks>Native: <c>flags</c></remarks>
     public int Flags;
 
 }

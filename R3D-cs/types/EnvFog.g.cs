@@ -11,44 +11,58 @@ namespace R3D_cs;
 /// <summary>
 /// Fog atmospheric effect settings.
 /// </summary>
-/// <seealso>R3D_EnvFog</seealso>
+/// <remarks>
+/// Native: <c>R3D_EnvFog</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EnvFog
 {
     /// <summary>
     /// Fog distribution mode (default: R3D_FOG_DISABLED)
     /// </summary>
-    /// <seealso>mode</seealso>
+    /// <remarks>
+    /// Native: <c>mode</c>
+    /// </remarks>
     public Fog Mode;
 
     /// <summary>
     /// Fog tint color (default: white)
     /// </summary>
-    /// <seealso>color</seealso>
+    /// <remarks>
+    /// Native: <c>color</c>
+    /// </remarks>
     public Color Color;
 
     /// <summary>
     /// Linear mode: distance where fog begins (default: 1.0)
     /// </summary>
-    /// <seealso>start</seealso>
+    /// <remarks>
+    /// Native: <c>start</c>
+    /// </remarks>
     public float Start;
 
     /// <summary>
     /// Linear mode: distance of full fog density (default: 50.0)
     /// </summary>
-    /// <seealso>end</seealso>
+    /// <remarks>
+    /// Native: <c>end</c>
+    /// </remarks>
     public float End;
 
     /// <summary>
     /// Exponential modes: fog thickness factor (default: 0.05)
     /// </summary>
-    /// <seealso>density</seealso>
+    /// <remarks>
+    /// Native: <c>density</c>
+    /// </remarks>
     public float Density;
 
     /// <summary>
     /// Fog influence on skybox [0-1] (default: 0.5)
     /// </summary>
-    /// <seealso>skyAffect</seealso>
+    /// <remarks>
+    /// Native: <c>skyAffect</c>
+    /// </remarks>
     public float SkyAffect;
 
 }

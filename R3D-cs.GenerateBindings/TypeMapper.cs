@@ -17,6 +17,12 @@ public static class TypeMapper
     ];
 
     /// <summary>
+    ///     Opaque types whose pointer is wrapped inside the struct as an nint handle.
+    ///     For these types, Type* maps to Type (by value) and Type** maps to Type*.
+    /// </summary>
+    public static readonly HashSet<string> OpaqueTypes = [];
+
+    /// <summary>
     ///     Maps a C++ type to its C# equivalent.
     /// </summary>
     /// <returns>A tuple of (csType, isUnsafe, isFixedBuffer, fixedSize).</returns>
@@ -68,7 +74,25 @@ public static class TypeMapper
         {
             CppPrimitiveType { Kind: CppPrimitiveKind.Void } => ("IntPtr", false, false, 0),
             CppQualifiedType { ElementType: CppPrimitiveType { Kind: CppPrimitiveKind.Char } } => ("string", false, false, 0), // const char*
+            _ when IsOpaqueType(ptr.ElementType) => (MapType(ptr.ElementType).csType, false, false, 0), // Type* → Type (by value)
             _ => (MapType(ptr.ElementType).csType + "*", true, false, 0)
+        };
+    }
+
+    /// <summary>
+    ///     Checks whether a type resolves to a known opaque type.
+    /// </summary>
+    private static bool IsOpaqueType(CppType type)
+    {
+        var unwrapped = type;
+        if (unwrapped is CppQualifiedType qt)
+            unwrapped = qt.ElementType;
+
+        return unwrapped switch
+        {
+            CppClass cls => OpaqueTypes.Contains(cls.Name),
+            CppTypedef td => OpaqueTypes.Contains(td.Name),
+            _ => false
         };
     }
 
@@ -143,7 +167,8 @@ public static class TypeMapper
         }
 
         // Pointer-to-pointer types (e.g., Type**) should remain as-is (not converted to ref)
-        if (mappedType.EndsWith("**"))
+        // Check both the mapped string and the CppType structure (opaque types collapse one level)
+        if (mappedType.EndsWith("**") || ptrType.ElementType is CppPointerType)
             return (null, mappedType);
 
         // Other struct/type pointers become ref parameters

@@ -14,44 +14,58 @@ namespace R3D_cs;
 /// Darkens areas where surfaces are close together, such as corners and crevices.
 /// </para>
 /// </summary>
-/// <seealso>R3D_EnvSSAO</seealso>
+/// <remarks>
+/// Native: <c>R3D_EnvSSAO</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EnvSSAO
 {
     /// <summary>
     /// Number of samples to compute SSAO (default: 16)
     /// </summary>
-    /// <seealso>sampleCount</seealso>
+    /// <remarks>
+    /// Native: <c>sampleCount</c>
+    /// </remarks>
     public int SampleCount;
 
     /// <summary>
     /// Base occlusion strength multiplier (default: 1.0)
     /// </summary>
-    /// <seealso>intensity</seealso>
+    /// <remarks>
+    /// Native: <c>intensity</c>
+    /// </remarks>
     public float Intensity;
 
     /// <summary>
     /// Exponential falloff for sharper darkening (default: 1.5)
     /// </summary>
-    /// <seealso>power</seealso>
+    /// <remarks>
+    /// Native: <c>power</c>
+    /// </remarks>
     public float Power;
 
     /// <summary>
     /// Sampling radius in world space (default: 0.25)
     /// </summary>
-    /// <seealso>radius</seealso>
+    /// <remarks>
+    /// Native: <c>radius</c>
+    /// </remarks>
     public float Radius;
 
     /// <summary>
     /// Depth bias to prevent self-shadowing, good value is ~2% of the radius (default: 0.007)
     /// </summary>
-    /// <seealso>bias</seealso>
+    /// <remarks>
+    /// Native: <c>bias</c>
+    /// </remarks>
     public float Bias;
 
     /// <summary>
     /// Enable/disable SSAO effect (default: false)
     /// </summary>
-    /// <seealso>enabled</seealso>
+    /// <remarks>
+    /// Native: <c>enabled</c>
+    /// </remarks>
     public bool Enabled;
 
 }

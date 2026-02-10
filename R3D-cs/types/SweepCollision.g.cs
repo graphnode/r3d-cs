@@ -11,32 +11,42 @@ namespace R3D_cs;
 /// <summary>
 /// Collision information from a sweep test
 /// </summary>
-/// <seealso>R3D_SweepCollision</seealso>
+/// <remarks>
+/// Native: <c>R3D_SweepCollision</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct SweepCollision
 {
     /// <summary>
     /// Whether a collision occurred
     /// </summary>
-    /// <seealso>hit</seealso>
+    /// <remarks>
+    /// Native: <c>hit</c>
+    /// </remarks>
     public bool Hit;
 
     /// <summary>
     /// Time of impact [0-1], fraction along velocity vector
     /// </summary>
-    /// <seealso>time</seealso>
+    /// <remarks>
+    /// Native: <c>time</c>
+    /// </remarks>
     public float Time;
 
     /// <summary>
     /// World space collision point
     /// </summary>
-    /// <seealso>point</seealso>
+    /// <remarks>
+    /// Native: <c>point</c>
+    /// </remarks>
     public Vector3 Point;
 
     /// <summary>
     /// Surface normal at collision point
     /// </summary>
-    /// <seealso>normal</seealso>
+    /// <remarks>
+    /// Native: <c>normal</c>
+    /// </remarks>
     public Vector3 Normal;
 
 }

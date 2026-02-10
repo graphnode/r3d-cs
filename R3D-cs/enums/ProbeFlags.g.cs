@@ -17,13 +17,15 @@ namespace R3D_cs;
 /// </list>
 /// </para>
 /// </summary>
-/// <seealso>R3D_ProbeFlags</seealso>
+/// <remarks>
+/// Native: <c>R3D_ProbeFlags</c>
+/// </remarks>
 [Flags]
 public enum ProbeFlags : uint
 {
-    /// <seealso>R3D_PROBE_ILLUMINATION</seealso>
+    /// <remarks>Native: <c>R3D_PROBE_ILLUMINATION</c></remarks>
     Illumination = (1<<0),
 
-    /// <seealso>R3D_PROBE_REFLECTION</seealso>
+    /// <remarks>Native: <c>R3D_PROBE_REFLECTION</c></remarks>
     Reflection = (1<<1),
 }

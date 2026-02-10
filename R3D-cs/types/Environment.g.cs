@@ -14,68 +14,90 @@ namespace R3D_cs;
 /// Contains all rendering environment parameters: background, lighting, and post-processing effects. Initialize with R3D_ENVIRONMENT_BASE for default values.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Environment</seealso>
+/// <remarks>
+/// Native: <c>R3D_Environment</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct Environment
 {
     /// <summary>
     /// Background and skybox settings
     /// </summary>
-    /// <seealso>background</seealso>
+    /// <remarks>
+    /// Native: <c>background</c>
+    /// </remarks>
     public EnvBackground Background;
 
     /// <summary>
     /// Ambient lighting configuration
     /// </summary>
-    /// <seealso>ambient</seealso>
+    /// <remarks>
+    /// Native: <c>ambient</c>
+    /// </remarks>
     public EnvAmbient Ambient;
 
     /// <summary>
     /// Screen space ambient occlusion
     /// </summary>
-    /// <seealso>ssao</seealso>
+    /// <remarks>
+    /// Native: <c>ssao</c>
+    /// </remarks>
     public EnvSSAO Ssao;
 
     /// <summary>
     /// Screen space indirect lighting
     /// </summary>
-    /// <seealso>ssil</seealso>
+    /// <remarks>
+    /// Native: <c>ssil</c>
+    /// </remarks>
     public EnvSSIL Ssil;
 
     /// <summary>
     /// Screen space reflections
     /// </summary>
-    /// <seealso>ssr</seealso>
+    /// <remarks>
+    /// Native: <c>ssr</c>
+    /// </remarks>
     public EnvSSR Ssr;
 
     /// <summary>
     /// Bloom glow effect
     /// </summary>
-    /// <seealso>bloom</seealso>
+    /// <remarks>
+    /// Native: <c>bloom</c>
+    /// </remarks>
     public EnvBloom Bloom;
 
     /// <summary>
     /// Atmospheric fog
     /// </summary>
-    /// <seealso>fog</seealso>
+    /// <remarks>
+    /// Native: <c>fog</c>
+    /// </remarks>
     public EnvFog Fog;
 
     /// <summary>
     /// Depth of field focus effect
     /// </summary>
-    /// <seealso>dof</seealso>
+    /// <remarks>
+    /// Native: <c>dof</c>
+    /// </remarks>
     public EnvDoF Dof;
 
     /// <summary>
     /// HDR tone mapping
     /// </summary>
-    /// <seealso>tonemap</seealso>
+    /// <remarks>
+    /// Native: <c>tonemap</c>
+    /// </remarks>
     public EnvTonemap Tonemap;
 
     /// <summary>
     /// Color grading adjustments
     /// </summary>
-    /// <seealso>color</seealso>
+    /// <remarks>
+    /// Native: <c>color</c>
+    /// </remarks>
     public EnvColor Color;
 
 }

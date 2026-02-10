@@ -11,26 +11,34 @@ namespace R3D_cs;
 /// <summary>
 /// Capsule shape defined by two endpoints and radius
 /// </summary>
-/// <seealso>R3D_Capsule</seealso>
+/// <remarks>
+/// Native: <c>R3D_Capsule</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct Capsule
 {
     /// <summary>
     /// Start point of capsule axis
     /// </summary>
-    /// <seealso>start</seealso>
+    /// <remarks>
+    /// Native: <c>start</c>
+    /// </remarks>
     public Vector3 Start;
 
     /// <summary>
     /// End point of capsule axis
     /// </summary>
-    /// <seealso>end</seealso>
+    /// <remarks>
+    /// Native: <c>end</c>
+    /// </remarks>
     public Vector3 End;
 
     /// <summary>
     /// Capsule radius
     /// </summary>
-    /// <seealso>radius</seealso>
+    /// <remarks>
+    /// Native: <c>radius</c>
+    /// </remarks>
     public float Radius;
 
 }

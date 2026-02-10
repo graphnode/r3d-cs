@@ -9,24 +9,32 @@ namespace R3D_cs;
 /// Specifies which faces of a geometry are discarded during rendering based on their winding order.
 /// </para>
 /// </summary>
-/// <seealso>R3D_CullMode</seealso>
+/// <remarks>
+/// Native: <c>R3D_CullMode</c>
+/// </remarks>
 public enum CullMode
 {
     /// <summary>
     /// No culling; all faces are rendered.
     /// </summary>
-    /// <seealso>R3D_CullMode.R3D_CULL_NONE</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CullMode.R3D_CULL_NONE</c>
+    /// </remarks>
     None,
 
     /// <summary>
     /// Cull back-facing polygons (faces with clockwise winding order).
     /// </summary>
-    /// <seealso>R3D_CullMode.R3D_CULL_BACK</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CullMode.R3D_CULL_BACK</c>
+    /// </remarks>
     Back,
 
     /// <summary>
     /// Cull front-facing polygons (faces with counter-clockwise winding order).
     /// </summary>
-    /// <seealso>R3D_CullMode.R3D_CULL_FRONT</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CullMode.R3D_CULL_FRONT</c>
+    /// </remarks>
     Front,
 }

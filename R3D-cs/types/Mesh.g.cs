@@ -14,80 +14,106 @@ namespace R3D_cs;
 /// Stores vertex and index data, shadow casting settings, bounding box, and layer information. Can represent a static or skinned mesh.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Mesh</seealso>
+/// <remarks>
+/// Native: <c>R3D_Mesh</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct Mesh
 {
     /// <summary>
     /// OpenGL objects handles.
     /// </summary>
-    /// <seealso>vao</seealso>
+    /// <remarks>
+    /// Native: <c>vao</c>
+    /// </remarks>
     public uint Vao;
 
     /// <summary>
     /// OpenGL objects handles.
     /// </summary>
-    /// <seealso>vbo</seealso>
+    /// <remarks>
+    /// Native: <c>vbo</c>
+    /// </remarks>
     public uint Vbo;
 
     /// <summary>
     /// OpenGL objects handles.
     /// </summary>
-    /// <seealso>ebo</seealso>
+    /// <remarks>
+    /// Native: <c>ebo</c>
+    /// </remarks>
     public uint Ebo;
 
     /// <summary>
     /// Number of vertices and indices currently in use.
     /// </summary>
-    /// <seealso>vertexCount</seealso>
+    /// <remarks>
+    /// Native: <c>vertexCount</c>
+    /// </remarks>
     public int VertexCount;
 
     /// <summary>
     /// Number of vertices and indices currently in use.
     /// </summary>
-    /// <seealso>indexCount</seealso>
+    /// <remarks>
+    /// Native: <c>indexCount</c>
+    /// </remarks>
     public int IndexCount;
 
     /// <summary>
     /// Number of vertices and indices allocated in GPU buffers.
     /// </summary>
-    /// <seealso>allocVertexCount</seealso>
+    /// <remarks>
+    /// Native: <c>allocVertexCount</c>
+    /// </remarks>
     public int AllocVertexCount;
 
     /// <summary>
     /// Number of vertices and indices allocated in GPU buffers.
     /// </summary>
-    /// <seealso>allocIndexCount</seealso>
+    /// <remarks>
+    /// Native: <c>allocIndexCount</c>
+    /// </remarks>
     public int AllocIndexCount;
 
     /// <summary>
     /// Shadow casting mode for the mesh.
     /// </summary>
-    /// <seealso>shadowCastMode</seealso>
+    /// <remarks>
+    /// Native: <c>shadowCastMode</c>
+    /// </remarks>
     public ShadowCastMode ShadowCastMode;
 
     /// <summary>
     /// Type of primitive that constitutes the vertices.
     /// </summary>
-    /// <seealso>primitiveType</seealso>
+    /// <remarks>
+    /// Native: <c>primitiveType</c>
+    /// </remarks>
     public PrimitiveType PrimitiveType;
 
     /// <summary>
     /// Hint about the usage of the mesh, retained in case of update if there is a reallocation.
     /// </summary>
-    /// <seealso>usage</seealso>
+    /// <remarks>
+    /// Native: <c>usage</c>
+    /// </remarks>
     public MeshUsage Usage;
 
     /// <summary>
     /// Bitfield indicating the rendering layer(s) of this mesh.
     /// </summary>
-    /// <seealso>layerMask</seealso>
+    /// <remarks>
+    /// Native: <c>layerMask</c>
+    /// </remarks>
     public Layer LayerMask;
 
     /// <summary>
     /// Axis-Aligned Bounding Box in local space.
     /// </summary>
-    /// <seealso>aabb</seealso>
+    /// <remarks>
+    /// Native: <c>aabb</c>
+    /// </remarks>
     public BoundingBox Aabb;
 
 }

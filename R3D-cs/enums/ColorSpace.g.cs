@@ -19,18 +19,24 @@ namespace R3D_cs;
 /// Used with `R3D_SetColorSpace()` to control whether input colors should be treated as linear or sRGB.
 /// </para>
 /// </summary>
-/// <seealso>R3D_ColorSpace</seealso>
+/// <remarks>
+/// Native: <c>R3D_ColorSpace</c>
+/// </remarks>
 public enum ColorSpace
 {
     /// <summary>
     /// Linear color space: values are used as-is.
     /// </summary>
-    /// <seealso>R3D_ColorSpace.R3D_COLORSPACE_LINEAR</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ColorSpace.R3D_COLORSPACE_LINEAR</c>
+    /// </remarks>
     Linear,
 
     /// <summary>
     /// sRGB color space: values are converted to linear on load.
     /// </summary>
-    /// <seealso>R3D_ColorSpace.R3D_COLORSPACE_SRGB</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ColorSpace.R3D_COLORSPACE_SRGB</c>
+    /// </remarks>
     Srgb,
 }

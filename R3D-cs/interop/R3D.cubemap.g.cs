@@ -23,7 +23,9 @@ public static unsafe partial class R3D
     /// The layout parameter tells how faces are arranged inside the source image.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_LoadCubemap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadCubemap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadCubemap", StringMarshalling = StringMarshalling.Utf8)]
     public static partial Cubemap LoadCubemap(string fileName, CubemapLayout layout);
 
@@ -33,7 +35,9 @@ public static unsafe partial class R3D
     /// Same behavior as R3D_LoadCubemap(), but without loading from disk.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_LoadCubemapFromImage</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadCubemapFromImage</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadCubemapFromImage")]
     public static partial Cubemap LoadCubemapFromImage(Image image, CubemapLayout layout);
 
@@ -43,14 +47,18 @@ public static unsafe partial class R3D
     /// Creates a GPU cubemap with procedural gradient sky and sun rendering. The cubemap is ready for use as environment map or IBL source.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_GenCubemapSky</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenCubemapSky</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenCubemapSky")]
     public static partial Cubemap GenCubemapSky(int size, CubemapSky @params);
 
     /// <summary>
     /// Releases GPU resources associated with a cubemap.
     /// </summary>
-    /// <seealso>R3D_UnloadCubemap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadCubemap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadCubemap")]
     public static partial void UnloadCubemap(Cubemap cubemap);
 
@@ -60,7 +68,9 @@ public static unsafe partial class R3D
     /// Re-renders the cubemap with new parameters. Faster than unload + generate when animating sky conditions (time of day, weather, etc.).
     /// </para>
     /// </summary>
-    /// <seealso>R3D_UpdateCubemapSky</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UpdateCubemapSky</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UpdateCubemapSky")]
     public static partial void UpdateCubemapSky(ref Cubemap cubemap, CubemapSky @params);
 

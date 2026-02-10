@@ -11,27 +11,29 @@ namespace R3D_cs;
 /// <summary>
 /// Bitmask defining which instance attributes are present.
 /// </summary>
-/// <seealso>R3D_InstanceFlags</seealso>
+/// <remarks>
+/// Native: <c>R3D_InstanceFlags</c>
+/// </remarks>
 [Flags]
 public enum InstanceFlags
 {
     /// <summary>Vector3</summary>
-    /// <seealso>R3D_INSTANCE_POSITION</seealso>
+    /// <remarks>Native: <c>R3D_INSTANCE_POSITION</c></remarks>
     Position = (1<<0),
 
     /// <summary>Quaternion</summary>
-    /// <seealso>R3D_INSTANCE_ROTATION</seealso>
+    /// <remarks>Native: <c>R3D_INSTANCE_ROTATION</c></remarks>
     Rotation = (1<<1),
 
     /// <summary>Vector3</summary>
-    /// <seealso>R3D_INSTANCE_SCALE</seealso>
+    /// <remarks>Native: <c>R3D_INSTANCE_SCALE</c></remarks>
     Scale = (1<<2),
 
     /// <summary>Color</summary>
-    /// <seealso>R3D_INSTANCE_COLOR</seealso>
+    /// <remarks>Native: <c>R3D_INSTANCE_COLOR</c></remarks>
     Color = (1<<3),
 
     /// <summary>Vector4</summary>
-    /// <seealso>R3D_INSTANCE_CUSTOM</seealso>
+    /// <remarks>Native: <c>R3D_INSTANCE_CUSTOM</c></remarks>
     Custom = (1<<4),
 }

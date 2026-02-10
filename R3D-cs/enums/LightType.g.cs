@@ -9,27 +9,35 @@ namespace R3D_cs;
 /// Each light type has different behaviors and use cases.
 /// </para>
 /// </summary>
-/// <seealso>R3D_LightType</seealso>
+/// <remarks>
+/// Native: <c>R3D_LightType</c>
+/// </remarks>
 public enum LightType
 {
     /// <summary>
     /// Directional light, affects the entire scene with parallel rays.
     /// </summary>
-    /// <seealso>R3D_LightType.R3D_LIGHT_DIR</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LightType.R3D_LIGHT_DIR</c>
+    /// </remarks>
     Dir,
 
     /// <summary>
     /// Spot light, emits light in a cone shape.
     /// </summary>
-    /// <seealso>R3D_LightType.R3D_LIGHT_SPOT</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LightType.R3D_LIGHT_SPOT</c>
+    /// </remarks>
     Spot,
 
     /// <summary>
     /// Omni light, emits light in all directions from a single point.
     /// </summary>
-    /// <seealso>R3D_LightType.R3D_LIGHT_OMNI</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LightType.R3D_LIGHT_OMNI</c>
+    /// </remarks>
     Omni,
 
-    /// <seealso>R3D_LightType.R3D_LIGHT_TYPE_COUNT</seealso>
+    /// <remarks>Native: <c>R3D_LightType.R3D_LIGHT_TYPE_COUNT</c></remarks>
     TypeCount,
 }

@@ -14,20 +14,26 @@ namespace R3D_cs;
 /// Provides the base color texture and a color multiplier.
 /// </para>
 /// </summary>
-/// <seealso>R3D_AlbedoMap</seealso>
+/// <remarks>
+/// Native: <c>R3D_AlbedoMap</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct AlbedoMap
 {
     /// <summary>
     /// Base color texture (default: WHITE)
     /// </summary>
-    /// <seealso>texture</seealso>
+    /// <remarks>
+    /// Native: <c>texture</c>
+    /// </remarks>
     public Texture2D Texture;
 
     /// <summary>
     /// Color multiplier (default: WHITE)
     /// </summary>
-    /// <seealso>color</seealso>
+    /// <remarks>
+    /// Native: <c>color</c>
+    /// </remarks>
     public Color Color;
 
 }

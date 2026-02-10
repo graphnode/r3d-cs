@@ -14,8 +14,11 @@ namespace R3D_cs;
 /// Represents a loaded asset file that can be used to extract multiple resources (models, skeletons, animations) without re-importing the file.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Importer</seealso>
+/// <remarks>
+/// Native: <c>R3D_Importer</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct Importer
 {
+    private nint _handle;
 }

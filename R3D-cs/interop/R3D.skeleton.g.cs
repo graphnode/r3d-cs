@@ -25,7 +25,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="filePath">Path to the model file containing the skeleton data.</param>
     /// <returns>Return the loaded R3D_Skeleton.</returns>
-    /// <seealso>R3D_LoadSkeleton</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadSkeleton</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSkeleton", StringMarshalling = StringMarshalling.Utf8)]
     public static partial Skeleton LoadSkeleton(string filePath);
 
@@ -39,7 +41,9 @@ public static unsafe partial class R3D
     /// <param name="size">Size of the memory buffer in bytes.</param>
     /// <param name="hint">Optional format hint (can be NULL).</param>
     /// <returns>Return the loaded R3D_Skeleton.</returns>
-    /// <seealso>R3D_LoadSkeletonFromMemory</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadSkeletonFromMemory</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSkeletonFromMemory", StringMarshalling = StringMarshalling.Utf8)]
     public static partial Skeleton LoadSkeletonFromMemory(void* data, uint size, string hint);
 
@@ -51,15 +55,19 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="importer">Importer instance to extract the skeleton from.</param>
     /// <returns>Return the loaded R3D_Skeleton.</returns>
-    /// <seealso>R3D_LoadSkeletonFromImporter</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadSkeletonFromImporter</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSkeletonFromImporter")]
-    public static partial Skeleton LoadSkeletonFromImporter(Importer* importer);
+    public static partial Skeleton LoadSkeletonFromImporter(Importer importer);
 
     /// <summary>
     /// Frees the memory allocated for a skeleton.
     /// </summary>
     /// <param name="skeleton">R3D_Skeleton to destroy.</param>
-    /// <seealso>R3D_UnloadSkeleton</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadSkeleton</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadSkeleton")]
     public static partial void UnloadSkeleton(Skeleton skeleton);
 
@@ -71,7 +79,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="skeleton">The skeleton to check.</param>
     /// <returns>true if valid, false otherwise.</returns>
-    /// <seealso>R3D_IsSkeletonValid</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsSkeletonValid</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsSkeletonValid")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsSkeletonValid(Skeleton skeleton);
@@ -82,7 +92,9 @@ public static unsafe partial class R3D
     /// <param name="skeleton">Skeleton to search in.</param>
     /// <param name="boneName">Name of the bone to find.</param>
     /// <returns>Index of the bone, or a negative value if not found.</returns>
-    /// <seealso>R3D_GetSkeletonBoneIndex</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetSkeletonBoneIndex</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetSkeletonBoneIndex", StringMarshalling = StringMarshalling.Utf8)]
     public static partial int GetSkeletonBoneIndex(Skeleton skeleton, string boneName);
 
@@ -92,7 +104,9 @@ public static unsafe partial class R3D
     /// <param name="skeleton">Skeleton to search in.</param>
     /// <param name="boneName">Name of the bone to find.</param>
     /// <returns>Pointer to the bone, or NULL if not found.</returns>
-    /// <seealso>R3D_GetSkeletonBone</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetSkeletonBone</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetSkeletonBone", StringMarshalling = StringMarshalling.Utf8)]
     public static partial BoneInfo* GetSkeletonBone(Skeleton skeleton, string boneName);
 

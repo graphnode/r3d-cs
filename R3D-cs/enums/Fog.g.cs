@@ -9,30 +9,40 @@ namespace R3D_cs;
 /// Distance-based fog density distribution methods.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Fog</seealso>
+/// <remarks>
+/// Native: <c>R3D_Fog</c>
+/// </remarks>
 public enum Fog
 {
     /// <summary>
     /// No fog effect
     /// </summary>
-    /// <seealso>R3D_Fog.R3D_FOG_DISABLED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Fog.R3D_FOG_DISABLED</c>
+    /// </remarks>
     Disabled,
 
     /// <summary>
     /// Linear density increase between start and end distances
     /// </summary>
-    /// <seealso>R3D_Fog.R3D_FOG_LINEAR</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Fog.R3D_FOG_LINEAR</c>
+    /// </remarks>
     Linear,
 
     /// <summary>
     /// Exponential squared density (exp2), more realistic
     /// </summary>
-    /// <seealso>R3D_Fog.R3D_FOG_EXP2</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Fog.R3D_FOG_EXP2</c>
+    /// </remarks>
     EXP2,
 
     /// <summary>
     /// Simple exponential density increase
     /// </summary>
-    /// <seealso>R3D_Fog.R3D_FOG_EXP</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Fog.R3D_FOG_EXP</c>
+    /// </remarks>
     Exp,
 }

@@ -9,7 +9,9 @@ namespace R3D_cs;
 /// ID type used to reference a light. A negative value indicates an invalid light.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Light</seealso>
+/// <remarks>
+/// Native: <c>R3D_Light</c>
+/// </remarks>
 public struct Light
 {
     internal int id;

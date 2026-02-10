@@ -14,32 +14,42 @@ namespace R3D_cs;
 /// Provides texture and individual multipliers for occlusion, roughness, and metalness.
 /// </para>
 /// </summary>
-/// <seealso>R3D_OrmMap</seealso>
+/// <remarks>
+/// Native: <c>R3D_OrmMap</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct OrmMap
 {
     /// <summary>
     /// ORM texture (default: WHITE)
     /// </summary>
-    /// <seealso>texture</seealso>
+    /// <remarks>
+    /// Native: <c>texture</c>
+    /// </remarks>
     public Texture2D Texture;
 
     /// <summary>
     /// Occlusion multiplier (default: 1.0f)
     /// </summary>
-    /// <seealso>occlusion</seealso>
+    /// <remarks>
+    /// Native: <c>occlusion</c>
+    /// </remarks>
     public float Occlusion;
 
     /// <summary>
     /// Roughness multiplier (default: 1.0f)
     /// </summary>
-    /// <seealso>roughness</seealso>
+    /// <remarks>
+    /// Native: <c>roughness</c>
+    /// </remarks>
     public float Roughness;
 
     /// <summary>
     /// Metalness multiplier (default: 0.0f)
     /// </summary>
-    /// <seealso>metalness</seealso>
+    /// <remarks>
+    /// Native: <c>metalness</c>
+    /// </remarks>
     public float Metalness;
 
 }

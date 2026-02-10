@@ -9,24 +9,32 @@ namespace R3D_cs;
 /// This enumeration defines how a 3D object aligns itself relative to the camera. It provides options to disable billboarding or to enable specific modes of alignment.
 /// </para>
 /// </summary>
-/// <seealso>R3D_BillboardMode</seealso>
+/// <remarks>
+/// Native: <c>R3D_BillboardMode</c>
+/// </remarks>
 public enum BillboardMode
 {
     /// <summary>
     /// Billboarding is disabled; the object retains its original orientation.
     /// </summary>
-    /// <seealso>R3D_BillboardMode.R3D_BILLBOARD_DISABLED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_BillboardMode.R3D_BILLBOARD_DISABLED</c>
+    /// </remarks>
     Disabled,
 
     /// <summary>
     /// Full billboarding; the object fully faces the camera, rotating on all axes.
     /// </summary>
-    /// <seealso>R3D_BillboardMode.R3D_BILLBOARD_FRONT</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_BillboardMode.R3D_BILLBOARD_FRONT</c>
+    /// </remarks>
     Front,
 
     /// <summary>
     /// Y-axis constrained billboarding; the object rotates only around the Y-axis, keeping its &quot;up&quot; orientation fixed. This is suitable for upright objects like characters or signs.
     /// </summary>
-    /// <seealso>R3D_BillboardMode.R3D_BILLBOARD_Y_AXIS</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_BillboardMode.R3D_BILLBOARD_Y_AXIS</c>
+    /// </remarks>
     YAxis,
 }

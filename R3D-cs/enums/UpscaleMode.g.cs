@@ -9,30 +9,40 @@ namespace R3D_cs;
 /// Upscale mode to apply when the output window is larger than the internal render resolution.
 /// </para>
 /// </summary>
-/// <seealso>R3D_UpscaleMode</seealso>
+/// <remarks>
+/// Native: <c>R3D_UpscaleMode</c>
+/// </remarks>
 public enum UpscaleMode
 {
     /// <summary>
     /// Nearest-neighbor upscaling: very fast, but produces blocky pixels.
     /// </summary>
-    /// <seealso>R3D_UpscaleMode.R3D_UPSCALE_NEAREST</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UpscaleMode.R3D_UPSCALE_NEAREST</c>
+    /// </remarks>
     Nearest,
 
     /// <summary>
     /// Bilinear upscaling: very fast, smoother than nearest, but can appear blurry.
     /// </summary>
-    /// <seealso>R3D_UpscaleMode.R3D_UPSCALE_LINEAR</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UpscaleMode.R3D_UPSCALE_LINEAR</c>
+    /// </remarks>
     Linear,
 
     /// <summary>
     /// Bicubic (Catmull-Rom) upscaling: slower, smoother, and less blurry than linear.
     /// </summary>
-    /// <seealso>R3D_UpscaleMode.R3D_UPSCALE_BICUBIC</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UpscaleMode.R3D_UPSCALE_BICUBIC</c>
+    /// </remarks>
     Bicubic,
 
     /// <summary>
     /// Lanczos-2 upscaling: preserves more fine details, but is the most expensive.
     /// </summary>
-    /// <seealso>R3D_UpscaleMode.R3D_UPSCALE_LANCZOS</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UpscaleMode.R3D_UPSCALE_LANCZOS</c>
+    /// </remarks>
     Lanczos,
 }

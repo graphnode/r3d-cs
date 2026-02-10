@@ -9,7 +9,9 @@ namespace R3D_cs;
 /// Negative values indicate an invalid probe.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Probe</seealso>
+/// <remarks>
+/// Native: <c>R3D_Probe</c>
+/// </remarks>
 public struct Probe
 {
     internal int id;

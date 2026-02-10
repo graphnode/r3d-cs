@@ -14,17 +14,19 @@ namespace R3D_cs;
 /// Holds the OpenGL texture handle and its base resolution (per face).
 /// </para>
 /// </summary>
-/// <seealso>R3D_Cubemap</seealso>
+/// <remarks>
+/// Native: <c>R3D_Cubemap</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct Cubemap
 {
-    /// <seealso>texture</seealso>
+    /// <remarks>Native: <c>texture</c></remarks>
     public uint Texture;
 
-    /// <seealso>fbo</seealso>
+    /// <remarks>Native: <c>fbo</c></remarks>
     public uint Fbo;
 
-    /// <seealso>size</seealso>
+    /// <remarks>Native: <c>size</c></remarks>
     public int Size;
 
 }

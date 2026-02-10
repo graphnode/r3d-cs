@@ -27,8 +27,8 @@ public static unsafe partial class R3D
     /// <returns>Created R3D_Mesh.</returns>
     /// <remarks>
     /// The function copies all vertex and index data into GPU buffers.
+    /// Native: <c>R3D_LoadMesh</c>
     /// </remarks>
-    /// <seealso>R3D_LoadMesh</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadMesh")]
     public static partial Mesh LoadMesh(PrimitiveType type, MeshData data, BoundingBox* aabb, MeshUsage usage);
 
@@ -36,7 +36,9 @@ public static unsafe partial class R3D
     /// Destroys a 3D mesh and frees its resources.
     /// </summary>
     /// <param name="mesh">R3D_Mesh to destroy.</param>
-    /// <seealso>R3D_UnloadMesh</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadMesh</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadMesh")]
     public static partial void UnloadMesh(Mesh mesh);
 
@@ -48,7 +50,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="mesh">The mesh to check.</param>
     /// <returns>true if valid, false otherwise.</returns>
-    /// <seealso>R3D_IsMeshValid</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsMeshValid</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsMeshValid")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsMeshValid(Mesh mesh);
@@ -62,7 +66,9 @@ public static unsafe partial class R3D
     /// <param name="resZ">Subdivisions along length.</param>
     /// <param name="frontDir">Direction vector for the quad's front face.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshQuad</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshQuad</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshQuad")]
     public static partial Mesh GenMeshQuad(float width, float length, int resX, int resZ, Vector3 frontDir);
 
@@ -74,7 +80,9 @@ public static unsafe partial class R3D
     /// <param name="resX">Subdivisions along X axis.</param>
     /// <param name="resZ">Subdivisions along Z axis.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshPlane</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshPlane</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshPlane")]
     public static partial Mesh GenMeshPlane(float width, float length, int resX, int resZ);
 
@@ -85,7 +93,9 @@ public static unsafe partial class R3D
     /// <param name="radius">Radius of the polygon.</param>
     /// <param name="frontDir">Direction vector for the polygon's front face.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshPoly</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshPoly</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshPoly")]
     public static partial Mesh GenMeshPoly(int sides, float radius, Vector3 frontDir);
 
@@ -96,7 +106,9 @@ public static unsafe partial class R3D
     /// <param name="height">Height along Y axis.</param>
     /// <param name="length">Length along Z axis.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshCube</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshCube</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshCube")]
     public static partial Mesh GenMeshCube(float width, float height, float length);
 
@@ -110,7 +122,9 @@ public static unsafe partial class R3D
     /// <param name="resY">Subdivisions along Y axis.</param>
     /// <param name="resZ">Subdivisions along Z axis.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshCubeEx</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshCubeEx</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshCubeEx")]
     public static partial Mesh GenMeshCubeEx(float width, float height, float length, int resX, int resY, int resZ);
 
@@ -122,7 +136,9 @@ public static unsafe partial class R3D
     /// <param name="length">Length along Z axis.</param>
     /// <param name="slopeNormal">Direction of the slope.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshSlope</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshSlope</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshSlope")]
     public static partial Mesh GenMeshSlope(float width, float height, float length, Vector3 slopeNormal);
 
@@ -133,7 +149,9 @@ public static unsafe partial class R3D
     /// <param name="rings">Number of latitude divisions.</param>
     /// <param name="slices">Number of longitude divisions.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshSphere</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshSphere</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshSphere")]
     public static partial Mesh GenMeshSphere(float radius, int rings, int slices);
 
@@ -144,7 +162,9 @@ public static unsafe partial class R3D
     /// <param name="rings">Number of latitude divisions.</param>
     /// <param name="slices">Number of longitude divisions.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshHemiSphere</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshHemiSphere</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshHemiSphere")]
     public static partial Mesh GenMeshHemiSphere(float radius, int rings, int slices);
 
@@ -156,7 +176,9 @@ public static unsafe partial class R3D
     /// <param name="height">Height along Y axis.</param>
     /// <param name="slices">Radial subdivisions.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshCylinder</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshCylinder</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshCylinder")]
     public static partial Mesh GenMeshCylinder(float bottomRadius, float topRadius, float height, int slices);
 
@@ -168,7 +190,9 @@ public static unsafe partial class R3D
     /// <param name="rings">Number of latitude divisions.</param>
     /// <param name="slices">Number of longitude divisions.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshCapsule</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshCapsule</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshCapsule")]
     public static partial Mesh GenMeshCapsule(float radius, float height, int rings, int slices);
 
@@ -180,7 +204,9 @@ public static unsafe partial class R3D
     /// <param name="radSeg">Segments around major radius.</param>
     /// <param name="sides">Sides around tube cross-section.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshTorus</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshTorus</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshTorus")]
     public static partial Mesh GenMeshTorus(float radius, float size, int radSeg, int sides);
 
@@ -192,7 +218,9 @@ public static unsafe partial class R3D
     /// <param name="radSeg">Segments around major radius.</param>
     /// <param name="sides">Sides around tube cross-section.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshKnot</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshKnot</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshKnot")]
     public static partial Mesh GenMeshKnot(float radius, float size, int radSeg, int sides);
 
@@ -202,7 +230,9 @@ public static unsafe partial class R3D
     /// <param name="heightmap">Heightmap image.</param>
     /// <param name="size">3D dimensions of terrain.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshHeightmap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshHeightmap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshHeightmap")]
     public static partial Mesh GenMeshHeightmap(Image heightmap, Vector3 size);
 
@@ -212,7 +242,9 @@ public static unsafe partial class R3D
     /// <param name="cubicmap">Cubicmap image.</param>
     /// <param name="cubeSize">Size of each cube.</param>
     /// <returns>Mesh ready for rendering.</returns>
-    /// <seealso>R3D_GenMeshCubicmap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshCubicmap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshCubicmap")]
     public static partial Mesh GenMeshCubicmap(Image cubicmap, Vector3 cubeSize);
 
@@ -229,7 +261,9 @@ public static unsafe partial class R3D
     /// <param name="data">Mesh data (vertices and indices) to upload.</param>
     /// <param name="aabb">Optional bounding box; if null, it is recalculated automatically.</param>
     /// <returns>Returns true if the update is successful, false otherwise.</returns>
-    /// <seealso>R3D_UpdateMesh</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UpdateMesh</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UpdateMesh")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool UpdateMesh(ref Mesh mesh, MeshData data, BoundingBox* aabb);

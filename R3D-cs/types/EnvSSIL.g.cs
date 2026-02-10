@@ -14,62 +14,82 @@ namespace R3D_cs;
 /// Approximates indirect lighting by gathering light from nearby surfaces in screen space.
 /// </para>
 /// </summary>
-/// <seealso>R3D_EnvSSIL</seealso>
+/// <remarks>
+/// Native: <c>R3D_EnvSSIL</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EnvSSIL
 {
     /// <summary>
     /// Number of samples to compute indirect lighting (default: 4)
     /// </summary>
-    /// <seealso>sampleCount</seealso>
+    /// <remarks>
+    /// Native: <c>sampleCount</c>
+    /// </remarks>
     public int SampleCount;
 
     /// <summary>
     /// Number of depth slices for accumulation (default: 4)
     /// </summary>
-    /// <seealso>sliceCount</seealso>
+    /// <remarks>
+    /// Native: <c>sliceCount</c>
+    /// </remarks>
     public int SliceCount;
 
     /// <summary>
     /// Maximum distance to gather light from (default: 5.0)
     /// </summary>
-    /// <seealso>sampleRadius</seealso>
+    /// <remarks>
+    /// Native: <c>sampleRadius</c>
+    /// </remarks>
     public float SampleRadius;
 
     /// <summary>
     /// Thickness threshold for occluders (default: 0.5)
     /// </summary>
-    /// <seealso>hitThickness</seealso>
+    /// <remarks>
+    /// Native: <c>hitThickness</c>
+    /// </remarks>
     public float HitThickness;
 
     /// <summary>
     /// Exponential falloff for visibility factor (too high = more noise) (default: 1.0)
     /// </summary>
-    /// <seealso>aoPower</seealso>
+    /// <remarks>
+    /// Native: <c>aoPower</c>
+    /// </remarks>
     public float AoPower;
 
     /// <summary>
     /// Multiplier for indirect light intensity (default: 1.0)
     /// </summary>
-    /// <seealso>energy</seealso>
+    /// <remarks>
+    /// Native: <c>energy</c>
+    /// </remarks>
     public float Energy;
 
     /// <summary>
     /// Bounce feeback factor. (default: 0.5) Simulates light bounces by re-injecting the SSIL from the previous frame into the current direct light. Be careful not to make the factor too high in order to avoid a feedback loop.
     /// </summary>
-    /// <seealso>bounce</seealso>
+    /// <remarks>
+    /// Native: <c>bounce</c>
+    /// </remarks>
     public float Bounce;
 
     /// <summary>
     /// Temporal convergence factor (0 disables it, default 0.5). Smooths sudden light flashes by blending with previous frames. Higher values produce smoother results but may cause ghosting. Tip: The faster the screen changes, the higher the convergence can be acceptable. Requires an additional history buffer (so require more memory). If multiple SSIL passes are done in the same frame, the history may be inconsistent, in that case, enable SSIL/convergence for only one pass per frame.
     /// </summary>
-    /// <seealso>convergence</seealso>
+    /// <remarks>
+    /// Native: <c>convergence</c>
+    /// </remarks>
     public float Convergence;
 
     /// <summary>
     /// Enable/disable SSIL effect (default: false)
     /// </summary>
-    /// <seealso>enabled</seealso>
+    /// <remarks>
+    /// Native: <c>enabled</c>
+    /// </remarks>
     public bool Enabled;
 
 }

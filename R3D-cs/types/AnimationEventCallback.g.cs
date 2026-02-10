@@ -15,7 +15,9 @@ namespace R3D_cs;
 /// <param name="eventType">Type of the event (finished, looped).</param>
 /// <param name="animIndex">Index of the animation triggering the event.</param>
 /// <param name="userData">Optional user-defined data passed when the callback was registered.</param>
-/// <seealso>R3D_AnimationEventCallback</seealso>
+/// <remarks>
+/// Native: <c>R3D_AnimationEventCallback</c>
+/// </remarks>
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 public unsafe delegate void AnimationEventCallback(AnimationPlayer* player, AnimationEvent eventType, int animIndex, IntPtr userData);
 

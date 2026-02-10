@@ -14,26 +14,34 @@ namespace R3D_cs;
 /// Represents a single animated property (translation, rotation or scale). Keys are sampled by time and interpolated at runtime.
 /// </para>
 /// </summary>
-/// <seealso>R3D_AnimationTrack</seealso>
+/// <remarks>
+/// Native: <c>R3D_AnimationTrack</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct AnimationTrack
 {
     /// <summary>
     /// Keyframe times (sorted, in animation ticks).
     /// </summary>
-    /// <seealso>times</seealso>
+    /// <remarks>
+    /// Native: <c>times</c>
+    /// </remarks>
     public float* Times;
 
     /// <summary>
     /// Keyframe values (Vector3 or Quaternion).
     /// </summary>
-    /// <seealso>values</seealso>
+    /// <remarks>
+    /// Native: <c>values</c>
+    /// </remarks>
     public void* Values;
 
     /// <summary>
     /// Number of keyframes.
     /// </summary>
-    /// <seealso>count</seealso>
+    /// <remarks>
+    /// Native: <c>count</c>
+    /// </remarks>
     public int Count;
 
 }

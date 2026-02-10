@@ -6,18 +6,24 @@ namespace R3D_cs;
 /// <summary>
 /// Depth of field modes.
 /// </summary>
-/// <seealso>R3D_DoF</seealso>
+/// <remarks>
+/// Native: <c>R3D_DoF</c>
+/// </remarks>
 public enum DoF
 {
     /// <summary>
     /// No depth of field effect
     /// </summary>
-    /// <seealso>R3D_DoF.R3D_DOF_DISABLED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DoF.R3D_DOF_DISABLED</c>
+    /// </remarks>
     Disabled,
 
     /// <summary>
     /// Depth of field enabled with focus point and blur
     /// </summary>
-    /// <seealso>R3D_DoF.R3D_DOF_ENABLED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DoF.R3D_DOF_ENABLED</c>
+    /// </remarks>
     Enabled,
 }

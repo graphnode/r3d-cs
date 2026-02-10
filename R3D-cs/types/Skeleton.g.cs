@@ -14,50 +14,66 @@ namespace R3D_cs;
 /// Defines the bone structure, reference poses, and inverse bind matrices required for skeletal animation. The skeleton provides both local and global bind poses used during skinning and animation playback.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Skeleton</seealso>
+/// <remarks>
+/// Native: <c>R3D_Skeleton</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct Skeleton
 {
     /// <summary>
     /// Array of bone descriptors defining the hierarchy and names.
     /// </summary>
-    /// <seealso>bones</seealso>
+    /// <remarks>
+    /// Native: <c>bones</c>
+    /// </remarks>
     public BoneInfo* Bones;
 
     /// <summary>
     /// Total number of bones in the skeleton.
     /// </summary>
-    /// <seealso>boneCount</seealso>
+    /// <remarks>
+    /// Native: <c>boneCount</c>
+    /// </remarks>
     public int BoneCount;
 
     /// <summary>
     /// Bind pose matrices relative to parent
     /// </summary>
-    /// <seealso>localBind</seealso>
+    /// <remarks>
+    /// Native: <c>localBind</c>
+    /// </remarks>
     public Matrix4x4* LocalBind;
 
     /// <summary>
     /// Bind pose matrices in model/global space
     /// </summary>
-    /// <seealso>modelBind</seealso>
+    /// <remarks>
+    /// Native: <c>modelBind</c>
+    /// </remarks>
     public Matrix4x4* ModelBind;
 
     /// <summary>
     /// Inverse bind matrices (model space) for skinning
     /// </summary>
-    /// <seealso>invBind</seealso>
+    /// <remarks>
+    /// Native: <c>invBind</c>
+    /// </remarks>
     public Matrix4x4* InvBind;
 
     /// <summary>
     /// Root correction if local bind is not identity
     /// </summary>
-    /// <seealso>rootBind</seealso>
+    /// <remarks>
+    /// Native: <c>rootBind</c>
+    /// </remarks>
     public Matrix4x4 RootBind;
 
     /// <summary>
     /// Texture ID that contains the bind pose for GPU skinning. This is a 1D Texture RGBA16F 4*boneCount.
     /// </summary>
-    /// <seealso>skinTexture</seealso>
+    /// <remarks>
+    /// Native: <c>skinTexture</c>
+    /// </remarks>
     public uint SkinTexture;
 
 }

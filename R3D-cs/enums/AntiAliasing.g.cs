@@ -6,18 +6,24 @@ namespace R3D_cs;
 /// <summary>
 /// Anti-aliasing modes for rendering.
 /// </summary>
-/// <seealso>R3D_AntiAliasing</seealso>
+/// <remarks>
+/// Native: <c>R3D_AntiAliasing</c>
+/// </remarks>
 public enum AntiAliasing
 {
     /// <summary>
     /// Anti-aliasing is disabled. Edges may appear jagged.
     /// </summary>
-    /// <seealso>R3D_AntiAliasing.R3D_ANTI_ALIASING_DISABLED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_AntiAliasing.R3D_ANTI_ALIASING_DISABLED</c>
+    /// </remarks>
     Disabled,
 
     /// <summary>
     /// FXAA is applied. Smooths edges efficiently but may appear blurry.
     /// </summary>
-    /// <seealso>R3D_AntiAliasing.R3D_ANTI_ALIASING_FXAA</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_AntiAliasing.R3D_ANTI_ALIASING_FXAA</c>
+    /// </remarks>
     Fxaa,
 }

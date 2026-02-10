@@ -25,8 +25,8 @@ public static unsafe partial class R3D
     /// <returns>Pointer to an array of R3D_Animation, or NULL on failure.</returns>
     /// <remarks>
     /// Free the returned array using R3D_UnloadAnimationLib().
+    /// Native: <c>R3D_LoadAnimationLib</c>
     /// </remarks>
-    /// <seealso>R3D_LoadAnimationLib</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAnimationLib", StringMarshalling = StringMarshalling.Utf8)]
     public static partial AnimationLib LoadAnimationLib(string filePath);
 
@@ -40,8 +40,8 @@ public static unsafe partial class R3D
     /// <returns>Pointer to an array of R3D_Animation, or NULL on failure.</returns>
     /// <remarks>
     /// Free the returned array using R3D_UnloadAnimationLib().
+    /// Native: <c>R3D_LoadAnimationLibFromMemory</c>
     /// </remarks>
-    /// <seealso>R3D_LoadAnimationLibFromMemory</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAnimationLibFromMemory", StringMarshalling = StringMarshalling.Utf8)]
     public static partial AnimationLib LoadAnimationLibFromMemory(void* data, uint size, string hint);
 
@@ -52,16 +52,18 @@ public static unsafe partial class R3D
     /// <returns>Pointer to an array of R3D_Animation, or NULL on failure.</returns>
     /// <remarks>
     /// Free the returned array using R3D_UnloadAnimationLib().
+    /// Native: <c>R3D_LoadAnimationLibFromImporter</c>
     /// </remarks>
-    /// <seealso>R3D_LoadAnimationLibFromImporter</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAnimationLibFromImporter")]
-    public static partial AnimationLib LoadAnimationLibFromImporter(Importer* importer);
+    public static partial AnimationLib LoadAnimationLibFromImporter(Importer importer);
 
     /// <summary>
     /// Releases all resources associated with an animation library.
     /// </summary>
     /// <param name="animLib">Animation library to unload.</param>
-    /// <seealso>R3D_UnloadAnimationLib</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadAnimationLib</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadAnimationLib")]
     public static partial void UnloadAnimationLib(AnimationLib animLib);
 
@@ -71,7 +73,9 @@ public static unsafe partial class R3D
     /// <param name="animLib">Animation library to search.</param>
     /// <param name="name">Name of the animation (case-sensitive).</param>
     /// <returns>Zero-based index if found, or -1 if not found.</returns>
-    /// <seealso>R3D_GetAnimationIndex</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetAnimationIndex</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAnimationIndex", StringMarshalling = StringMarshalling.Utf8)]
     public static partial int GetAnimationIndex(AnimationLib animLib, string name);
 
@@ -81,7 +85,9 @@ public static unsafe partial class R3D
     /// <param name="animLib">Animation library to search.</param>
     /// <param name="name">Name of the animation (case-sensitive).</param>
     /// <returns>Pointer to the animation, or NULL if not found.</returns>
-    /// <seealso>R3D_GetAnimation</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetAnimation</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAnimation", StringMarshalling = StringMarshalling.Utf8)]
     public static partial Animation* GetAnimation(AnimationLib animLib, string name);
 

@@ -35,7 +35,9 @@ public static unsafe partial class R3D
     /// <param name="resWidth">Width of the internal resolution.</param>
     /// <param name="resHeight">Height of the internal resolution.</param>
     /// <returns>True if the initialization is successful.</returns>
-    /// <seealso>R3D_Init</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Init</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_Init")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool Init(int resWidth, int resHeight);
@@ -46,7 +48,9 @@ public static unsafe partial class R3D
     /// This function shuts down the rendering system and frees all allocated memory, including the resources associated with the created lights.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_Close</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Close</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_Close")]
     public static partial void Close();
 
@@ -58,7 +62,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="width">Pointer to store the width of the internal resolution.</param>
     /// <param name="height">Pointer to store the height of the internal resolution.</param>
-    /// <seealso>R3D_GetResolution</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetResolution</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetResolution")]
     public static partial void GetResolution(out int width, out int height);
 
@@ -73,8 +79,8 @@ public static unsafe partial class R3D
     /// <remarks>
     /// <b>Warning:</b>
     /// This function may be slow due to the destruction and recreation of framebuffers.
+    /// Native: <c>R3D_UpdateResolution</c>
     /// </remarks>
-    /// <seealso>R3D_UpdateResolution</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UpdateResolution")]
     public static partial void UpdateResolution(int width, int height);
 
@@ -82,7 +88,9 @@ public static unsafe partial class R3D
     /// Retrieves the current anti-aliasing mode used for rendering.
     /// </summary>
     /// <returns>The currently active R3D_AntiAliasing mode.</returns>
-    /// <seealso>R3D_GetAntiAliasing</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetAntiAliasing</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAntiAliasing")]
     public static partial AntiAliasing GetAntiAliasing();
 
@@ -90,7 +98,9 @@ public static unsafe partial class R3D
     /// Sets the anti-aliasing mode for rendering.
     /// </summary>
     /// <param name="mode">The desired R3D_AntiAliasing mode.</param>
-    /// <seealso>R3D_SetAntiAliasing</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetAntiAliasing</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetAntiAliasing")]
     public static partial void SetAntiAliasing(AntiAliasing mode);
 
@@ -98,7 +108,9 @@ public static unsafe partial class R3D
     /// Retrieves the current aspect ratio handling mode.
     /// </summary>
     /// <returns>The currently active R3D_AspectMode.</returns>
-    /// <seealso>R3D_GetAspectMode</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetAspectMode</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAspectMode")]
     public static partial AspectMode GetAspectMode();
 
@@ -106,7 +118,9 @@ public static unsafe partial class R3D
     /// Sets the aspect ratio handling mode for rendering.
     /// </summary>
     /// <param name="mode">The desired R3D_AspectMode.</param>
-    /// <seealso>R3D_SetAspectMode</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetAspectMode</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetAspectMode")]
     public static partial void SetAspectMode(AspectMode mode);
 
@@ -114,7 +128,9 @@ public static unsafe partial class R3D
     /// Retrieves the current upscaling/filtering method.
     /// </summary>
     /// <returns>The currently active R3D_UpscaleMode.</returns>
-    /// <seealso>R3D_GetUpscaleMode</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetUpscaleMode</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetUpscaleMode")]
     public static partial UpscaleMode GetUpscaleMode();
 
@@ -122,7 +138,9 @@ public static unsafe partial class R3D
     /// Sets the upscaling/filtering method for rendering output.
     /// </summary>
     /// <param name="mode">The desired R3D_UpscaleMode.</param>
-    /// <seealso>R3D_SetUpscaleMode</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetUpscaleMode</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetUpscaleMode")]
     public static partial void SetUpscaleMode(UpscaleMode mode);
 
@@ -130,7 +148,9 @@ public static unsafe partial class R3D
     /// Retrieves the current downscaling mode used for rendering.
     /// </summary>
     /// <returns>The currently active R3D_DownscaleMode.</returns>
-    /// <seealso>R3D_GetDownscaleMode</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetDownscaleMode</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetDownscaleMode")]
     public static partial DownscaleMode GetDownscaleMode();
 
@@ -138,7 +158,9 @@ public static unsafe partial class R3D
     /// Sets the downscaling mode for rendering output.
     /// </summary>
     /// <param name="mode">The desired R3D_DownscaleMode.</param>
-    /// <seealso>R3D_SetDownscaleMode</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetDownscaleMode</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetDownscaleMode")]
     public static partial void SetDownscaleMode(DownscaleMode mode);
 
@@ -146,7 +168,9 @@ public static unsafe partial class R3D
     /// Gets the current output mode.
     /// </summary>
     /// <returns>The currently active R3D_OutputMode.</returns>
-    /// <seealso>R3D_GetOutputMode</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetOutputMode</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetOutputMode")]
     public static partial OutputMode GetOutputMode();
 
@@ -156,8 +180,8 @@ public static unsafe partial class R3D
     /// <param name="mode">The R3D_OutputMode to use.</param>
     /// <remarks>
     /// Nothing will be output if the requested target has not been created / used.
+    /// Native: <c>R3D_SetOutputMode</c>
     /// </remarks>
-    /// <seealso>R3D_SetOutputMode</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetOutputMode")]
     public static partial void SetOutputMode(OutputMode mode);
 
@@ -174,7 +198,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="filter">The texture filtering mode to be applied by default.</param>
-    /// <seealso>R3D_SetTextureFilter</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetTextureFilter</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetTextureFilter")]
     public static partial void SetTextureFilter(TextureFilter filter);
 
@@ -198,7 +224,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="space">Color space to use for color inputs (linear or sRGB).</param>
-    /// <seealso>R3D_SetColorSpace</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetColorSpace</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetColorSpace")]
     public static partial void SetColorSpace(ColorSpace space);
 
@@ -209,7 +237,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <returns>R3D_Layer Bitfield of active layers.</returns>
-    /// <seealso>R3D_GetActiveLayers</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetActiveLayers</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetActiveLayers")]
     public static partial Layer GetActiveLayers();
 
@@ -220,7 +250,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="bitfield">Bitfield representing the layers to activate.</param>
-    /// <seealso>R3D_SetActiveLayers</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetActiveLayers</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetActiveLayers")]
     public static partial void SetActiveLayers(Layer bitfield);
 
@@ -231,7 +263,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="bitfield">Bitfield representing one or more layers to enable.</param>
-    /// <seealso>R3D_EnableLayers</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_EnableLayers</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_EnableLayers")]
     public static partial void EnableLayers(Layer bitfield);
 
@@ -242,7 +276,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="bitfield">Bitfield representing one or more layers to disable.</param>
-    /// <seealso>R3D_DisableLayers</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DisableLayers</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DisableLayers")]
     public static partial void DisableLayers(Layer bitfield);
 

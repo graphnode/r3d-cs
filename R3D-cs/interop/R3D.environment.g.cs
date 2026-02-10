@@ -24,7 +24,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <returns>Pointer to the active R3D_Environment structure</returns>
-    /// <seealso>R3D_GetEnvironment</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetEnvironment</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetEnvironment")]
     public static partial Environment* GetEnvironment();
 
@@ -35,7 +37,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="env">Pointer to the R3D_Environment structure to copy from</param>
-    /// <seealso>R3D_SetEnvironment</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetEnvironment</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetEnvironment")]
     public static partial void SetEnvironment(Environment* env);
 

@@ -17,32 +17,42 @@ namespace R3D_cs;
 /// Think of it as a toolbox for procedural or dynamic mesh generation on the CPU.
 /// </para>
 /// </summary>
-/// <seealso>R3D_MeshData</seealso>
+/// <remarks>
+/// Native: <c>R3D_MeshData</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct MeshData
 {
     /// <summary>
     /// Pointer to vertex data in CPU memory.
     /// </summary>
-    /// <seealso>vertices</seealso>
+    /// <remarks>
+    /// Native: <c>vertices</c>
+    /// </remarks>
     public Vertex* Vertices;
 
     /// <summary>
     /// Pointer to index data in CPU memory.
     /// </summary>
-    /// <seealso>indices</seealso>
+    /// <remarks>
+    /// Native: <c>indices</c>
+    /// </remarks>
     public uint* Indices;
 
     /// <summary>
     /// Number of vertices.
     /// </summary>
-    /// <seealso>vertexCount</seealso>
+    /// <remarks>
+    /// Native: <c>vertexCount</c>
+    /// </remarks>
     public int VertexCount;
 
     /// <summary>
     /// Number of indices.
     /// </summary>
-    /// <seealso>indexCount</seealso>
+    /// <remarks>
+    /// Native: <c>indexCount</c>
+    /// </remarks>
     public int IndexCount;
 
 }

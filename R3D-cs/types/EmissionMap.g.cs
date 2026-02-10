@@ -14,26 +14,34 @@ namespace R3D_cs;
 /// Provides emission texture, color, and energy multiplier.
 /// </para>
 /// </summary>
-/// <seealso>R3D_EmissionMap</seealso>
+/// <remarks>
+/// Native: <c>R3D_EmissionMap</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EmissionMap
 {
     /// <summary>
     /// Emission texture (default: WHITE)
     /// </summary>
-    /// <seealso>texture</seealso>
+    /// <remarks>
+    /// Native: <c>texture</c>
+    /// </remarks>
     public Texture2D Texture;
 
     /// <summary>
     /// Emission color (default: WHITE)
     /// </summary>
-    /// <seealso>color</seealso>
+    /// <remarks>
+    /// Native: <c>color</c>
+    /// </remarks>
     public Color Color;
 
     /// <summary>
     /// Emission strength (default: 0.0f)
     /// </summary>
-    /// <seealso>energy</seealso>
+    /// <remarks>
+    /// Native: <c>energy</c>
+    /// </remarks>
     public float Energy;
 
 }

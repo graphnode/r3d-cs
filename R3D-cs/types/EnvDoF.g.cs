@@ -14,32 +14,42 @@ namespace R3D_cs;
 /// Blurs objects outside the focal plane.
 /// </para>
 /// </summary>
-/// <seealso>R3D_EnvDoF</seealso>
+/// <remarks>
+/// Native: <c>R3D_EnvDoF</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EnvDoF
 {
     /// <summary>
     /// Enable/disable state (default: R3D_DOF_DISABLED)
     /// </summary>
-    /// <seealso>mode</seealso>
+    /// <remarks>
+    /// Native: <c>mode</c>
+    /// </remarks>
     public DoF Mode;
 
     /// <summary>
     /// Focus distance in meters from camera (default: 10.0)
     /// </summary>
-    /// <seealso>focusPoint</seealso>
+    /// <remarks>
+    /// Native: <c>focusPoint</c>
+    /// </remarks>
     public float FocusPoint;
 
     /// <summary>
     /// Depth of field depth: lower = shallower (default: 1.0)
     /// </summary>
-    /// <seealso>focusScale</seealso>
+    /// <remarks>
+    /// Native: <c>focusScale</c>
+    /// </remarks>
     public float FocusScale;
 
     /// <summary>
     /// Maximum blur radius, similar to aperture (default: 20.0)
     /// </summary>
-    /// <seealso>maxBlurSize</seealso>
+    /// <remarks>
+    /// Native: <c>maxBlurSize</c>
+    /// </remarks>
     public float MaxBlurSize;
 
 }

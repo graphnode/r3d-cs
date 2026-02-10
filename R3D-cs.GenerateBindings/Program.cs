@@ -117,7 +117,7 @@ internal static class Program
                 if (solutionRoot != null)
                 {
                     string upstreamFile = Path.Combine(solutionRoot, ".r3d-upstream");
-                    WriteUpstreamFile(upstreamFile, commitSha, tag, version);
+                    WriteUpstreamFile(upstreamFile, commitSha, tag);
                     Console.WriteLine();
                     Console.WriteLine($"Updated {upstreamFile}");
                 }
@@ -210,12 +210,11 @@ internal static class Program
         return dir;
     }
 
-    private static void WriteUpstreamFile(string filePath, string commitSha, string? tag, string version)
+    private static void WriteUpstreamFile(string filePath, string commitSha, string? tag)
     {
         using var writer = new StreamWriter(filePath);
         writer.NewLine = "\n";
         writer.WriteLine($"R3D_UPSTREAM_COMMIT={commitSha}");
         writer.WriteLine($"R3D_UPSTREAM_TAG={tag ?? ""}");
-        writer.WriteLine($"R3D_VERSION={version}");
     }
 }

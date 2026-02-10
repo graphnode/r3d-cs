@@ -25,9 +25,11 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="filePath">Path to the shader source file.</param>
     /// <returns>Pointer to the loaded surface shader, or NULL on failure.</returns>
-    /// <seealso>R3D_LoadSurfaceShader</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadSurfaceShader</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSurfaceShader", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial SurfaceShader* LoadSurfaceShader(string filePath);
+    public static partial SurfaceShader LoadSurfaceShader(string filePath);
 
     /// <summary>
     /// Loads a surface shader from a source code string in memory.
@@ -37,17 +39,21 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="code">Null-terminated shader source code.</param>
     /// <returns>Pointer to the loaded surface shader, or NULL on failure.</returns>
-    /// <seealso>R3D_LoadSurfaceShaderFromMemory</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadSurfaceShaderFromMemory</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSurfaceShaderFromMemory", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial SurfaceShader* LoadSurfaceShaderFromMemory(string code);
+    public static partial SurfaceShader LoadSurfaceShaderFromMemory(string code);
 
     /// <summary>
     /// Unloads and destroys a surface shader.
     /// </summary>
     /// <param name="shader">Surface shader to unload.</param>
-    /// <seealso>R3D_UnloadSurfaceShader</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadSurfaceShader</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadSurfaceShader")]
-    public static partial void UnloadSurfaceShader(ref SurfaceShader shader);
+    public static partial void UnloadSurfaceShader(SurfaceShader shader);
 
     /// <summary>
     /// Sets a uniform value for the current frame.
@@ -64,10 +70,10 @@ public static unsafe partial class R3D
     /// <remarks>
     /// <b>Warning:</b>
     /// Boolean values are read as 4 bytes.
+    /// Native: <c>R3D_SetSurfaceShaderUniform</c>
     /// </remarks>
-    /// <seealso>R3D_SetSurfaceShaderUniform</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetSurfaceShaderUniform", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial void SetSurfaceShaderUniform(ref SurfaceShader shader, string name, void* value);
+    public static partial void SetSurfaceShaderUniform(SurfaceShader shader, string name, void* value);
 
     /// <summary>
     /// Sets a texture sampler for the current frame.
@@ -81,8 +87,10 @@ public static unsafe partial class R3D
     /// <param name="shader">Target surface shader. May be NULL. In that case, the call is ignored and a warning is logged.</param>
     /// <param name="name">Name of the sampler uniform. Must not be NULL.</param>
     /// <param name="texture">Texture to bind to the sampler.</param>
-    /// <seealso>R3D_SetSurfaceShaderSampler</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetSurfaceShaderSampler</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetSurfaceShaderSampler", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial void SetSurfaceShaderSampler(ref SurfaceShader shader, string name, Texture2D texture);
+    public static partial void SetSurfaceShaderSampler(SurfaceShader shader, string name, Texture2D texture);
 
 }

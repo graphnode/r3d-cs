@@ -25,7 +25,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="flags">IBL components that the probe must support.</param>
     /// <returns>A valid probe ID, or a negative value on failure.</returns>
-    /// <seealso>R3D_CreateProbe</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CreateProbe</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_CreateProbe")]
     public static partial Probe CreateProbe(ProbeFlags flags);
 
@@ -33,7 +35,9 @@ public static unsafe partial class R3D
     /// Destroys a probe and frees its resources.
     /// </summary>
     /// <param name="id">Probe ID to destroy.</param>
-    /// <seealso>R3D_DestroyProbe</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DestroyProbe</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DestroyProbe")]
     public static partial void DestroyProbe(Probe id);
 
@@ -42,7 +46,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">Probe ID.</param>
     /// <returns>true if the probe is valid and allocated, otherwise false.</returns>
-    /// <seealso>R3D_IsProbeExist</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsProbeExist</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsProbeExist")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsProbeExist(Probe id);
@@ -52,7 +58,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">Probe ID.</param>
     /// <returns>The flags assigned to the probe.</returns>
-    /// <seealso>R3D_GetProbeFlags</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetProbeFlags</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetProbeFlags")]
     public static partial ProbeFlags GetProbeFlags(Probe id);
 
@@ -64,7 +72,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">Probe ID.</param>
     /// <returns>true if active, otherwise false.</returns>
-    /// <seealso>R3D_IsProbeActive</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsProbeActive</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsProbeActive")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsProbeActive(Probe id);
@@ -74,7 +84,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">Probe ID.</param>
     /// <param name="active">Set to true to enable the probe.</param>
-    /// <seealso>R3D_SetProbeActive</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetProbeActive</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetProbeActive")]
     public static partial void SetProbeActive(Probe id, [MarshalAs(UnmanagedType.I1)] bool active);
 
@@ -94,7 +106,9 @@ public static unsafe partial class R3D
     /// Use &quot;ONCE&quot; for static scenes, &quot;ALWAYS&quot; for highly dynamic scenes.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_GetProbeUpdateMode</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetProbeUpdateMode</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetProbeUpdateMode")]
     public static partial ProbeUpdateMode GetProbeUpdateMode(Probe id);
 
@@ -106,7 +120,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">Probe ID.</param>
     /// <param name="mode">Update mode to apply.</param>
-    /// <seealso>R3D_SetProbeUpdateMode</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetProbeUpdateMode</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetProbeUpdateMode")]
     public static partial void SetProbeUpdateMode(Probe id, ProbeUpdateMode mode);
 
@@ -119,7 +135,9 @@ public static unsafe partial class R3D
     /// Use this for rooms, caves, tunnels, etc... where outside lighting should not bleed inside.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_GetProbeInterior</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetProbeInterior</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetProbeInterior")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool GetProbeInterior(Probe id);
@@ -127,7 +145,9 @@ public static unsafe partial class R3D
     /// <summary>
     /// Enables or disables indoor mode for the probe.
     /// </summary>
-    /// <seealso>R3D_SetProbeInterior</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetProbeInterior</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetProbeInterior")]
     public static partial void SetProbeInterior(Probe id, [MarshalAs(UnmanagedType.I1)] bool active);
 
@@ -137,7 +157,9 @@ public static unsafe partial class R3D
     /// When enabled, shadowing is baked into the captured lighting. This improves realism, but increases capture cost.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_GetProbeShadows</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetProbeShadows</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetProbeShadows")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool GetProbeShadows(Probe id);
@@ -145,21 +167,27 @@ public static unsafe partial class R3D
     /// <summary>
     /// Enables or disables shadow rendering during probe capture.
     /// </summary>
-    /// <seealso>R3D_SetProbeShadows</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetProbeShadows</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetProbeShadows")]
     public static partial void SetProbeShadows(Probe id, [MarshalAs(UnmanagedType.I1)] bool active);
 
     /// <summary>
     /// Gets the world position of the probe.
     /// </summary>
-    /// <seealso>R3D_GetProbePosition</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetProbePosition</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetProbePosition")]
     public static partial Vector3 GetProbePosition(Probe id);
 
     /// <summary>
     /// Sets the world position of the probe.
     /// </summary>
-    /// <seealso>R3D_SetProbePosition</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetProbePosition</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetProbePosition")]
     public static partial void SetProbePosition(Probe id, Vector3 position);
 
@@ -169,7 +197,9 @@ public static unsafe partial class R3D
     /// The range defines the radius (in world units) within which this probe contributes to lighting. Objects outside this sphere receive no influence.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_GetProbeRange</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetProbeRange</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetProbeRange")]
     public static partial float GetProbeRange(Probe id);
 
@@ -177,7 +207,9 @@ public static unsafe partial class R3D
     /// Sets the effective range of the probe.
     /// </summary>
     /// <param name="range">Radius in world units. Must be &gt; 0.</param>
-    /// <seealso>R3D_SetProbeRange</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetProbeRange</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetProbeRange")]
     public static partial void SetProbeRange(Probe id, float range);
 
@@ -198,7 +230,9 @@ public static unsafe partial class R3D
     /// </list>
     /// </para>
     /// </summary>
-    /// <seealso>R3D_GetProbeFalloff</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetProbeFalloff</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetProbeFalloff")]
     public static partial float GetProbeFalloff(Probe id);
 
@@ -208,7 +242,9 @@ public static unsafe partial class R3D
     /// Larger values make the probe feel more localized.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_SetProbeFalloff</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetProbeFalloff</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetProbeFalloff")]
     public static partial void SetProbeFalloff(Probe id, float falloff);
 

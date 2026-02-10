@@ -16,39 +16,49 @@ namespace R3D_cs;
 /// </summary>
 /// <remarks>
 /// This structure does not directly control depth buffer writes for technical reasons. To render objects without writing to the depth buffer, use alpha blending mode instead.
+/// Native: <c>R3D_DepthState</c>
 /// </remarks>
-/// <seealso>R3D_DepthState</seealso>
 [StructLayout(LayoutKind.Sequential)]
 public struct DepthState
 {
     /// <summary>
     /// Comparison function for depth test (default: LESS)
     /// </summary>
-    /// <seealso>mode</seealso>
+    /// <remarks>
+    /// Native: <c>mode</c>
+    /// </remarks>
     public CompareMode Mode;
 
     /// <summary>
     /// Scales the maximum depth slope for polygon offset (default: 0.0f)
     /// </summary>
-    /// <seealso>offsetFactor</seealso>
+    /// <remarks>
+    /// Native: <c>offsetFactor</c>
+    /// </remarks>
     public float OffsetFactor;
 
     /// <summary>
     /// Constant depth offset value (default: 0.0f)
     /// </summary>
-    /// <seealso>offsetUnits</seealso>
+    /// <remarks>
+    /// Native: <c>offsetUnits</c>
+    /// </remarks>
     public float OffsetUnits;
 
     /// <summary>
     /// Near clipping plane for depth range mapping (default: 0.0f)
     /// </summary>
-    /// <seealso>rangeNear</seealso>
+    /// <remarks>
+    /// Native: <c>rangeNear</c>
+    /// </remarks>
     public float RangeNear;
 
     /// <summary>
     /// Far clipping plane for depth range mapping (default: 1.0f)
     /// </summary>
-    /// <seealso>rangeFar</seealso>
+    /// <remarks>
+    /// Native: <c>rangeFar</c>
+    /// </remarks>
     public float RangeFar;
 
 }

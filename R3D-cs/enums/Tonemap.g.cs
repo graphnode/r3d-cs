@@ -9,42 +9,56 @@ namespace R3D_cs;
 /// HDR to LDR color compression methods.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Tonemap</seealso>
+/// <remarks>
+/// Native: <c>R3D_Tonemap</c>
+/// </remarks>
 public enum Tonemap
 {
     /// <summary>
     /// Direct linear mapping (no compression)
     /// </summary>
-    /// <seealso>R3D_Tonemap.R3D_TONEMAP_LINEAR</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Tonemap.R3D_TONEMAP_LINEAR</c>
+    /// </remarks>
     Linear,
 
     /// <summary>
     /// Reinhard operator, balanced HDR compression
     /// </summary>
-    /// <seealso>R3D_Tonemap.R3D_TONEMAP_REINHARD</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Tonemap.R3D_TONEMAP_REINHARD</c>
+    /// </remarks>
     Reinhard,
 
     /// <summary>
     /// Film-like response curve
     /// </summary>
-    /// <seealso>R3D_Tonemap.R3D_TONEMAP_FILMIC</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Tonemap.R3D_TONEMAP_FILMIC</c>
+    /// </remarks>
     Filmic,
 
     /// <summary>
     /// Academy Color Encoding System (cinematic standard)
     /// </summary>
-    /// <seealso>R3D_Tonemap.R3D_TONEMAP_ACES</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Tonemap.R3D_TONEMAP_ACES</c>
+    /// </remarks>
     Aces,
 
     /// <summary>
     /// Modern algorithm preserving highlights and shadows
     /// </summary>
-    /// <seealso>R3D_Tonemap.R3D_TONEMAP_AGX</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Tonemap.R3D_TONEMAP_AGX</c>
+    /// </remarks>
     Agx,
 
     /// <summary>
     /// Internal: number of tonemap modes
     /// </summary>
-    /// <seealso>R3D_Tonemap.R3D_TONEMAP_COUNT</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_Tonemap.R3D_TONEMAP_COUNT</c>
+    /// </remarks>
     Count,
 }

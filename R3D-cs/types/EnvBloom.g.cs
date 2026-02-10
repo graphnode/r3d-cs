@@ -14,44 +14,58 @@ namespace R3D_cs;
 /// Glow effect around bright areas in the scene.
 /// </para>
 /// </summary>
-/// <seealso>R3D_EnvBloom</seealso>
+/// <remarks>
+/// Native: <c>R3D_EnvBloom</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EnvBloom
 {
     /// <summary>
     /// Bloom blending mode (default: R3D_BLOOM_DISABLED)
     /// </summary>
-    /// <seealso>mode</seealso>
+    /// <remarks>
+    /// Native: <c>mode</c>
+    /// </remarks>
     public Bloom Mode;
 
     /// <summary>
     /// Mipmap spread factor [0-1]: higher = wider glow (default: 0.5)
     /// </summary>
-    /// <seealso>levels</seealso>
+    /// <remarks>
+    /// Native: <c>levels</c>
+    /// </remarks>
     public float Levels;
 
     /// <summary>
     /// Bloom strength multiplier (default: 0.05)
     /// </summary>
-    /// <seealso>intensity</seealso>
+    /// <remarks>
+    /// Native: <c>intensity</c>
+    /// </remarks>
     public float Intensity;
 
     /// <summary>
     /// Minimum brightness to trigger bloom (default: 0.0)
     /// </summary>
-    /// <seealso>threshold</seealso>
+    /// <remarks>
+    /// Native: <c>threshold</c>
+    /// </remarks>
     public float Threshold;
 
     /// <summary>
     /// Softness of brightness cutoff transition (default: 0.5)
     /// </summary>
-    /// <seealso>softThreshold</seealso>
+    /// <remarks>
+    /// Native: <c>softThreshold</c>
+    /// </remarks>
     public float SoftThreshold;
 
     /// <summary>
     /// Blur filter radius during upscaling (default: 1.0)
     /// </summary>
-    /// <seealso>filterRadius</seealso>
+    /// <remarks>
+    /// Native: <c>filterRadius</c>
+    /// </remarks>
     public float FilterRadius;
 
 }

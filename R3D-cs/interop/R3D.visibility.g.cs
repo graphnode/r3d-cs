@@ -25,7 +25,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="position">The 3D point to test.</param>
     /// <returns>`true` if inside the frustum, `false` otherwise.</returns>
-    /// <seealso>R3D_IsPointVisible</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsPointVisible</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsPointVisible")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsPointVisible(Vector3 position);
@@ -39,7 +41,9 @@ public static unsafe partial class R3D
     /// <param name="position">The center of the sphere.</param>
     /// <param name="radius">The sphere's radius (must be positive).</param>
     /// <returns>`true` if at least partially inside the frustum, `false` otherwise.</returns>
-    /// <seealso>R3D_IsSphereVisible</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsSphereVisible</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsSphereVisible")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsSphereVisible(Vector3 position, float radius);
@@ -52,7 +56,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="aabb">The bounding box to test.</param>
     /// <returns>`true` if at least partially inside the frustum, `false` otherwise.</returns>
-    /// <seealso>R3D_IsBoundingBoxVisible</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsBoundingBoxVisible</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsBoundingBoxVisible")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsBoundingBoxVisible(BoundingBox aabb);
@@ -66,7 +72,9 @@ public static unsafe partial class R3D
     /// <param name="aabb">Local-space bounding box.</param>
     /// <param name="transform">World-space transform matrix.</param>
     /// <returns>`true` if the transformed box intersects the frustum, `false` otherwise.</returns>
-    /// <seealso>R3D_IsOrientedBoxVisible</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsOrientedBoxVisible</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsOrientedBoxVisible")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsOrientedBoxVisible(BoundingBox aabb, Matrix4x4 transform);

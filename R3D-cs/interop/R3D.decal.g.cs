@@ -24,7 +24,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="decal">to unload maps from.</param>
-    /// <seealso>R3D_UnloadDecalMaps</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadDecalMaps</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadDecalMaps")]
     public static partial void UnloadDecalMaps(Decal decal);
 

@@ -14,56 +14,74 @@ namespace R3D_cs;
 /// Contains multiple meshes and their associated materials, along with animation and bounding information.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Model</seealso>
+/// <remarks>
+/// Native: <c>R3D_Model</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct Model
 {
     /// <summary>
     /// Array of meshes composing the model.
     /// </summary>
-    /// <seealso>meshes</seealso>
+    /// <remarks>
+    /// Native: <c>meshes</c>
+    /// </remarks>
     public Mesh* Meshes;
 
     /// <summary>
     /// Array of meshes data in RAM (optional, can be NULL).
     /// </summary>
-    /// <seealso>meshData</seealso>
+    /// <remarks>
+    /// Native: <c>meshData</c>
+    /// </remarks>
     public MeshData* MeshData;
 
     /// <summary>
     /// Array of materials used by the model.
     /// </summary>
-    /// <seealso>materials</seealso>
+    /// <remarks>
+    /// Native: <c>materials</c>
+    /// </remarks>
     public Material* Materials;
 
     /// <summary>
     /// Array of material indices, one per mesh.
     /// </summary>
-    /// <seealso>meshMaterials</seealso>
+    /// <remarks>
+    /// Native: <c>meshMaterials</c>
+    /// </remarks>
     public int* MeshMaterials;
 
     /// <summary>
     /// Number of meshes.
     /// </summary>
-    /// <seealso>meshCount</seealso>
+    /// <remarks>
+    /// Native: <c>meshCount</c>
+    /// </remarks>
     public int MeshCount;
 
     /// <summary>
     /// Number of materials.
     /// </summary>
-    /// <seealso>materialCount</seealso>
+    /// <remarks>
+    /// Native: <c>materialCount</c>
+    /// </remarks>
     public int MaterialCount;
 
     /// <summary>
     /// Axis-Aligned Bounding Box encompassing the whole model.
     /// </summary>
-    /// <seealso>aabb</seealso>
+    /// <remarks>
+    /// Native: <c>aabb</c>
+    /// </remarks>
     public BoundingBox Aabb;
 
     /// <summary>
     /// Skeleton hierarchy and bind pose used for skinning (NULL if non-skinned).
     /// </summary>
-    /// <seealso>skeleton</seealso>
+    /// <remarks>
+    /// Native: <c>skeleton</c>
+    /// </remarks>
     public Skeleton Skeleton;
 
 }

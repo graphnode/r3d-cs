@@ -26,58 +26,60 @@ namespace R3D_cs;
 /// For simplicity, 16 layers are defined in this header, but the maximum number of layers is 32 for an uint32_t.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Layer</seealso>
+/// <remarks>
+/// Native: <c>R3D_Layer</c>
+/// </remarks>
 [Flags]
 public enum Layer : uint
 {
-    /// <seealso>R3D_LAYER_01</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_01</c></remarks>
     Layer01 = (1<<0),
 
-    /// <seealso>R3D_LAYER_02</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_02</c></remarks>
     Layer02 = (1<<1),
 
-    /// <seealso>R3D_LAYER_03</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_03</c></remarks>
     Layer03 = (1<<2),
 
-    /// <seealso>R3D_LAYER_04</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_04</c></remarks>
     Layer04 = (1<<3),
 
-    /// <seealso>R3D_LAYER_05</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_05</c></remarks>
     Layer05 = (1<<4),
 
-    /// <seealso>R3D_LAYER_06</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_06</c></remarks>
     Layer06 = (1<<5),
 
-    /// <seealso>R3D_LAYER_07</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_07</c></remarks>
     Layer07 = (1<<6),
 
-    /// <seealso>R3D_LAYER_08</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_08</c></remarks>
     Layer08 = (1<<7),
 
-    /// <seealso>R3D_LAYER_09</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_09</c></remarks>
     Layer09 = (1<<8),
 
-    /// <seealso>R3D_LAYER_10</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_10</c></remarks>
     Layer10 = (1<<9),
 
-    /// <seealso>R3D_LAYER_11</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_11</c></remarks>
     Layer11 = (1<<10),
 
-    /// <seealso>R3D_LAYER_12</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_12</c></remarks>
     Layer12 = (1<<11),
 
-    /// <seealso>R3D_LAYER_13</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_13</c></remarks>
     Layer13 = (1<<12),
 
-    /// <seealso>R3D_LAYER_14</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_14</c></remarks>
     Layer14 = (1<<13),
 
-    /// <seealso>R3D_LAYER_15</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_15</c></remarks>
     Layer15 = (1<<14),
 
-    /// <seealso>R3D_LAYER_16</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_16</c></remarks>
     Layer16 = (1<<15),
 
-    /// <seealso>R3D_LAYER_ALL</seealso>
+    /// <remarks>Native: <c>R3D_LAYER_ALL</c></remarks>
     All = 0xFFFFFFFF,
 }

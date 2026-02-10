@@ -22,6 +22,19 @@ public class CodeGenerator(string outputDir)
     /// </summary>
     public void Generate(CppCompilation compilation, string version)
     {
+        // Identify opaque types (structs with no fields) before generating
+        TypeMapper.OpaqueTypes.Clear();
+        foreach (var @class in compilation.Classes)
+        {
+            if (!IsR3DSource(@class.SourceFile))
+                continue;
+            if (@class.ClassKind == CppClassKind.Struct && @class.Fields.Count == 0)
+                TypeMapper.OpaqueTypes.Add(@class.Name);
+        }
+
+        if (TypeMapper.OpaqueTypes.Count > 0)
+            Console.WriteLine($"Detected opaque types: {string.Join(", ", TypeMapper.OpaqueTypes)}");
+
         // Clear output directories
         Console.WriteLine("Preparing output directories...");
         ClearDirectory(Path.Combine(outputDir, "enums"));
@@ -130,10 +143,17 @@ public class CodeGenerator(string outputDir)
 
             CommentGenerator.Generate(sb, @class.Comment, @class.Name);
 
+            bool isOpaque = TypeMapper.OpaqueTypes.Contains(@class.Name);
+
             sb.AppendLine("[StructLayout(LayoutKind.Sequential)]");
             sb.Append($"public {(needsUnsafe ? "unsafe " : "")}struct {className}");
             sb.AppendLine();
             sb.AppendLine("{");
+
+            if (isOpaque)
+            {
+                sb.AppendLine("    private nint _handle;");
+            }
 
             foreach (var field in @class.Fields)
             {

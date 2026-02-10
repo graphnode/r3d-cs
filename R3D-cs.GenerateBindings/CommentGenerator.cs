@@ -76,6 +76,8 @@ public static class CommentGenerator
                         string paragraphText = ExtractText(paragraph);
                         if (string.IsNullOrWhiteSpace(paragraphText))
                             break;
+                        if (IsBannerComment(paragraphText))
+                            break;
 
                         if (!foundBrief)
                         {
@@ -121,8 +123,8 @@ public static class CommentGenerator
                 hasComment = true;
             }
 
-            // Generate <remarks> (includes notes and warnings)
-            if (remarkTexts.Count > 0 || warningTexts.Count > 0)
+            // Generate <remarks> (includes notes, warnings, and native C name)
+            if (remarkTexts.Count > 0 || warningTexts.Count > 0 || originalName != null)
             {
                 sb.AppendLine($"{prefix}/// <remarks>");
 
@@ -135,18 +137,33 @@ public static class CommentGenerator
 
                 foreach (string remark in remarkTexts) AppendMultilineText(sb, remark, prefix);
 
+                if (originalName != null)
+                    sb.AppendLine($"{prefix}/// Native: <c>{XmlEscape(originalName)}</c>");
+
                 sb.AppendLine($"{prefix}/// </remarks>");
                 hasComment = true;
             }
         }
-
-        if (originalName != null)
+        else if (originalName != null)
         {
-            sb.AppendLine($"{prefix}/// <seealso>{XmlEscape(originalName)}</seealso>");
+            // No comment but still want the native name reference
+            sb.AppendLine($"{prefix}/// <remarks>Native: <c>{XmlEscape(originalName)}</c></remarks>");
             hasComment = true;
         }
 
         return hasComment;
+    }
+
+    /// <summary>
+    ///     Detects section banner comments like "======== OPAQUE TYPES ========".
+    /// </summary>
+    private static bool IsBannerComment(string text)
+    {
+        string trimmed = text.Trim();
+        return trimmed.Length >= 4 &&
+               (trimmed.StartsWith("====") || trimmed.EndsWith("====") ||
+                trimmed.StartsWith("----") || trimmed.EndsWith("----") ||
+                trimmed.StartsWith("****") || trimmed.EndsWith("****"));
     }
 
     /// <summary>
@@ -287,7 +304,7 @@ public static class CommentGenerator
 
         if (originalName != null)
         {
-            sb.AppendLine($"{prefix}/// <seealso>{XmlEscape($"{originalName}")}</seealso>");
+            sb.AppendLine($"{prefix}/// <remarks>Native: <c>{XmlEscape(originalName)}</c></remarks>");
             hasComment = true;
         }
 

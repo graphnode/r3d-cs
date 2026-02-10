@@ -9,24 +9,32 @@ namespace R3D_cs;
 /// Downscale mode to apply when the output window is smaller than the internal render resolution.
 /// </para>
 /// </summary>
-/// <seealso>R3D_DownscaleMode</seealso>
+/// <remarks>
+/// Native: <c>R3D_DownscaleMode</c>
+/// </remarks>
 public enum DownscaleMode
 {
     /// <summary>
     /// Nearest-neighbor downscaling: very fast, but produces aliasing.
     /// </summary>
-    /// <seealso>R3D_DownscaleMode.R3D_DOWNSCALE_NEAREST</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DownscaleMode.R3D_DOWNSCALE_NEAREST</c>
+    /// </remarks>
     Nearest,
 
     /// <summary>
     /// Bilinear downscaling: very fast, can serve as a basic form of anti-aliasing (SSAA).
     /// </summary>
-    /// <seealso>R3D_DownscaleMode.R3D_DOWNSCALE_LINEAR</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DownscaleMode.R3D_DOWNSCALE_LINEAR</c>
+    /// </remarks>
     Linear,
 
     /// <summary>
     /// Box-blur downscaling: uses a simple but effective box blur, slightly more expensive than linear, smooths moiré better.
     /// </summary>
-    /// <seealso>R3D_DownscaleMode.R3D_DOWNSCALE_BOX</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DownscaleMode.R3D_DOWNSCALE_BOX</c>
+    /// </remarks>
     Box,
 }

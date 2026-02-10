@@ -25,7 +25,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="type">The type of light to create (directional, spot or omni-directional).</param>
     /// <returns>The ID of the created light.</returns>
-    /// <seealso>R3D_CreateLight</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CreateLight</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_CreateLight")]
     public static partial Light CreateLight(LightType type);
 
@@ -36,7 +38,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light to destroy.</param>
-    /// <seealso>R3D_DestroyLight</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DestroyLight</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DestroyLight")]
     public static partial void DestroyLight(Light id);
 
@@ -48,7 +52,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light to check.</param>
     /// <returns>True if the light exists, false otherwise.</returns>
-    /// <seealso>R3D_IsLightExist</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsLightExist</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsLightExist")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsLightExist(Light id);
@@ -61,7 +67,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The type of the light.</returns>
-    /// <seealso>R3D_GetLightType</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightType</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightType")]
     public static partial LightType GetLightType(Light id);
 
@@ -73,7 +81,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light to check.</param>
     /// <returns>True if the light is active, false otherwise.</returns>
-    /// <seealso>R3D_IsLightActive</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsLightActive</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsLightActive")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsLightActive(Light id);
@@ -85,7 +95,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light to toggle.</param>
-    /// <seealso>R3D_ToggleLight</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ToggleLight</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_ToggleLight")]
     public static partial void ToggleLight(Light id);
 
@@ -97,7 +109,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light to set the active state for.</param>
     /// <param name="active">True to activate the light, false to deactivate it.</param>
-    /// <seealso>R3D_SetLightActive</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightActive</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightActive")]
     public static partial void SetLightActive(Light id, [MarshalAs(UnmanagedType.I1)] bool active);
 
@@ -109,7 +123,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The color of the light as a `Color` structure.</returns>
-    /// <seealso>R3D_GetLightColor</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightColor</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightColor")]
     public static partial Color GetLightColor(Light id);
 
@@ -121,7 +137,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The color of the light as a `Vector3`.</returns>
-    /// <seealso>R3D_GetLightColorV</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightColorV</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightColorV")]
     public static partial Vector3 GetLightColorV(Light id);
 
@@ -133,7 +151,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="color">The new color to set for the light.</param>
-    /// <seealso>R3D_SetLightColor</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightColor</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightColor")]
     public static partial void SetLightColor(Light id, Color color);
 
@@ -145,7 +165,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="color">The new color to set for the light as a `Vector3`.</param>
-    /// <seealso>R3D_SetLightColorV</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightColorV</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightColorV")]
     public static partial void SetLightColorV(Light id, Vector3 color);
 
@@ -157,7 +179,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The position of the light as a `Vector3`.</returns>
-    /// <seealso>R3D_GetLightPosition</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightPosition</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightPosition")]
     public static partial Vector3 GetLightPosition(Light id);
 
@@ -171,8 +195,8 @@ public static unsafe partial class R3D
     /// <param name="position">The new position to set for the light.</param>
     /// <remarks>
     /// Has no effect for directional lights. If called on a directional light, a warning will be logged.
+    /// Native: <c>R3D_SetLightPosition</c>
     /// </remarks>
-    /// <seealso>R3D_SetLightPosition</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightPosition")]
     public static partial void SetLightPosition(Light id, Vector3 position);
 
@@ -184,7 +208,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The direction of the light as a `Vector3`.</returns>
-    /// <seealso>R3D_GetLightDirection</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightDirection</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightDirection")]
     public static partial Vector3 GetLightDirection(Light id);
 
@@ -198,8 +224,8 @@ public static unsafe partial class R3D
     /// <param name="direction">The new direction to set for the light. The vector is automatically normalized.</param>
     /// <remarks>
     /// Has no effect for omni-directional lights. If called on an omni-directional light, a warning will be logged.
+    /// Native: <c>R3D_SetLightDirection</c>
     /// </remarks>
-    /// <seealso>R3D_SetLightDirection</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightDirection")]
     public static partial void SetLightDirection(Light id, Vector3 direction);
 
@@ -219,8 +245,8 @@ public static unsafe partial class R3D
     /// <item><description>For spot lights, both position and direction are set accordingly.</description></item>
     /// <item><description>This function does **not** emit any warning or log message.</description></item>
     /// </list>
+    /// Native: <c>R3D_LightLookAt</c>
     /// </remarks>
-    /// <seealso>R3D_LightLookAt</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LightLookAt")]
     public static partial void LightLookAt(Light id, Vector3 position, Vector3 target);
 
@@ -232,7 +258,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The energy level of the light.</returns>
-    /// <seealso>R3D_GetLightEnergy</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightEnergy</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightEnergy")]
     public static partial float GetLightEnergy(Light id);
 
@@ -244,7 +272,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="energy">The new energy value to set for the light.</param>
-    /// <seealso>R3D_SetLightEnergy</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightEnergy</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightEnergy")]
     public static partial void SetLightEnergy(Light id, float energy);
 
@@ -256,7 +286,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The current specular intensity of the light.</returns>
-    /// <seealso>R3D_GetLightSpecular</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightSpecular</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightSpecular")]
     public static partial float GetLightSpecular(Light id);
 
@@ -268,7 +300,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="specular">The new specular intensity value to set for the light.</param>
-    /// <seealso>R3D_SetLightSpecular</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightSpecular</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightSpecular")]
     public static partial void SetLightSpecular(Light id, float specular);
 
@@ -280,7 +314,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The range of the light.</returns>
-    /// <seealso>R3D_GetLightRange</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightRange</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightRange")]
     public static partial float GetLightRange(Light id);
 
@@ -292,7 +328,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="range">The range value to apply.</param>
-    /// <seealso>R3D_SetLightRange</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightRange</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightRange")]
     public static partial void SetLightRange(Light id, float range);
 
@@ -304,7 +342,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The attenuation factor of the light.</returns>
-    /// <seealso>R3D_GetLightAttenuation</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightAttenuation</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightAttenuation")]
     public static partial float GetLightAttenuation(Light id);
 
@@ -316,7 +356,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="attenuation">The new attenuation factor to set for the light.</param>
-    /// <seealso>R3D_SetLightAttenuation</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightAttenuation</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightAttenuation")]
     public static partial void SetLightAttenuation(Light id, float attenuation);
 
@@ -328,7 +370,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The inner cutoff angle in degrees of the spotlight.</returns>
-    /// <seealso>R3D_GetLightInnerCutOff</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightInnerCutOff</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightInnerCutOff")]
     public static partial float GetLightInnerCutOff(Light id);
 
@@ -340,7 +384,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="degrees">The new inner cutoff angle in degrees.</param>
-    /// <seealso>R3D_SetLightInnerCutOff</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightInnerCutOff</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightInnerCutOff")]
     public static partial void SetLightInnerCutOff(Light id, float degrees);
 
@@ -352,7 +398,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The outer cutoff angle in degrees of the spotlight.</returns>
-    /// <seealso>R3D_GetLightOuterCutOff</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightOuterCutOff</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightOuterCutOff")]
     public static partial float GetLightOuterCutOff(Light id);
 
@@ -364,7 +412,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="degrees">The new outer cutoff angle in degrees.</param>
-    /// <seealso>R3D_SetLightOuterCutOff</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightOuterCutOff</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightOuterCutOff")]
     public static partial void SetLightOuterCutOff(Light id, float degrees);
 
@@ -380,8 +430,8 @@ public static unsafe partial class R3D
     /// <param name="id">The ID of the light.</param>
     /// <remarks>
     /// Creating too many shadow-casting lights can exhaust GPU memory and potentially crash the graphics driver. Disabling shadows on one light and enabling them on another is free, since existing shadow maps are reused.
+    /// Native: <c>R3D_EnableShadow</c>
     /// </remarks>
-    /// <seealso>R3D_EnableShadow</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_EnableShadow")]
     public static partial void EnableShadow(Light id);
 
@@ -392,7 +442,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <seealso>R3D_DisableShadow</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_DisableShadow</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DisableShadow")]
     public static partial void DisableShadow(Light id);
 
@@ -404,7 +456,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>True if shadow casting is enabled, false otherwise.</returns>
-    /// <seealso>R3D_IsShadowEnabled</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsShadowEnabled</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsShadowEnabled")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsShadowEnabled(Light id);
@@ -422,7 +476,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The shadow map update mode.</returns>
-    /// <seealso>R3D_GetShadowUpdateMode</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetShadowUpdateMode</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetShadowUpdateMode")]
     public static partial ShadowUpdateMode GetShadowUpdateMode(Light id);
 
@@ -434,7 +490,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="mode">The update mode to set for the shadow map (Interval, Continuous, or Manual).</param>
-    /// <seealso>R3D_SetShadowUpdateMode</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetShadowUpdateMode</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetShadowUpdateMode")]
     public static partial void SetShadowUpdateMode(Light id, ShadowUpdateMode mode);
 
@@ -446,7 +504,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The frequency in milliseconds at which the shadow map is updated.</returns>
-    /// <seealso>R3D_GetShadowUpdateFrequency</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetShadowUpdateFrequency</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetShadowUpdateFrequency")]
     public static partial int GetShadowUpdateFrequency(Light id);
 
@@ -458,7 +518,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="msec">The frequency in milliseconds at which to update the shadow map.</param>
-    /// <seealso>R3D_SetShadowUpdateFrequency</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetShadowUpdateFrequency</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetShadowUpdateFrequency")]
     public static partial void SetShadowUpdateFrequency(Light id, int msec);
 
@@ -469,7 +531,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <seealso>R3D_UpdateShadowMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UpdateShadowMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UpdateShadowMap")]
     public static partial void UpdateShadowMap(Light id);
 
@@ -481,7 +545,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The softness radius in texels currently set for the shadow.</returns>
-    /// <seealso>R3D_GetShadowSoftness</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetShadowSoftness</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetShadowSoftness")]
     public static partial float GetShadowSoftness(Light id);
 
@@ -495,15 +561,17 @@ public static unsafe partial class R3D
     /// <param name="softness">The softness radius in texels to apply (must be &gt;= 0).</param>
     /// <remarks>
     /// The softness must be set only after shadows have been enabled for the light, since the shadow map resolution must be known before the softness can be applied.
+    /// Native: <c>R3D_SetShadowSoftness</c>
     /// </remarks>
-    /// <seealso>R3D_SetShadowSoftness</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetShadowSoftness")]
     public static partial void SetShadowSoftness(Light id, float softness);
 
     /// <summary>
     /// Gets the shadow depth bias value.
     /// </summary>
-    /// <seealso>R3D_GetShadowDepthBias</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetShadowDepthBias</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetShadowDepthBias")]
     public static partial float GetShadowDepthBias(Light id);
 
@@ -513,14 +581,18 @@ public static unsafe partial class R3D
     /// A higher bias helps reduce &quot;shadow acne&quot; artifacts (shadows flickering or appearing misaligned on surfaces). Be careful: too large values may cause shadows to look detached or floating away from objects.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_SetShadowDepthBias</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetShadowDepthBias</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetShadowDepthBias")]
     public static partial void SetShadowDepthBias(Light id, float value);
 
     /// <summary>
     /// Gets the shadow slope bias value.
     /// </summary>
-    /// <seealso>R3D_GetShadowSlopeBias</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetShadowSlopeBias</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetShadowSlopeBias")]
     public static partial float GetShadowSlopeBias(Light id);
 
@@ -530,7 +602,9 @@ public static unsafe partial class R3D
     /// This bias mainly compensates artifacts on surfaces angled relative to the light. It helps prevent shadows from incorrectly appearing or disappearing along object edges.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_SetShadowSlopeBias</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetShadowSlopeBias</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetShadowSlopeBias")]
     public static partial void SetShadowSlopeBias(Light id, float value);
 
@@ -552,7 +626,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="light">The light for which to compute the bounding box.</param>
     /// <returns>A BoundingBox struct that encloses the light's influence volume.</returns>
-    /// <seealso>R3D_GetLightBoundingBox</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightBoundingBox</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightBoundingBox")]
     public static partial BoundingBox GetLightBoundingBox(Light light);
 
@@ -565,8 +641,8 @@ public static unsafe partial class R3D
     /// <param name="id">The ID of the light.</param>
     /// <remarks>
     /// This function should be called while using the default 3D rendering mode of raylib, not with R3D's rendering mode. It uses raylib's 3D drawing functions to render the light's shape.
+    /// Native: <c>R3D_DrawLightShape</c>
     /// </remarks>
-    /// <seealso>R3D_DrawLightShape</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawLightShape")]
     public static partial void DrawLightShape(Light id);
 

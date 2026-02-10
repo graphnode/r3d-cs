@@ -14,26 +14,34 @@ namespace R3D_cs;
 /// Converts HDR colors to displayable LDR range.
 /// </para>
 /// </summary>
-/// <seealso>R3D_EnvTonemap</seealso>
+/// <remarks>
+/// Native: <c>R3D_EnvTonemap</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EnvTonemap
 {
     /// <summary>
     /// Tone mapping algorithm (default: R3D_TONEMAP_LINEAR)
     /// </summary>
-    /// <seealso>mode</seealso>
+    /// <remarks>
+    /// Native: <c>mode</c>
+    /// </remarks>
     public Tonemap Mode;
 
     /// <summary>
     /// Scene brightness multiplier (default: 1.0)
     /// </summary>
-    /// <seealso>exposure</seealso>
+    /// <remarks>
+    /// Native: <c>exposure</c>
+    /// </remarks>
     public float Exposure;
 
     /// <summary>
     /// Reference white point (not used for AGX) (default: 1.0)
     /// </summary>
-    /// <seealso>white</seealso>
+    /// <remarks>
+    /// Native: <c>white</c>
+    /// </remarks>
     public float White;
 
 }

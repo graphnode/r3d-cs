@@ -9,60 +9,80 @@ namespace R3D_cs;
 /// Controls how an object interacts with the shadow mapping system. These modes determine whether the object contributes to shadows, and if so, whether it is also rendered in the main pass.
 /// </para>
 /// </summary>
-/// <seealso>R3D_ShadowCastMode</seealso>
+/// <remarks>
+/// Native: <c>R3D_ShadowCastMode</c>
+/// </remarks>
 public enum ShadowCastMode
 {
     /// <summary>
     /// The object casts shadows; the faces used are determined by the material's culling mode.
     /// </summary>
-    /// <seealso>R3D_ShadowCastMode.R3D_SHADOW_CAST_ON_AUTO</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowCastMode.R3D_SHADOW_CAST_ON_AUTO</c>
+    /// </remarks>
     OnAuto,
 
     /// <summary>
     /// The object casts shadows with both front and back faces, ignoring face culling.
     /// </summary>
-    /// <seealso>R3D_ShadowCastMode.R3D_SHADOW_CAST_ON_DOUBLE_SIDED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowCastMode.R3D_SHADOW_CAST_ON_DOUBLE_SIDED</c>
+    /// </remarks>
     OnDoubleSided,
 
     /// <summary>
     /// The object casts shadows with only front faces, culling back faces.
     /// </summary>
-    /// <seealso>R3D_ShadowCastMode.R3D_SHADOW_CAST_ON_FRONT_SIDE</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowCastMode.R3D_SHADOW_CAST_ON_FRONT_SIDE</c>
+    /// </remarks>
     OnFrontSide,
 
     /// <summary>
     /// The object casts shadows with only back faces, culling front faces.
     /// </summary>
-    /// <seealso>R3D_ShadowCastMode.R3D_SHADOW_CAST_ON_BACK_SIDE</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowCastMode.R3D_SHADOW_CAST_ON_BACK_SIDE</c>
+    /// </remarks>
     OnBackSide,
 
     /// <summary>
     /// The object only casts shadows; the faces used are determined by the material's culling mode.
     /// </summary>
-    /// <seealso>R3D_ShadowCastMode.R3D_SHADOW_CAST_ONLY_AUTO</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowCastMode.R3D_SHADOW_CAST_ONLY_AUTO</c>
+    /// </remarks>
     OnlyAuto,
 
     /// <summary>
     /// The object only casts shadows with both front and back faces, ignoring face culling.
     /// </summary>
-    /// <seealso>R3D_ShadowCastMode.R3D_SHADOW_CAST_ONLY_DOUBLE_SIDED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowCastMode.R3D_SHADOW_CAST_ONLY_DOUBLE_SIDED</c>
+    /// </remarks>
     OnlyDoubleSided,
 
     /// <summary>
     /// The object only casts shadows with only front faces, culling back faces.
     /// </summary>
-    /// <seealso>R3D_ShadowCastMode.R3D_SHADOW_CAST_ONLY_FRONT_SIDE</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowCastMode.R3D_SHADOW_CAST_ONLY_FRONT_SIDE</c>
+    /// </remarks>
     OnlyFrontSide,
 
     /// <summary>
     /// The object only casts shadows with only back faces, culling front faces.
     /// </summary>
-    /// <seealso>R3D_ShadowCastMode.R3D_SHADOW_CAST_ONLY_BACK_SIDE</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowCastMode.R3D_SHADOW_CAST_ONLY_BACK_SIDE</c>
+    /// </remarks>
     OnlyBackSide,
 
     /// <summary>
     /// The object does not cast shadows at all.
     /// </summary>
-    /// <seealso>R3D_ShadowCastMode.R3D_SHADOW_CAST_DISABLED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_ShadowCastMode.R3D_SHADOW_CAST_DISABLED</c>
+    /// </remarks>
     Disabled,
 }

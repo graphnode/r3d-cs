@@ -11,26 +11,34 @@ namespace R3D_cs;
 /// <summary>
 /// Ambient lighting configuration.
 /// </summary>
-/// <seealso>R3D_EnvAmbient</seealso>
+/// <remarks>
+/// Native: <c>R3D_EnvAmbient</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EnvAmbient
 {
     /// <summary>
     /// Ambient light color when there is no ambient map
     /// </summary>
-    /// <seealso>color</seealso>
+    /// <remarks>
+    /// Native: <c>color</c>
+    /// </remarks>
     public Color Color;
 
     /// <summary>
     /// Energy multiplier for ambient light (map or color)
     /// </summary>
-    /// <seealso>energy</seealso>
+    /// <remarks>
+    /// Native: <c>energy</c>
+    /// </remarks>
     public float Energy;
 
     /// <summary>
     /// IBL environment map, can be generated from skybox
     /// </summary>
-    /// <seealso>map</seealso>
+    /// <remarks>
+    /// Native: <c>map</c>
+    /// </remarks>
     public AmbientMap Map;
 
 }

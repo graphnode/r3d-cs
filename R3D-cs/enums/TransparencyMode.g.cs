@@ -9,24 +9,32 @@ namespace R3D_cs;
 /// This enumeration defines how a material handles transparency during rendering. It controls whether transparency is disabled, rendered using a depth pre-pass, or rendered with standard alpha blending.
 /// </para>
 /// </summary>
-/// <seealso>R3D_TransparencyMode</seealso>
+/// <remarks>
+/// Native: <c>R3D_TransparencyMode</c>
+/// </remarks>
 public enum TransparencyMode
 {
     /// <summary>
     /// No transparency, supports alpha cutoff.
     /// </summary>
-    /// <seealso>R3D_TransparencyMode.R3D_TRANSPARENCY_DISABLED</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_TransparencyMode.R3D_TRANSPARENCY_DISABLED</c>
+    /// </remarks>
     Disabled,
 
     /// <summary>
     /// Supports transparency with shadows. Writes shadows for alpha &gt; 0.1 and depth for alpha &gt; 0.99.
     /// </summary>
-    /// <seealso>R3D_TransparencyMode.R3D_TRANSPARENCY_PREPASS</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_TransparencyMode.R3D_TRANSPARENCY_PREPASS</c>
+    /// </remarks>
     Prepass,
 
     /// <summary>
     /// Standard transparency without shadows or depth writes.
     /// </summary>
-    /// <seealso>R3D_TransparencyMode.R3D_TRANSPARENCY_ALPHA</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_TransparencyMode.R3D_TRANSPARENCY_ALPHA</c>
+    /// </remarks>
     Alpha,
 }

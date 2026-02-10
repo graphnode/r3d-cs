@@ -14,62 +14,82 @@ namespace R3D_cs;
 /// The animation player updates animation states, interpolates keyframes, blends animations according to their weights, and stores the resulting local and global bone transforms. It also supports GPU skinning by uploading the global pose into a texture.
 /// </para>
 /// </summary>
-/// <seealso>R3D_AnimationPlayer</seealso>
+/// <remarks>
+/// Native: <c>R3D_AnimationPlayer</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct AnimationPlayer
 {
     /// <summary>
     /// Array of active animation states, one per animation.
     /// </summary>
-    /// <seealso>states</seealso>
+    /// <remarks>
+    /// Native: <c>states</c>
+    /// </remarks>
     public AnimationState* States;
 
     /// <summary>
     /// Animation library providing the available animations.
     /// </summary>
-    /// <seealso>animLib</seealso>
+    /// <remarks>
+    /// Native: <c>animLib</c>
+    /// </remarks>
     public AnimationLib AnimLib;
 
     /// <summary>
     /// Skeleton to animate.
     /// </summary>
-    /// <seealso>skeleton</seealso>
+    /// <remarks>
+    /// Native: <c>skeleton</c>
+    /// </remarks>
     public Skeleton Skeleton;
 
     /// <summary>
     /// Array of bone transforms representing the blended local pose.
     /// </summary>
-    /// <seealso>localPose</seealso>
+    /// <remarks>
+    /// Native: <c>localPose</c>
+    /// </remarks>
     public Matrix4x4* LocalPose;
 
     /// <summary>
     /// Array of bone transforms in model space, obtained by hierarchical accumulation.
     /// </summary>
-    /// <seealso>modelPose</seealso>
+    /// <remarks>
+    /// Native: <c>modelPose</c>
+    /// </remarks>
     public Matrix4x4* ModelPose;
 
     /// <summary>
     /// Array of final skinning matrices (invBind * modelPose), sent to the GPU.
     /// </summary>
-    /// <seealso>skinBuffer</seealso>
+    /// <remarks>
+    /// Native: <c>skinBuffer</c>
+    /// </remarks>
     public Matrix4x4* SkinBuffer;
 
     /// <summary>
     /// GPU texture ID storing the skinning matrices as a 1D RGBA16F texture.
     /// </summary>
-    /// <seealso>skinTexture</seealso>
+    /// <remarks>
+    /// Native: <c>skinTexture</c>
+    /// </remarks>
     public uint SkinTexture;
 
     /// <summary>
     /// Callback function to receive animation events.
     /// </summary>
-    /// <seealso>eventCallback</seealso>
+    /// <remarks>
+    /// Native: <c>eventCallback</c>
+    /// </remarks>
     public IntPtr EventCallback;
 
     /// <summary>
     /// Optional user data pointer passed to the callback.
     /// </summary>
-    /// <seealso>eventUserData</seealso>
+    /// <remarks>
+    /// Native: <c>eventUserData</c>
+    /// </remarks>
     public IntPtr EventUserData;
 
 }

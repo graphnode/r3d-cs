@@ -1,4 +1,3 @@
-using System;
 using System.Numerics;
 using R3D_cs;
 using Raylib_cs;
@@ -8,7 +7,7 @@ namespace Examples;
 
 public static class Shader
 {
-    public static unsafe int Main()
+    public static int Main()
     {
         // Initialize window
         InitWindow(800, 450, "[r3d] - Shader example");
@@ -38,11 +37,11 @@ public static class Shader
         UnloadImage(image);
 
         // Set custom sampler
-        R3D.SetSurfaceShaderSampler(ref *material.Shader, "u_texture", texture);
+        R3D.SetSurfaceShaderSampler(material.Shader, "u_texture", texture);
 
         // Load a screen shader
-        ScreenShader* screenShader = R3D.LoadScreenShader("resources/shaders/screen.glsl");
-        R3D.SetScreenShaderChain(&screenShader, 1);
+        var screenShader = R3D.LoadScreenShader("resources/shaders/screen.glsl");
+        R3D.SetScreenShaderChain([screenShader]);
 
         // Create light
         var light = R3D.CreateLight(LightType.Spot);
@@ -68,8 +67,8 @@ public static class Shader
                 ClearBackground(Color.RayWhite);
 
                 float time = 2.0f * (float)GetTime();
-                R3D.SetScreenShaderUniform(ref *screenShader, "u_time", &time);
-                R3D.SetSurfaceShaderUniform(ref *material.Shader, "u_time", &time);
+                R3D.SetScreenShaderUniform(screenShader, "u_time", ref time);
+                R3D.SetSurfaceShaderUniform(material.Shader, "u_time", ref time);
 
                 R3D.Begin(camera);
                     var planeMaterial = R3D.GetDefaultMaterial();
@@ -81,8 +80,8 @@ public static class Shader
         }
 
         // Cleanup
-        R3D.UnloadSurfaceShader(ref *material.Shader);
-        R3D.UnloadScreenShader(ref *screenShader);
+        R3D.UnloadSurfaceShader(material.Shader);
+        R3D.UnloadScreenShader(screenShader);
         R3D.UnloadMesh(torus);
         R3D.UnloadMesh(plane);
         R3D.Close();

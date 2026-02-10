@@ -14,44 +14,58 @@ namespace R3D_cs;
 /// Contains all animation channels required to animate a skeleton. Each channel corresponds to one bone and defines its transformation (translation, rotation, scale) over time.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Animation</seealso>
+/// <remarks>
+/// Native: <c>R3D_Animation</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct Animation
 {
     /// <summary>
     /// Array of animation channels, one per animated bone.
     /// </summary>
-    /// <seealso>channels</seealso>
+    /// <remarks>
+    /// Native: <c>channels</c>
+    /// </remarks>
     public AnimationChannel* Channels;
 
     /// <summary>
     /// Total number of channels in this animation.
     /// </summary>
-    /// <seealso>channelCount</seealso>
+    /// <remarks>
+    /// Native: <c>channelCount</c>
+    /// </remarks>
     public int ChannelCount;
 
     /// <summary>
     /// Playback rate; number of animation ticks per second.
     /// </summary>
-    /// <seealso>ticksPerSecond</seealso>
+    /// <remarks>
+    /// Native: <c>ticksPerSecond</c>
+    /// </remarks>
     public float TicksPerSecond;
 
     /// <summary>
     /// Total length of the animation, in ticks.
     /// </summary>
-    /// <seealso>duration</seealso>
+    /// <remarks>
+    /// Native: <c>duration</c>
+    /// </remarks>
     public float Duration;
 
     /// <summary>
     /// Number of bones in the target skeleton.
     /// </summary>
-    /// <seealso>boneCount</seealso>
+    /// <remarks>
+    /// Native: <c>boneCount</c>
+    /// </remarks>
     public int BoneCount;
 
     /// <summary>
     /// Animation name (null-terminated string).
     /// </summary>
-    /// <seealso>name</seealso>
+    /// <remarks>
+    /// Native: <c>name</c>
+    /// </remarks>
     public fixed byte Name[32];
 
 }

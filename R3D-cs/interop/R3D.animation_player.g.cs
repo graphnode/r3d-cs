@@ -26,7 +26,9 @@ public static unsafe partial class R3D
     /// <param name="skeleton">Skeleton to animate.</param>
     /// <param name="animLib">Animation library providing animations.</param>
     /// <returns>Newly created animation player, or a zeroed struct on failure.</returns>
-    /// <seealso>R3D_LoadAnimationPlayer</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadAnimationPlayer</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAnimationPlayer")]
     public static partial AnimationPlayer LoadAnimationPlayer(Skeleton skeleton, AnimationLib animLib);
 
@@ -34,7 +36,9 @@ public static unsafe partial class R3D
     /// Releases all resources used by an animation player.
     /// </summary>
     /// <param name="player">Animation player to unload.</param>
-    /// <seealso>R3D_UnloadAnimationPlayer</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadAnimationPlayer</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadAnimationPlayer")]
     public static partial void UnloadAnimationPlayer(AnimationPlayer player);
 
@@ -43,7 +47,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="player">Animation player to check.</param>
     /// <returns>true if valid, false otherwise.</returns>
-    /// <seealso>R3D_IsAnimationPlayerValid</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsAnimationPlayerValid</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsAnimationPlayerValid")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsAnimationPlayerValid(AnimationPlayer player);
@@ -54,7 +60,9 @@ public static unsafe partial class R3D
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation.</param>
     /// <returns>true if playing, false otherwise.</returns>
-    /// <seealso>R3D_IsAnimationPlaying</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_IsAnimationPlaying</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsAnimationPlaying")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool IsAnimationPlaying(AnimationPlayer player, int animIndex);
@@ -64,7 +72,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation to play.</param>
-    /// <seealso>R3D_PlayAnimation</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_PlayAnimation</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_PlayAnimation")]
     public static partial void PlayAnimation(ref AnimationPlayer player, int animIndex);
 
@@ -73,7 +83,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation to pause.</param>
-    /// <seealso>R3D_PauseAnimation</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_PauseAnimation</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_PauseAnimation")]
     public static partial void PauseAnimation(ref AnimationPlayer player, int animIndex);
 
@@ -82,7 +94,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation to stop.</param>
-    /// <seealso>R3D_StopAnimation</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_StopAnimation</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_StopAnimation")]
     public static partial void StopAnimation(ref AnimationPlayer player, int animIndex);
 
@@ -91,7 +105,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation to rewind.</param>
-    /// <seealso>R3D_RewindAnimation</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_RewindAnimation</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_RewindAnimation")]
     public static partial void RewindAnimation(ref AnimationPlayer player, int animIndex);
 
@@ -101,7 +117,9 @@ public static unsafe partial class R3D
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation.</param>
     /// <returns>Current time in animation ticks.</returns>
-    /// <seealso>R3D_GetAnimationTime</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetAnimationTime</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAnimationTime")]
     public static partial float GetAnimationTime(AnimationPlayer player, int animIndex);
 
@@ -111,7 +129,9 @@ public static unsafe partial class R3D
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation.</param>
     /// <param name="time">Time in animation ticks.</param>
-    /// <seealso>R3D_SetAnimationTime</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetAnimationTime</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetAnimationTime")]
     public static partial void SetAnimationTime(ref AnimationPlayer player, int animIndex, float time);
 
@@ -121,7 +141,9 @@ public static unsafe partial class R3D
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation.</param>
     /// <returns>Current weight.</returns>
-    /// <seealso>R3D_GetAnimationWeight</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetAnimationWeight</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAnimationWeight")]
     public static partial float GetAnimationWeight(AnimationPlayer player, int animIndex);
 
@@ -131,7 +153,9 @@ public static unsafe partial class R3D
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation.</param>
     /// <param name="weight">Blending weight to apply.</param>
-    /// <seealso>R3D_SetAnimationWeight</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetAnimationWeight</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetAnimationWeight")]
     public static partial void SetAnimationWeight(ref AnimationPlayer player, int animIndex, float weight);
 
@@ -141,7 +165,9 @@ public static unsafe partial class R3D
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation.</param>
     /// <returns>Current speed (may be negative for reverse playback).</returns>
-    /// <seealso>R3D_GetAnimationSpeed</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetAnimationSpeed</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAnimationSpeed")]
     public static partial float GetAnimationSpeed(AnimationPlayer player, int animIndex);
 
@@ -154,7 +180,9 @@ public static unsafe partial class R3D
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation.</param>
     /// <param name="speed">Playback speed.</param>
-    /// <seealso>R3D_SetAnimationSpeed</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetAnimationSpeed</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetAnimationSpeed")]
     public static partial void SetAnimationSpeed(ref AnimationPlayer player, int animIndex, float speed);
 
@@ -164,7 +192,9 @@ public static unsafe partial class R3D
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation.</param>
     /// <returns>True if looping is enabled.</returns>
-    /// <seealso>R3D_GetAnimationLoop</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetAnimationLoop</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAnimationLoop")]
     [return: MarshalAs(UnmanagedType.I1)]
     public static partial bool GetAnimationLoop(AnimationPlayer player, int animIndex);
@@ -175,7 +205,9 @@ public static unsafe partial class R3D
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation.</param>
     /// <param name="loop">True to enable looping.</param>
-    /// <seealso>R3D_SetAnimationLoop</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetAnimationLoop</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetAnimationLoop")]
     public static partial void SetAnimationLoop(ref AnimationPlayer player, int animIndex, [MarshalAs(UnmanagedType.I1)] bool loop);
 
@@ -187,7 +219,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="player">Animation player.</param>
     /// <param name="dt">Delta time in seconds.</param>
-    /// <seealso>R3D_AdvanceAnimationPlayerTime</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_AdvanceAnimationPlayerTime</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_AdvanceAnimationPlayerTime")]
     public static partial void AdvanceAnimationPlayerTime(ref AnimationPlayer player, float dt);
 
@@ -198,7 +232,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="player">Animation player whose local pose will be updated.</param>
-    /// <seealso>R3D_CalculateAnimationPlayerLocalPose</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CalculateAnimationPlayerLocalPose</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_CalculateAnimationPlayerLocalPose")]
     public static partial void CalculateAnimationPlayerLocalPose(ref AnimationPlayer player);
 
@@ -209,7 +245,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="player">Animation player whose model pose will be updated.</param>
-    /// <seealso>R3D_CalculateAnimationPlayerModelPose</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CalculateAnimationPlayerModelPose</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_CalculateAnimationPlayerModelPose")]
     public static partial void CalculateAnimationPlayerModelPose(ref AnimationPlayer player);
 
@@ -220,7 +258,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="player">Animation player whose local and model poses will be updated.</param>
-    /// <seealso>R3D_CalculateAnimationPlayerPose</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CalculateAnimationPlayerPose</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_CalculateAnimationPlayerPose")]
     public static partial void CalculateAnimationPlayerPose(ref AnimationPlayer player);
 
@@ -228,7 +268,9 @@ public static unsafe partial class R3D
     /// Calculates the skinning matrices and uploads them to the GPU.
     /// </summary>
     /// <param name="player">Animation player.</param>
-    /// <seealso>R3D_UploadAnimationPlayerPose</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UploadAnimationPlayerPose</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UploadAnimationPlayerPose")]
     public static partial void UploadAnimationPlayerPose(ref AnimationPlayer player);
 
@@ -240,7 +282,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="player">Animation player.</param>
     /// <param name="dt">Delta time in seconds.</param>
-    /// <seealso>R3D_UpdateAnimationPlayer</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UpdateAnimationPlayer</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UpdateAnimationPlayer")]
     public static partial void UpdateAnimationPlayer(ref AnimationPlayer player, float dt);
 

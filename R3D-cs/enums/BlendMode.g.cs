@@ -11,31 +11,39 @@ namespace R3D_cs;
 /// </summary>
 /// <remarks>
 /// The blend mode is applied only if you are in forward rendering mode or auto-detect mode.
+/// Native: <c>R3D_BlendMode</c>
 /// </remarks>
-/// <seealso>R3D_BlendMode</seealso>
 public enum BlendMode
 {
     /// <summary>
     /// Default mode: the result will be opaque or alpha blended depending on the transparency mode.
     /// </summary>
-    /// <seealso>R3D_BlendMode.R3D_BLEND_MIX</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_BlendMode.R3D_BLEND_MIX</c>
+    /// </remarks>
     Mix,
 
     /// <summary>
     /// Additive blending: source color is added to the destination, making bright effects.
     /// </summary>
-    /// <seealso>R3D_BlendMode.R3D_BLEND_ADDITIVE</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_BlendMode.R3D_BLEND_ADDITIVE</c>
+    /// </remarks>
     Additive,
 
     /// <summary>
     /// Multiply blending: source color is multiplied with the destination, darkening the image.
     /// </summary>
-    /// <seealso>R3D_BlendMode.R3D_BLEND_MULTIPLY</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_BlendMode.R3D_BLEND_MULTIPLY</c>
+    /// </remarks>
     Multiply,
 
     /// <summary>
     /// Premultiplied alpha blending: source color is blended with the destination assuming the source color is already multiplied by its alpha.
     /// </summary>
-    /// <seealso>R3D_BlendMode.R3D_BLEND_PREMULTIPLIED_ALPHA</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_BlendMode.R3D_BLEND_PREMULTIPLIED_ALPHA</c>
+    /// </remarks>
     PremultipliedAlpha,
 }

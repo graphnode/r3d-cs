@@ -11,55 +11,71 @@ namespace R3D_cs;
 /// </summary>
 /// <remarks>
 /// The depth/stencil comparison mode affects both forward and deferred rendering passes.
+/// Native: <c>R3D_CompareMode</c>
 /// </remarks>
-/// <seealso>R3D_CompareMode</seealso>
 public enum CompareMode
 {
     /// <summary>
     /// Passes if 'value' &lt; 'buffer' (default)
     /// </summary>
-    /// <seealso>R3D_CompareMode.R3D_COMPARE_LESS</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CompareMode.R3D_COMPARE_LESS</c>
+    /// </remarks>
     Less,
 
     /// <summary>
     /// Passes if 'value' &lt; = 'buffer'
     /// </summary>
-    /// <seealso>R3D_CompareMode.R3D_COMPARE_LEQUAL</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CompareMode.R3D_COMPARE_LEQUAL</c>
+    /// </remarks>
     Lequal,
 
     /// <summary>
     /// Passes if 'value' == 'buffer'
     /// </summary>
-    /// <seealso>R3D_CompareMode.R3D_COMPARE_EQUAL</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CompareMode.R3D_COMPARE_EQUAL</c>
+    /// </remarks>
     Equal,
 
     /// <summary>
     /// Passes if 'value' &gt;  'buffer'
     /// </summary>
-    /// <seealso>R3D_CompareMode.R3D_COMPARE_GREATER</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CompareMode.R3D_COMPARE_GREATER</c>
+    /// </remarks>
     Greater,
 
     /// <summary>
     /// Passes if 'value' &gt;= 'buffer'
     /// </summary>
-    /// <seealso>R3D_CompareMode.R3D_COMPARE_GEQUAL</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CompareMode.R3D_COMPARE_GEQUAL</c>
+    /// </remarks>
     Gequal,
 
     /// <summary>
     /// Passes if 'value' != 'buffer'
     /// </summary>
-    /// <seealso>R3D_CompareMode.R3D_COMPARE_NOTEQUAL</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CompareMode.R3D_COMPARE_NOTEQUAL</c>
+    /// </remarks>
     Notequal,
 
     /// <summary>
     /// Always passes
     /// </summary>
-    /// <seealso>R3D_CompareMode.R3D_COMPARE_ALWAYS</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CompareMode.R3D_COMPARE_ALWAYS</c>
+    /// </remarks>
     Always,
 
     /// <summary>
     /// Never passes
     /// </summary>
-    /// <seealso>R3D_CompareMode.R3D_COMPARE_NEVER</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CompareMode.R3D_COMPARE_NEVER</c>
+    /// </remarks>
     Never,
 }

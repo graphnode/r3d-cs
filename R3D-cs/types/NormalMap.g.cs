@@ -14,20 +14,26 @@ namespace R3D_cs;
 /// Provides normal map texture and scale factor.
 /// </para>
 /// </summary>
-/// <seealso>R3D_NormalMap</seealso>
+/// <remarks>
+/// Native: <c>R3D_NormalMap</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct NormalMap
 {
     /// <summary>
     /// Normal map texture (default: Front Facing)
     /// </summary>
-    /// <seealso>texture</seealso>
+    /// <remarks>
+    /// Native: <c>texture</c>
+    /// </remarks>
     public Texture2D Texture;
 
     /// <summary>
     /// Normal scale (default: 1.0f)
     /// </summary>
-    /// <seealso>scale</seealso>
+    /// <remarks>
+    /// Native: <c>scale</c>
+    /// </remarks>
     public float Scale;
 
 }

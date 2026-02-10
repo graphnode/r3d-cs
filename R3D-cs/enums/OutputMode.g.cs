@@ -8,40 +8,40 @@ namespace R3D_cs;
 /// </summary>
 /// <remarks>
 /// Nothing will be output if the requested target has not been created / used.
+/// Native: <c>R3D_OutputMode</c>
 /// </remarks>
-/// <seealso>R3D_OutputMode</seealso>
 public enum OutputMode
 {
-    /// <seealso>R3D_OutputMode.R3D_OUTPUT_SCENE</seealso>
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_SCENE</c></remarks>
     Scene,
 
-    /// <seealso>R3D_OutputMode.R3D_OUTPUT_ALBEDO</seealso>
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_ALBEDO</c></remarks>
     Albedo,
 
-    /// <seealso>R3D_OutputMode.R3D_OUTPUT_NORMAL</seealso>
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_NORMAL</c></remarks>
     Normal,
 
-    /// <seealso>R3D_OutputMode.R3D_OUTPUT_ORM</seealso>
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_ORM</c></remarks>
     Orm,
 
-    /// <seealso>R3D_OutputMode.R3D_OUTPUT_DIFFUSE</seealso>
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_DIFFUSE</c></remarks>
     Diffuse,
 
-    /// <seealso>R3D_OutputMode.R3D_OUTPUT_SPECULAR</seealso>
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_SPECULAR</c></remarks>
     Specular,
 
-    /// <seealso>R3D_OutputMode.R3D_OUTPUT_SSAO</seealso>
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_SSAO</c></remarks>
     Ssao,
 
-    /// <seealso>R3D_OutputMode.R3D_OUTPUT_SSIL</seealso>
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_SSIL</c></remarks>
     Ssil,
 
-    /// <seealso>R3D_OutputMode.R3D_OUTPUT_SSR</seealso>
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_SSR</c></remarks>
     Ssr,
 
-    /// <seealso>R3D_OutputMode.R3D_OUTPUT_BLOOM</seealso>
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_BLOOM</c></remarks>
     Bloom,
 
-    /// <seealso>R3D_OutputMode.R3D_OUTPUT_DOF</seealso>
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_DOF</c></remarks>
     Dof,
 }

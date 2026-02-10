@@ -23,7 +23,9 @@ public static unsafe partial class R3D
     /// The layout parameter tells how faces are arranged inside the source image.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_LoadAmbientMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadAmbientMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAmbientMap", StringMarshalling = StringMarshalling.Utf8)]
     public static partial AmbientMap LoadAmbientMap(string fileName, CubemapLayout layout, AmbientFlags flags);
 
@@ -33,7 +35,9 @@ public static unsafe partial class R3D
     /// Same behavior as R3D_LoadAmbientMap(), but without loading from disk.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_LoadAmbientMapFromImage</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadAmbientMapFromImage</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAmbientMapFromImage")]
     public static partial AmbientMap LoadAmbientMapFromImage(Image image, CubemapLayout layout, AmbientFlags flags);
 
@@ -53,7 +57,9 @@ public static unsafe partial class R3D
     /// <param name="cubemap">Source cubemap (environment / sky).</param>
     /// <param name="flags">Which components to generate (irradiance, reflection, or both).</param>
     /// <returns>A fully initialized ambient map.</returns>
-    /// <seealso>R3D_GenAmbientMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GenAmbientMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenAmbientMap")]
     public static partial AmbientMap GenAmbientMap(Cubemap cubemap, AmbientFlags flags);
 
@@ -63,7 +69,9 @@ public static unsafe partial class R3D
     /// After this call, the ambient map is no longer valid.
     /// </para>
     /// </summary>
-    /// <seealso>R3D_UnloadAmbientMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadAmbientMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadAmbientMap")]
     public static partial void UnloadAmbientMap(AmbientMap ambientMap);
 
@@ -78,7 +86,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="ambientMap">Existing ambient map to update.</param>
     /// <param name="cubemap">New cubemap source.</param>
-    /// <seealso>R3D_UpdateAmbientMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UpdateAmbientMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UpdateAmbientMap")]
     public static partial void UpdateAmbientMap(AmbientMap ambientMap, Cubemap cubemap);
 

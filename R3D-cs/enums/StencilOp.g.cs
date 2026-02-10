@@ -9,36 +9,48 @@ namespace R3D_cs;
 /// Defines how the stencil buffer value is modified based on test results.
 /// </para>
 /// </summary>
-/// <seealso>R3D_StencilOp</seealso>
+/// <remarks>
+/// Native: <c>R3D_StencilOp</c>
+/// </remarks>
 public enum StencilOp
 {
     /// <summary>
     /// Keep the current stencil value
     /// </summary>
-    /// <seealso>R3D_StencilOp.R3D_STENCIL_KEEP</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_StencilOp.R3D_STENCIL_KEEP</c>
+    /// </remarks>
     StencilKeep,
 
     /// <summary>
     /// Set stencil value to 0
     /// </summary>
-    /// <seealso>R3D_StencilOp.R3D_STENCIL_ZERO</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_StencilOp.R3D_STENCIL_ZERO</c>
+    /// </remarks>
     StencilZero,
 
     /// <summary>
     /// Replace with reference value
     /// </summary>
-    /// <seealso>R3D_StencilOp.R3D_STENCIL_REPLACE</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_StencilOp.R3D_STENCIL_REPLACE</c>
+    /// </remarks>
     StencilReplace,
 
     /// <summary>
     /// Increment stencil value (clamped)
     /// </summary>
-    /// <seealso>R3D_StencilOp.R3D_STENCIL_INCR</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_StencilOp.R3D_STENCIL_INCR</c>
+    /// </remarks>
     StencilIncr,
 
     /// <summary>
     /// Decrement stencil value (clamped)
     /// </summary>
-    /// <seealso>R3D_StencilOp.R3D_STENCIL_DECR</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_StencilOp.R3D_STENCIL_DECR</c>
+    /// </remarks>
     StencilDecr,
 }

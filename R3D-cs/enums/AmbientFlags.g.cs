@@ -17,13 +17,15 @@ namespace R3D_cs;
 /// </list>
 /// </para>
 /// </summary>
-/// <seealso>R3D_AmbientFlags</seealso>
+/// <remarks>
+/// Native: <c>R3D_AmbientFlags</c>
+/// </remarks>
 [Flags]
 public enum AmbientFlags : uint
 {
-    /// <seealso>R3D_AMBIENT_ILLUMINATION</seealso>
+    /// <remarks>Native: <c>R3D_AMBIENT_ILLUMINATION</c></remarks>
     Illumination = (1<<0),
 
-    /// <seealso>R3D_AMBIENT_REFLECTION</seealso>
+    /// <remarks>Native: <c>R3D_AMBIENT_REFLECTION</c></remarks>
     Reflection = (1<<1),
 }

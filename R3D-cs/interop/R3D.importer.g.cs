@@ -26,9 +26,11 @@ public static unsafe partial class R3D
     /// <param name="filePath">Path to the asset file.</param>
     /// <param name="flags">Importer behavior flags.</param>
     /// <returns>Pointer to a new importer instance, or NULL on failure.</returns>
-    /// <seealso>R3D_LoadImporter</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadImporter</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadImporter", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial Importer* LoadImporter(string filePath, ImportFlags flags);
+    public static partial Importer LoadImporter(string filePath, ImportFlags flags);
 
     /// <summary>
     /// Load an importer from a memory buffer.
@@ -41,9 +43,11 @@ public static unsafe partial class R3D
     /// <param name="hint">Optional file format hint (may be NULL).</param>
     /// <param name="flags">Importer behavior flags.</param>
     /// <returns>Pointer to a new importer instance, or NULL on failure.</returns>
-    /// <seealso>R3D_LoadImporterFromMemory</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadImporterFromMemory</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadImporterFromMemory", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial Importer* LoadImporterFromMemory(void* data, uint size, string hint, ImportFlags flags);
+    public static partial Importer LoadImporterFromMemory(void* data, uint size, string hint, ImportFlags flags);
 
     /// <summary>
     /// Destroy an importer instance.
@@ -52,8 +56,10 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="importer">Importer instance to destroy.</param>
-    /// <seealso>R3D_UnloadImporter</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadImporter</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadImporter")]
-    public static partial void UnloadImporter(Importer* importer);
+    public static partial void UnloadImporter(Importer importer);
 
 }

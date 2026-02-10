@@ -6,18 +6,24 @@ namespace R3D_cs;
 /// <summary>
 /// Aspect ratio handling modes for rendering.
 /// </summary>
-/// <seealso>R3D_AspectMode</seealso>
+/// <remarks>
+/// Native: <c>R3D_AspectMode</c>
+/// </remarks>
 public enum AspectMode
 {
     /// <summary>
     /// Expands the rendered output to fully fill the target (render texture or window).
     /// </summary>
-    /// <seealso>R3D_AspectMode.R3D_ASPECT_EXPAND</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_AspectMode.R3D_ASPECT_EXPAND</c>
+    /// </remarks>
     Expand,
 
     /// <summary>
     /// Preserves the target's aspect ratio without distortion, adding empty gaps if necessary.
     /// </summary>
-    /// <seealso>R3D_AspectMode.R3D_ASPECT_KEEP</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_AspectMode.R3D_ASPECT_KEEP</c>
+    /// </remarks>
     Keep,
 }

@@ -11,50 +11,66 @@ namespace R3D_cs;
 /// <summary>
 /// Represents a vertex and all its attributes for a mesh.
 /// </summary>
-/// <seealso>R3D_Vertex</seealso>
+/// <remarks>
+/// Native: <c>R3D_Vertex</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct Vertex
 {
     /// <summary>
     /// The 3D position of the vertex in object space.
     /// </summary>
-    /// <seealso>position</seealso>
+    /// <remarks>
+    /// Native: <c>position</c>
+    /// </remarks>
     public Vector3 Position;
 
     /// <summary>
     /// The 2D texture coordinates (UV) for mapping textures.
     /// </summary>
-    /// <seealso>texcoord</seealso>
+    /// <remarks>
+    /// Native: <c>texcoord</c>
+    /// </remarks>
     public Vector2 Texcoord;
 
     /// <summary>
     /// The normal vector used for lighting calculations.
     /// </summary>
-    /// <seealso>normal</seealso>
+    /// <remarks>
+    /// Native: <c>normal</c>
+    /// </remarks>
     public Vector3 Normal;
 
     /// <summary>
     /// Vertex color, in RGBA32.
     /// </summary>
-    /// <seealso>color</seealso>
+    /// <remarks>
+    /// Native: <c>color</c>
+    /// </remarks>
     public Color Color;
 
     /// <summary>
     /// The tangent vector, used in normal mapping (often with a handedness in w).
     /// </summary>
-    /// <seealso>tangent</seealso>
+    /// <remarks>
+    /// Native: <c>tangent</c>
+    /// </remarks>
     public Vector4 Tangent;
 
     /// <summary>
     /// Indices of up to 4 bones that influence this vertex (for skinning).
     /// </summary>
-    /// <seealso>boneIds</seealso>
+    /// <remarks>
+    /// Native: <c>boneIds</c>
+    /// </remarks>
     public fixed int BoneIds[4];
 
     /// <summary>
     /// Corresponding bone weights (should sum to 1.0). Defines the influence of each bone.
     /// </summary>
-    /// <seealso>weights</seealso>
+    /// <remarks>
+    /// Native: <c>weights</c>
+    /// </remarks>
     public fixed float Weights[4];
 
 }

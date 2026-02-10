@@ -14,26 +14,34 @@ namespace R3D_cs;
 /// Final color correction applied after all other effects.
 /// </para>
 /// </summary>
-/// <seealso>R3D_EnvColor</seealso>
+/// <remarks>
+/// Native: <c>R3D_EnvColor</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EnvColor
 {
     /// <summary>
     /// Overall brightness multiplier (default: 1.0)
     /// </summary>
-    /// <seealso>brightness</seealso>
+    /// <remarks>
+    /// Native: <c>brightness</c>
+    /// </remarks>
     public float Brightness;
 
     /// <summary>
     /// Contrast between dark and bright areas (default: 1.0)
     /// </summary>
-    /// <seealso>contrast</seealso>
+    /// <remarks>
+    /// Native: <c>contrast</c>
+    /// </remarks>
     public float Contrast;
 
     /// <summary>
     /// Color intensity (default: 1.0)
     /// </summary>
-    /// <seealso>saturation</seealso>
+    /// <remarks>
+    /// Native: <c>saturation</c>
+    /// </remarks>
     public float Saturation;
 
 }

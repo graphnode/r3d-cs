@@ -24,7 +24,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <returns>Default material structure with standard properties.</returns>
-    /// <seealso>R3D_GetDefaultMaterial</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetDefaultMaterial</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetDefaultMaterial")]
     public static partial Material GetDefaultMaterial();
 
@@ -35,7 +37,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="material">Default material to define.</param>
-    /// <seealso>R3D_SetDefaultMaterial</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_SetDefaultMaterial</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetDefaultMaterial")]
     public static partial void SetDefaultMaterial(Material material);
 
@@ -49,8 +53,8 @@ public static unsafe partial class R3D
     /// <remarks>
     /// <b>Warning:</b>
     /// Only call this function if you are certain that the textures are not shared with other materials or objects, as this will permanently free the texture data.
+    /// Native: <c>R3D_UnloadMaterial</c>
     /// </remarks>
-    /// <seealso>R3D_UnloadMaterial</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadMaterial")]
     public static partial void UnloadMaterial(Material material);
 
@@ -63,7 +67,9 @@ public static unsafe partial class R3D
     /// <param name="fileName">Path to the texture file.</param>
     /// <param name="color">Multiplicative tint applied in the shader.</param>
     /// <returns>Albedo map structure. Returns an empty map on failure.</returns>
-    /// <seealso>R3D_LoadAlbedoMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadAlbedoMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAlbedoMap", StringMarshalling = StringMarshalling.Utf8)]
     public static partial AlbedoMap LoadAlbedoMap(string fileName, Color color);
 
@@ -78,7 +84,9 @@ public static unsafe partial class R3D
     /// <param name="dataSize">Size of image data in bytes.</param>
     /// <param name="color">Multiplicative tint applied in the shader.</param>
     /// <returns>Albedo map structure. Returns an empty map on failure.</returns>
-    /// <seealso>R3D_LoadAlbedoMapFromMemory</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadAlbedoMapFromMemory</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadAlbedoMapFromMemory", StringMarshalling = StringMarshalling.Utf8)]
     public static partial AlbedoMap LoadAlbedoMapFromMemory(string fileType, void* fileData, int dataSize, Color color);
 
@@ -89,7 +97,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="map">Albedo map to unload.</param>
-    /// <seealso>R3D_UnloadAlbedoMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadAlbedoMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadAlbedoMap")]
     public static partial void UnloadAlbedoMap(AlbedoMap map);
 
@@ -103,7 +113,9 @@ public static unsafe partial class R3D
     /// <param name="color">Emission color.</param>
     /// <param name="energy">Emission intensity multiplier.</param>
     /// <returns>Emission map. Returns an empty map on failure.</returns>
-    /// <seealso>R3D_LoadEmissionMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadEmissionMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadEmissionMap", StringMarshalling = StringMarshalling.Utf8)]
     public static partial EmissionMap LoadEmissionMap(string fileName, Color color, float energy);
 
@@ -119,7 +131,9 @@ public static unsafe partial class R3D
     /// <param name="color">Emission color.</param>
     /// <param name="energy">Emission intensity multiplier.</param>
     /// <returns>Emission map. Returns an empty map on failure.</returns>
-    /// <seealso>R3D_LoadEmissionMapFromMemory</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadEmissionMapFromMemory</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadEmissionMapFromMemory", StringMarshalling = StringMarshalling.Utf8)]
     public static partial EmissionMap LoadEmissionMapFromMemory(string fileType, void* fileData, int dataSize, Color color, float energy);
 
@@ -130,7 +144,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="map">Emission map to unload.</param>
-    /// <seealso>R3D_UnloadEmissionMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadEmissionMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadEmissionMap")]
     public static partial void UnloadEmissionMap(EmissionMap map);
 
@@ -143,7 +159,9 @@ public static unsafe partial class R3D
     /// <param name="fileName">Path to the texture file.</param>
     /// <param name="scale">Normal intensity multiplier.</param>
     /// <returns>Normal map. Returns an empty map on failure.</returns>
-    /// <seealso>R3D_LoadNormalMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadNormalMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadNormalMap", StringMarshalling = StringMarshalling.Utf8)]
     public static partial NormalMap LoadNormalMap(string fileName, float scale);
 
@@ -158,7 +176,9 @@ public static unsafe partial class R3D
     /// <param name="dataSize">Size of image data in bytes.</param>
     /// <param name="scale">Normal intensity multiplier.</param>
     /// <returns>Normal map. Returns an empty map on failure.</returns>
-    /// <seealso>R3D_LoadNormalMapFromMemory</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadNormalMapFromMemory</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadNormalMapFromMemory", StringMarshalling = StringMarshalling.Utf8)]
     public static partial NormalMap LoadNormalMapFromMemory(string fileType, void* fileData, int dataSize, float scale);
 
@@ -169,7 +189,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="map">Normal map to unload.</param>
-    /// <seealso>R3D_UnloadNormalMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadNormalMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadNormalMap")]
     public static partial void UnloadNormalMap(NormalMap map);
 
@@ -184,7 +206,9 @@ public static unsafe partial class R3D
     /// <param name="roughness">Roughness multiplier.</param>
     /// <param name="metalness">Metalness multiplier.</param>
     /// <returns>ORM map. Returns an empty map on failure.</returns>
-    /// <seealso>R3D_LoadOrmMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadOrmMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadOrmMap", StringMarshalling = StringMarshalling.Utf8)]
     public static partial OrmMap LoadOrmMap(string fileName, float occlusion, float roughness, float metalness);
 
@@ -201,7 +225,9 @@ public static unsafe partial class R3D
     /// <param name="roughness">Roughness multiplier.</param>
     /// <param name="metalness">Metalness multiplier.</param>
     /// <returns>ORM map. Returns an empty map on failure.</returns>
-    /// <seealso>R3D_LoadOrmMapFromMemory</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadOrmMapFromMemory</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadOrmMapFromMemory", StringMarshalling = StringMarshalling.Utf8)]
     public static partial OrmMap LoadOrmMapFromMemory(string fileType, void* fileData, int dataSize, float occlusion, float roughness, float metalness);
 
@@ -212,7 +238,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <param name="map">ORM map to unload.</param>
-    /// <seealso>R3D_UnloadOrmMap</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadOrmMap</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadOrmMap")]
     public static partial void UnloadOrmMap(OrmMap map);
 

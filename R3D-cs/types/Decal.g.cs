@@ -16,75 +16,97 @@ namespace R3D_cs;
 /// </summary>
 /// <remarks>
 /// Decals are drawn using deferred screen space rendering and do not interact with any forward rendered or non-opaque objects.
+/// Native: <c>R3D_Decal</c>
 /// </remarks>
-/// <seealso>R3D_Decal</seealso>
 [StructLayout(LayoutKind.Sequential)]
-public unsafe struct Decal
+public struct Decal
 {
     /// <summary>
     /// Albedo map (if the texture is undefined, implicitly treat `applyColor` as false, with alpha = 1.0)
     /// </summary>
-    /// <seealso>albedo</seealso>
+    /// <remarks>
+    /// Native: <c>albedo</c>
+    /// </remarks>
     public AlbedoMap Albedo;
 
     /// <summary>
     /// Emission map
     /// </summary>
-    /// <seealso>emission</seealso>
+    /// <remarks>
+    /// Native: <c>emission</c>
+    /// </remarks>
     public EmissionMap Emission;
 
     /// <summary>
     /// Normal map
     /// </summary>
-    /// <seealso>normal</seealso>
+    /// <remarks>
+    /// Native: <c>normal</c>
+    /// </remarks>
     public NormalMap Normal;
 
     /// <summary>
     /// Occlusion-Roughness-Metalness map
     /// </summary>
-    /// <seealso>orm</seealso>
+    /// <remarks>
+    /// Native: <c>orm</c>
+    /// </remarks>
     public OrmMap Orm;
 
     /// <summary>
     /// UV offset (default: {0.0f, 0.0f})
     /// </summary>
-    /// <seealso>uvOffset</seealso>
+    /// <remarks>
+    /// Native: <c>uvOffset</c>
+    /// </remarks>
     public Vector2 UvOffset;
 
     /// <summary>
     /// UV scale (default: {1.0f, 1.0f})
     /// </summary>
-    /// <seealso>uvScale</seealso>
+    /// <remarks>
+    /// Native: <c>uvScale</c>
+    /// </remarks>
     public Vector2 UvScale;
 
     /// <summary>
     /// Alpha cutoff threshold (default: 0.01f)
     /// </summary>
-    /// <seealso>alphaCutoff</seealso>
+    /// <remarks>
+    /// Native: <c>alphaCutoff</c>
+    /// </remarks>
     public float AlphaCutoff;
 
     /// <summary>
     /// Maximum angle against the surface normal to draw decal. 0.0f disables threshold. (default: 0.0f)
     /// </summary>
-    /// <seealso>normalThreshold</seealso>
+    /// <remarks>
+    /// Native: <c>normalThreshold</c>
+    /// </remarks>
     public float NormalThreshold;
 
     /// <summary>
     /// The width of fading along the normal threshold (default: 0.0f)
     /// </summary>
-    /// <seealso>fadeWidth</seealso>
+    /// <remarks>
+    /// Native: <c>fadeWidth</c>
+    /// </remarks>
     public float FadeWidth;
 
     /// <summary>
     /// Indicates that the albedo color will not be rendered, only the alpha component of the albedo will be used as a mask. (default: true)
     /// </summary>
-    /// <seealso>applyColor</seealso>
+    /// <remarks>
+    /// Native: <c>applyColor</c>
+    /// </remarks>
     public bool ApplyColor;
 
     /// <summary>
     /// Custom shader applied to the decal (default: NULL)
     /// </summary>
-    /// <seealso>shader</seealso>
-    public SurfaceShader* Shader;
+    /// <remarks>
+    /// Native: <c>shader</c>
+    /// </remarks>
+    public SurfaceShader Shader;
 
 }

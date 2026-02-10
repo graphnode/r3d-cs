@@ -23,14 +23,18 @@ public static unsafe partial class R3D
     /// <param name="capacity">Max instances.</param>
     /// <param name="flags">Attribute mask to allocate.</param>
     /// <returns>Initialized instance buffer.</returns>
-    /// <seealso>R3D_LoadInstanceBuffer</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_LoadInstanceBuffer</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadInstanceBuffer")]
     public static partial InstanceBuffer LoadInstanceBuffer(int capacity, InstanceFlags flags);
 
     /// <summary>
     /// Destroy all GPU buffers owned by this instance buffer.
     /// </summary>
-    /// <seealso>R3D_UnloadInstanceBuffer</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnloadInstanceBuffer</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadInstanceBuffer")]
     public static partial void UnloadInstanceBuffer(InstanceBuffer buffer);
 
@@ -41,7 +45,9 @@ public static unsafe partial class R3D
     /// <param name="offset">First instance index.</param>
     /// <param name="count">Number of instances.</param>
     /// <param name="data">Source pointer.</param>
-    /// <seealso>R3D_UploadInstances</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UploadInstances</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UploadInstances")]
     public static partial void UploadInstances(InstanceBuffer buffer, InstanceFlags flag, int offset, int count, IntPtr data);
 
@@ -50,7 +56,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="flag">Attribute to map (single bit).</param>
     /// <returns>Writable pointer, or NULL on error.</returns>
-    /// <seealso>R3D_MapInstances</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_MapInstances</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_MapInstances")]
     public static partial IntPtr MapInstances(InstanceBuffer buffer, InstanceFlags flag);
 
@@ -58,7 +66,9 @@ public static unsafe partial class R3D
     /// Unmap one or more previously mapped attribute buffers.
     /// </summary>
     /// <param name="flags">Bitmask of attributes to unmap.</param>
-    /// <seealso>R3D_UnmapInstances</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_UnmapInstances</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnmapInstances")]
     public static partial void UnmapInstances(InstanceBuffer buffer, InstanceFlags flags);
 

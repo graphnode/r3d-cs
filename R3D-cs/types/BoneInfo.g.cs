@@ -14,20 +14,26 @@ namespace R3D_cs;
 /// Contains the bone name and the index of its parent bone.
 /// </para>
 /// </summary>
-/// <seealso>R3D_BoneInfo</seealso>
+/// <remarks>
+/// Native: <c>R3D_BoneInfo</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct BoneInfo
 {
     /// <summary>
     /// Bone name (max 31 characters + null terminator).
     /// </summary>
-    /// <seealso>name</seealso>
+    /// <remarks>
+    /// Native: <c>name</c>
+    /// </remarks>
     public fixed byte Name[32];
 
     /// <summary>
     /// Index of the parent bone (-1 if root).
     /// </summary>
-    /// <seealso>parent</seealso>
+    /// <remarks>
+    /// Native: <c>parent</c>
+    /// </remarks>
     public int Parent;
 
 }

@@ -8,11 +8,11 @@ using Raylib_cs;
 
 namespace R3D_cs;
 
-/// <summary>
-/// ======================================== OPAQUE TYPES ========================================
-/// </summary>
-/// <seealso>R3D_ScreenShader</seealso>
+/// <remarks>
+/// Native: <c>R3D_ScreenShader</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct ScreenShader
 {
+    private nint _handle;
 }

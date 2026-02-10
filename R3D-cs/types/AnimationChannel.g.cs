@@ -14,32 +14,42 @@ namespace R3D_cs;
 /// Contains animation tracks for translation, rotation and scale. The sampled tracks are combined to produce the bone local transform.
 /// </para>
 /// </summary>
-/// <seealso>R3D_AnimationChannel</seealso>
+/// <remarks>
+/// Native: <c>R3D_AnimationChannel</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct AnimationChannel
 {
     /// <summary>
     /// Translation track (Vector3).
     /// </summary>
-    /// <seealso>translation</seealso>
+    /// <remarks>
+    /// Native: <c>translation</c>
+    /// </remarks>
     public AnimationTrack Translation;
 
     /// <summary>
     /// Rotation track (Quaternion).
     /// </summary>
-    /// <seealso>rotation</seealso>
+    /// <remarks>
+    /// Native: <c>rotation</c>
+    /// </remarks>
     public AnimationTrack Rotation;
 
     /// <summary>
     /// Scale track (Vector3).
     /// </summary>
-    /// <seealso>scale</seealso>
+    /// <remarks>
+    /// Native: <c>scale</c>
+    /// </remarks>
     public AnimationTrack Scale;
 
     /// <summary>
     /// Index of the affected bone.
     /// </summary>
-    /// <seealso>boneIndex</seealso>
+    /// <remarks>
+    /// Native: <c>boneIndex</c>
+    /// </remarks>
     public int BoneIndex;
 
 }

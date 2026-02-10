@@ -24,7 +24,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <returns>A white texture.</returns>
-    /// <seealso>R3D_GetWhiteTexture</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetWhiteTexture</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetWhiteTexture")]
     public static partial Texture2D GetWhiteTexture();
 
@@ -35,7 +37,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <returns>A black texture.</returns>
-    /// <seealso>R3D_GetBlackTexture</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetBlackTexture</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetBlackTexture")]
     public static partial Texture2D GetBlackTexture();
 
@@ -46,7 +50,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <returns>A neutral normal texture.</returns>
-    /// <seealso>R3D_GetNormalTexture</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetNormalTexture</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetNormalTexture")]
     public static partial Texture2D GetNormalTexture();
 
@@ -59,8 +65,8 @@ public static unsafe partial class R3D
     /// <returns>The normal buffer texture.</returns>
     /// <remarks>
     /// You can find the decoding functions in the embedded shaders, such as 'screen/lighting.fs.glsl'.
+    /// Native: <c>R3D_GetBufferNormal</c>
     /// </remarks>
-    /// <seealso>R3D_GetBufferNormal</seealso>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetBufferNormal")]
     public static partial Texture2D GetBufferNormal();
 
@@ -74,7 +80,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <returns>The final depth buffer texture (R16, linear depth).</returns>
-    /// <seealso>R3D_GetBufferDepth</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetBufferDepth</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetBufferDepth")]
     public static partial Texture2D GetBufferDepth();
 
@@ -85,7 +93,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <returns>The current view matrix.</returns>
-    /// <seealso>R3D_GetMatrixView</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetMatrixView</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetMatrixView")]
     public static partial Matrix4x4 GetMatrixView();
 
@@ -96,7 +106,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <returns>The current inverse view matrix.</returns>
-    /// <seealso>R3D_GetMatrixInvView</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetMatrixInvView</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetMatrixInvView")]
     public static partial Matrix4x4 GetMatrixInvView();
 
@@ -107,7 +119,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <returns>The current projection matrix.</returns>
-    /// <seealso>R3D_GetMatrixProjection</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetMatrixProjection</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetMatrixProjection")]
     public static partial Matrix4x4 GetMatrixProjection();
 
@@ -118,7 +132,9 @@ public static unsafe partial class R3D
     /// </para>
     /// </summary>
     /// <returns>The current inverse projection matrix.</returns>
-    /// <seealso>R3D_GetMatrixInvProjection</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_GetMatrixInvProjection</c>
+    /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetMatrixInvProjection")]
     public static partial Matrix4x4 GetMatrixInvProjection();
 

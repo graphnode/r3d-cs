@@ -14,98 +14,130 @@ namespace R3D_cs;
 /// Combines multiple texture maps and rendering parameters for shading.
 /// </para>
 /// </summary>
-/// <seealso>R3D_Material</seealso>
+/// <remarks>
+/// Native: <c>R3D_Material</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
-public unsafe struct Material
+public struct Material
 {
     /// <summary>
     /// Albedo map
     /// </summary>
-    /// <seealso>albedo</seealso>
+    /// <remarks>
+    /// Native: <c>albedo</c>
+    /// </remarks>
     public AlbedoMap Albedo;
 
     /// <summary>
     /// Emission map
     /// </summary>
-    /// <seealso>emission</seealso>
+    /// <remarks>
+    /// Native: <c>emission</c>
+    /// </remarks>
     public EmissionMap Emission;
 
     /// <summary>
     /// Normal map
     /// </summary>
-    /// <seealso>normal</seealso>
+    /// <remarks>
+    /// Native: <c>normal</c>
+    /// </remarks>
     public NormalMap Normal;
 
     /// <summary>
     /// Occlusion-Roughness-Metalness map
     /// </summary>
-    /// <seealso>orm</seealso>
+    /// <remarks>
+    /// Native: <c>orm</c>
+    /// </remarks>
     public OrmMap Orm;
 
     /// <summary>
     /// UV offset (default: {0.0f, 0.0f})
     /// </summary>
-    /// <seealso>uvOffset</seealso>
+    /// <remarks>
+    /// Native: <c>uvOffset</c>
+    /// </remarks>
     public Vector2 UvOffset;
 
     /// <summary>
     /// UV scale (default: {1.0f, 1.0f})
     /// </summary>
-    /// <seealso>uvScale</seealso>
+    /// <remarks>
+    /// Native: <c>uvScale</c>
+    /// </remarks>
     public Vector2 UvScale;
 
     /// <summary>
     /// Alpha cutoff threshold (default: 0.01f)
     /// </summary>
-    /// <seealso>alphaCutoff</seealso>
+    /// <remarks>
+    /// Native: <c>alphaCutoff</c>
+    /// </remarks>
     public float AlphaCutoff;
 
     /// <summary>
     /// Depth test configuration (default: standard)
     /// </summary>
-    /// <seealso>depth</seealso>
+    /// <remarks>
+    /// Native: <c>depth</c>
+    /// </remarks>
     public DepthState Depth;
 
     /// <summary>
     /// Stencil test configuration (default: disabled)
     /// </summary>
-    /// <seealso>stencil</seealso>
+    /// <remarks>
+    /// Native: <c>stencil</c>
+    /// </remarks>
     public StencilState Stencil;
 
     /// <summary>
     /// Transparency mode (default: DISABLED)
     /// </summary>
-    /// <seealso>transparencyMode</seealso>
+    /// <remarks>
+    /// Native: <c>transparencyMode</c>
+    /// </remarks>
     public TransparencyMode TransparencyMode;
 
     /// <summary>
     /// Billboard mode (default: DISABLED)
     /// </summary>
-    /// <seealso>billboardMode</seealso>
+    /// <remarks>
+    /// Native: <c>billboardMode</c>
+    /// </remarks>
     public BillboardMode BillboardMode;
 
     /// <summary>
     /// Blend mode (default: MIX)
     /// </summary>
-    /// <seealso>blendMode</seealso>
+    /// <remarks>
+    /// Native: <c>blendMode</c>
+    /// </remarks>
     public BlendMode BlendMode;
 
     /// <summary>
     /// Face culling mode (default: BACK)
     /// </summary>
-    /// <seealso>cullMode</seealso>
+    /// <remarks>
+    /// Native: <c>cullMode</c>
+    /// </remarks>
     public CullMode CullMode;
 
     /// <summary>
     /// If true, material does not participate in lighting (default: false)
     /// </summary>
-    /// <seealso>unlit</seealso>
+    /// <remarks>
+    /// Native: <c>unlit</c>
+    /// </remarks>
     public bool Unlit;
 
     /// <summary>
     /// Custom shader applied to the material (default: NULL)
     /// </summary>
-    /// <seealso>shader</seealso>
-    public SurfaceShader* Shader;
+    /// <remarks>
+    /// Native: <c>shader</c>
+    /// </remarks>
+    public SurfaceShader Shader;
 
 }

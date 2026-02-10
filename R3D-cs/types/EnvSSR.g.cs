@@ -14,50 +14,66 @@ namespace R3D_cs;
 /// Real-time reflections calculated in screen space.
 /// </para>
 /// </summary>
-/// <seealso>R3D_EnvSSR</seealso>
+/// <remarks>
+/// Native: <c>R3D_EnvSSR</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EnvSSR
 {
     /// <summary>
     /// Maximum ray marching steps (default: 32)
     /// </summary>
-    /// <seealso>maxRaySteps</seealso>
+    /// <remarks>
+    /// Native: <c>maxRaySteps</c>
+    /// </remarks>
     public int MaxRaySteps;
 
     /// <summary>
     /// Binary search refinement steps (default: 4)
     /// </summary>
-    /// <seealso>binarySteps</seealso>
+    /// <remarks>
+    /// Native: <c>binarySteps</c>
+    /// </remarks>
     public int BinarySteps;
 
     /// <summary>
     /// Ray step size (default: 0.125)
     /// </summary>
-    /// <seealso>stepSize</seealso>
+    /// <remarks>
+    /// Native: <c>stepSize</c>
+    /// </remarks>
     public float StepSize;
 
     /// <summary>
     /// Depth tolerance for valid hits (default: 0.2)
     /// </summary>
-    /// <seealso>thickness</seealso>
+    /// <remarks>
+    /// Native: <c>thickness</c>
+    /// </remarks>
     public float Thickness;
 
     /// <summary>
     /// Maximum ray distance (default: 4.0)
     /// </summary>
-    /// <seealso>maxDistance</seealso>
+    /// <remarks>
+    /// Native: <c>maxDistance</c>
+    /// </remarks>
     public float MaxDistance;
 
     /// <summary>
     /// Screen edge fade start [0,1] (default: 0.25)
     /// </summary>
-    /// <seealso>edgeFade</seealso>
+    /// <remarks>
+    /// Native: <c>edgeFade</c>
+    /// </remarks>
     public float EdgeFade;
 
     /// <summary>
     /// Enable/disable SSR (default: false)
     /// </summary>
-    /// <seealso>enabled</seealso>
+    /// <remarks>
+    /// Native: <c>enabled</c>
+    /// </remarks>
     public bool Enabled;
 
 }

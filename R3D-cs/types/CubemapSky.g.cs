@@ -14,86 +14,114 @@ namespace R3D_cs;
 /// Curves control gradient falloff (lower = sharper transition at horizon).
 /// </para>
 /// </summary>
-/// <seealso>R3D_CubemapSky</seealso>
+/// <remarks>
+/// Native: <c>R3D_CubemapSky</c>
+/// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct CubemapSky
 {
     /// <summary>
     /// Sky color at zenith
     /// </summary>
-    /// <seealso>skyTopColor</seealso>
+    /// <remarks>
+    /// Native: <c>skyTopColor</c>
+    /// </remarks>
     public Color SkyTopColor;
 
     /// <summary>
     /// Sky color at horizon
     /// </summary>
-    /// <seealso>skyHorizonColor</seealso>
+    /// <remarks>
+    /// Native: <c>skyHorizonColor</c>
+    /// </remarks>
     public Color SkyHorizonColor;
 
     /// <summary>
     /// Gradient curve exponent (0.01 - 1.0, typical: 0.15)
     /// </summary>
-    /// <seealso>skyHorizonCurve</seealso>
+    /// <remarks>
+    /// Native: <c>skyHorizonCurve</c>
+    /// </remarks>
     public float SkyHorizonCurve;
 
     /// <summary>
     /// Sky brightness multiplier
     /// </summary>
-    /// <seealso>skyEnergy</seealso>
+    /// <remarks>
+    /// Native: <c>skyEnergy</c>
+    /// </remarks>
     public float SkyEnergy;
 
     /// <summary>
     /// Ground color at nadir
     /// </summary>
-    /// <seealso>groundBottomColor</seealso>
+    /// <remarks>
+    /// Native: <c>groundBottomColor</c>
+    /// </remarks>
     public Color GroundBottomColor;
 
     /// <summary>
     /// Ground color at horizon
     /// </summary>
-    /// <seealso>groundHorizonColor</seealso>
+    /// <remarks>
+    /// Native: <c>groundHorizonColor</c>
+    /// </remarks>
     public Color GroundHorizonColor;
 
     /// <summary>
     /// Gradient curve exponent (typical: 0.02)
     /// </summary>
-    /// <seealso>groundHorizonCurve</seealso>
+    /// <remarks>
+    /// Native: <c>groundHorizonCurve</c>
+    /// </remarks>
     public float GroundHorizonCurve;
 
     /// <summary>
     /// Ground brightness multiplier
     /// </summary>
-    /// <seealso>groundEnergy</seealso>
+    /// <remarks>
+    /// Native: <c>groundEnergy</c>
+    /// </remarks>
     public float GroundEnergy;
 
     /// <summary>
     /// Direction from which light comes (can take not normalized)
     /// </summary>
-    /// <seealso>sunDirection</seealso>
+    /// <remarks>
+    /// Native: <c>sunDirection</c>
+    /// </remarks>
     public Vector3 SunDirection;
 
     /// <summary>
     /// Sun disk color
     /// </summary>
-    /// <seealso>sunColor</seealso>
+    /// <remarks>
+    /// Native: <c>sunColor</c>
+    /// </remarks>
     public Color SunColor;
 
     /// <summary>
     /// Sun angular size in radians (real sun: ~0.0087 rad = 0.5°)
     /// </summary>
-    /// <seealso>sunSize</seealso>
+    /// <remarks>
+    /// Native: <c>sunSize</c>
+    /// </remarks>
     public float SunSize;
 
     /// <summary>
     /// Sun edge softness exponent (typical: 0.15)
     /// </summary>
-    /// <seealso>sunCurve</seealso>
+    /// <remarks>
+    /// Native: <c>sunCurve</c>
+    /// </remarks>
     public float SunCurve;
 
     /// <summary>
     /// Sun brightness multiplier
     /// </summary>
-    /// <seealso>sunEnergy</seealso>
+    /// <remarks>
+    /// Native: <c>sunEnergy</c>
+    /// </remarks>
     public float SunEnergy;
 
 }

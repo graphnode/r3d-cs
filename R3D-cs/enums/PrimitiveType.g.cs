@@ -6,48 +6,64 @@ namespace R3D_cs;
 /// <summary>
 /// Defines the geometric primitive type.
 /// </summary>
-/// <seealso>R3D_PrimitiveType</seealso>
+/// <remarks>
+/// Native: <c>R3D_PrimitiveType</c>
+/// </remarks>
 public enum PrimitiveType
 {
     /// <summary>
     /// Each vertex represents a single point.
     /// </summary>
-    /// <seealso>R3D_PrimitiveType.R3D_PRIMITIVE_POINTS</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_PrimitiveType.R3D_PRIMITIVE_POINTS</c>
+    /// </remarks>
     Points,
 
     /// <summary>
     /// Each pair of vertices forms an independent line segment.
     /// </summary>
-    /// <seealso>R3D_PrimitiveType.R3D_PRIMITIVE_LINES</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_PrimitiveType.R3D_PRIMITIVE_LINES</c>
+    /// </remarks>
     Lines,
 
     /// <summary>
     /// Connected series of line segments sharing vertices.
     /// </summary>
-    /// <seealso>R3D_PrimitiveType.R3D_PRIMITIVE_LINE_STRIP</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_PrimitiveType.R3D_PRIMITIVE_LINE_STRIP</c>
+    /// </remarks>
     LineStrip,
 
     /// <summary>
     /// Closed loop of connected line segments.
     /// </summary>
-    /// <seealso>R3D_PrimitiveType.R3D_PRIMITIVE_LINE_LOOP</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_PrimitiveType.R3D_PRIMITIVE_LINE_LOOP</c>
+    /// </remarks>
     LineLoop,
 
     /// <summary>
     /// Each set of three vertices forms an independent triangle.
     /// </summary>
-    /// <seealso>R3D_PrimitiveType.R3D_PRIMITIVE_TRIANGLES</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_PrimitiveType.R3D_PRIMITIVE_TRIANGLES</c>
+    /// </remarks>
     Triangles,
 
     /// <summary>
     /// Connected strip of triangles sharing vertices.
     /// </summary>
-    /// <seealso>R3D_PrimitiveType.R3D_PRIMITIVE_TRIANGLE_STRIP</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_PrimitiveType.R3D_PRIMITIVE_TRIANGLE_STRIP</c>
+    /// </remarks>
     TriangleStrip,
 
     /// <summary>
     /// Fan of triangles sharing the first vertex.
     /// </summary>
-    /// <seealso>R3D_PrimitiveType.R3D_PRIMITIVE_TRIANGLE_FAN</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_PrimitiveType.R3D_PRIMITIVE_TRIANGLE_FAN</c>
+    /// </remarks>
     TriangleFan,
 }

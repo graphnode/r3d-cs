@@ -9,42 +9,56 @@ namespace R3D_cs;
 /// Used when converting an image into a cubemap. AUTO_DETECT tries to guess the layout based on image dimensions.
 /// </para>
 /// </summary>
-/// <seealso>R3D_CubemapLayout</seealso>
+/// <remarks>
+/// Native: <c>R3D_CubemapLayout</c>
+/// </remarks>
 public enum CubemapLayout
 {
     /// <summary>
     /// Automatically detect layout type
     /// </summary>
-    /// <seealso>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_AUTO_DETECT</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_AUTO_DETECT</c>
+    /// </remarks>
     AutoDetect,
 
     /// <summary>
     /// Layout is defined by a vertical line with faces
     /// </summary>
-    /// <seealso>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_LINE_VERTICAL</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_LINE_VERTICAL</c>
+    /// </remarks>
     LineVertical,
 
     /// <summary>
     /// Layout is defined by a horizontal line with faces
     /// </summary>
-    /// <seealso>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_LINE_HORIZONTAL</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_LINE_HORIZONTAL</c>
+    /// </remarks>
     LineHorizontal,
 
     /// <summary>
     /// Layout is defined by a 3x4 cross with cubemap faces
     /// </summary>
-    /// <seealso>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_CROSS_THREE_BY_FOUR</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_CROSS_THREE_BY_FOUR</c>
+    /// </remarks>
     CrossThreeByFour,
 
     /// <summary>
     /// Layout is defined by a 4x3 cross with cubemap faces
     /// </summary>
-    /// <seealso>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_CROSS_FOUR_BY_THREE</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_CROSS_FOUR_BY_THREE</c>
+    /// </remarks>
     CrossFourByThree,
 
     /// <summary>
     /// Layout is defined by an equirectangular panorama
     /// </summary>
-    /// <seealso>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_PANORAMA</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_CubemapLayout.R3D_CUBEMAP_LAYOUT_PANORAMA</c>
+    /// </remarks>
     Panorama,
 }

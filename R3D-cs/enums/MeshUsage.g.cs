@@ -6,24 +6,32 @@ namespace R3D_cs;
 /// <summary>
 /// Hint on how a mesh will be used.
 /// </summary>
-/// <seealso>R3D_MeshUsage</seealso>
+/// <remarks>
+/// Native: <c>R3D_MeshUsage</c>
+/// </remarks>
 public enum MeshUsage
 {
     /// <summary>
     /// Will never be updated.
     /// </summary>
-    /// <seealso>R3D_MeshUsage.R3D_STATIC_MESH</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_MeshUsage.R3D_STATIC_MESH</c>
+    /// </remarks>
     StaticMesh,
 
     /// <summary>
     /// Will be updated occasionally.
     /// </summary>
-    /// <seealso>R3D_MeshUsage.R3D_DYNAMIC_MESH</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_MeshUsage.R3D_DYNAMIC_MESH</c>
+    /// </remarks>
     DynamicMesh,
 
     /// <summary>
     /// Will be update on each frame.
     /// </summary>
-    /// <seealso>R3D_MeshUsage.R3D_STREAMED_MESH</seealso>
+    /// <remarks>
+    /// Native: <c>R3D_MeshUsage.R3D_STREAMED_MESH</c>
+    /// </remarks>
     StreamedMesh,
 }
