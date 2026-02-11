@@ -14,7 +14,7 @@ public static class Kinematics
 
     private static Vector3 CapsuleCenter(Capsule caps) => (caps.Start + caps.End) * 0.5f;
 
-    public static unsafe int Main()
+    public static int Main()
     {
         InitWindow(800, 450, "[r3d] - Kinematics Example");
         SetTargetFPS(60);
@@ -54,7 +54,7 @@ public static class Kinematics
 
         // Slope obstacle
         var slopeMeshData = R3D.GenMeshDataSlope(2, 2, 2, new Vector3(0, 1, -1));
-        var slopeMesh = R3D.LoadMesh(PrimitiveType.Triangles, slopeMeshData, null, MeshUsage.StaticMesh);
+        var slopeMesh = R3D.LoadMesh(PrimitiveType.Triangles, slopeMeshData, MeshUsage.StaticMesh);
         var slopeTransform = Matrix4x4.Transpose(Matrix4x4.CreateTranslation(0, 1, 5));
 
         // Player capsule

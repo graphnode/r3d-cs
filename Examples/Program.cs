@@ -32,7 +32,8 @@ public static class ExampleList
         new("Billboards", Billboards.Main),
         new("Sun", Sun.Main),
         new("Dof", Dof.Main),
-        new("Decal", Decal.Main)
+        new("Decal", Decal.Main),
+        new("CustomMesh", CustomMesh.Main)
     ];
 
     public static ExampleInfo? GetExample(string name)

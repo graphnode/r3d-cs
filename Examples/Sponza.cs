@@ -7,7 +7,7 @@ namespace Examples;
 
 public static class Sponza
 {
-    public static unsafe int Main()
+    public static int Main()
     {
         // Initialize window
         InitWindow(800, 450, "[r3d] - Sponza example");
@@ -32,7 +32,7 @@ public static class Sponza
         var sponza = R3D.LoadModel("resources/models/Sponza.glb");
 
         // Setup lights
-        var lights = stackalloc Light[2];
+        var lights = new Light[2];
         for (var i = 0; i < 2; i++)
         {
             lights[i] = R3D.CreateLight(LightType.Omni);

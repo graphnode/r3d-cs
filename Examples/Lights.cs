@@ -16,7 +16,7 @@ public static class Lights
         return min + (max - min) * Random.Shared.NextSingle();
     }
 
-    public static unsafe int Main()
+    public static int Main()
     {
         // Initialize window
         InitWindow(800, 450, "[r3d] - Many lights example");
@@ -47,7 +47,7 @@ public static class Lights
         R3D.UnmapInstances(instances, InstanceFlags.Position);
 
         // Create lights
-        var lights = stackalloc Light[NUM_LIGHTS];
+        var lights = new Light[NUM_LIGHTS];
         for (var i = 0; i < NUM_LIGHTS; i++)
         {
             lights[i] = R3D.CreateLight(LightType.Omni);

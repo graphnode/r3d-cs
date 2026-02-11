@@ -12,7 +12,7 @@ public static class Particles
 {
     private const int MAX_PARTICLES = 4096;
 
-    public static unsafe int Main()
+    public static int Main()
     {
         // Initialize window
         InitWindow(800, 450, "[r3d] - Particles example");

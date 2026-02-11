@@ -321,23 +321,6 @@ public static unsafe partial class R3D
         }
     }
 
-    /// <summary>
-    ///     Extension method to set a light's position and direction to look at a target point.
-    /// </summary>
-    /// <param name="light">The light to modify.</param>
-    /// <param name="position">The position to place the light.</param>
-    /// <param name="target">The point the light should look at.</param>
-    /// <example>
-    ///     <code>
-    /// var light = R3D.CreateLight(LightType.Spot);
-    /// light.LookAt(new Vector3(0, 10, 5), Vector3.Zero);
-    /// </code>
-    /// </example>
-    public static void LookAt(this Light light, Vector3 position, Vector3 target)
-    {
-        LightLookAt(light, position, target);
-    }
-
     // ---- Generic uniform convenience overloads ----
 
     /// <summary>
@@ -362,6 +345,52 @@ public static unsafe partial class R3D
     public static void SetSurfaceShaderUniform<T>(SurfaceShader shader, string name, ref T value) where T : unmanaged
     {
         SetSurfaceShaderUniform(shader, name, Unsafe.AsPointer(ref value));
+    }
+
+    /// <summary>
+    ///     Creates a 3D mesh from CPU-side mesh data, computing the bounding box automatically.
+    /// </summary>
+    /// <param name="type">Primitive type used to interpret vertex data.</param>
+    /// <param name="data">MeshData containing vertices and indices.</param>
+    /// <param name="usage">Hint on how the mesh will be used.</param>
+    /// <returns>Created Mesh.</returns>
+    public static Mesh LoadMesh(PrimitiveType type, MeshData data, MeshUsage usage)
+        => LoadMesh(type, data, null, usage);
+
+    /// <summary>
+    ///     Creates a 3D mesh from CPU-side mesh data with an explicit bounding box.
+    /// </summary>
+    /// <param name="type">Primitive type used to interpret vertex data.</param>
+    /// <param name="data">MeshData containing vertices and indices.</param>
+    /// <param name="aabb">Bounding box for the mesh.</param>
+    /// <param name="usage">Hint on how the mesh will be used.</param>
+    /// <returns>Created Mesh.</returns>
+    public static Mesh LoadMesh(PrimitiveType type, MeshData data, ref BoundingBox aabb, MeshUsage usage)
+    {
+        fixed (BoundingBox* ptr = &aabb)
+            return LoadMesh(type, data, ptr, usage);
+    }
+
+    /// <summary>
+    ///     Updates an existing mesh with new CPU-side data, computing the bounding box automatically.
+    /// </summary>
+    /// <param name="mesh">The mesh to update.</param>
+    /// <param name="data">New MeshData to upload.</param>
+    /// <returns>True if the update was successful.</returns>
+    public static bool UpdateMesh(ref Mesh mesh, MeshData data)
+        => UpdateMesh(ref mesh, data, null);
+
+    /// <summary>
+    ///     Updates an existing mesh with new CPU-side data and an explicit bounding box.
+    /// </summary>
+    /// <param name="mesh">The mesh to update.</param>
+    /// <param name="data">New MeshData to upload.</param>
+    /// <param name="aabb">Bounding box for the mesh.</param>
+    /// <returns>True if the update was successful.</returns>
+    public static bool UpdateMesh(ref Mesh mesh, MeshData data, ref BoundingBox aabb)
+    {
+        fixed (BoundingBox* ptr = &aabb)
+            return UpdateMesh(ref mesh, data, ptr);
     }
 
     /// <summary>
