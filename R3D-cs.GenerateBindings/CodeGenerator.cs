@@ -123,6 +123,81 @@ public class CodeGenerator(string outputDir)
         return count;
     }
 
+    /// <summary>
+    ///     Explicit count expressions for pointer fields whose counts live in nested structs.
+    /// </summary>
+    private static readonly Dictionary<(string structName, string cFieldName), string> ExplicitCountExpressions = new()
+    {
+        [("R3D_AnimationPlayer", "states")] = "AnimLib.Count",
+        [("R3D_AnimationPlayer", "localPose")] = "Skeleton.BoneCount",
+        [("R3D_AnimationPlayer", "modelPose")] = "Skeleton.BoneCount",
+        [("R3D_AnimationPlayer", "skinBuffer")] = "Skeleton.BoneCount",
+    };
+
+    /// <summary>
+    ///     Finds the C# count expression for a pointer field by prefix-matching count fields,
+    ///     falling back to a generic "Count" field, a lone count field, or the explicit map.
+    /// </summary>
+    /// <summary>
+    ///     Returns the number of leading characters shared by two strings (case-insensitive).
+    /// </summary>
+    private static int CommonPrefixLength(string a, string b)
+    {
+        int len = Math.Min(a.Length, b.Length);
+        for (var i = 0; i < len; i++)
+        {
+            if (char.ToUpperInvariant(a[i]) != char.ToUpperInvariant(b[i]))
+                return i;
+        }
+        return len;
+    }
+
+    private static string? FindCountExpression(
+        string nativeStructName,
+        string cFieldName,
+        string csFieldName,
+        List<(string csName, string cName)> countFields)
+    {
+        // 1. Check explicit overrides (for nested-struct counts like AnimLib.Count)
+        if (ExplicitCountExpressions.TryGetValue((nativeStructName, cFieldName), out string? expr))
+            return expr;
+
+        // 2. Common-prefix match: count field name minus "Count" must share a significant
+        //    common prefix with the pointer field name.  This handles Latin plurals where
+        //    the singular is NOT a prefix of the plural (Vertex→Vertices, Index→Indices).
+        string? bestMatch = null;
+        var bestLen = 0;
+        foreach (var (csName, _) in countFields)
+        {
+            if (csName.Length <= 5 || !csName.EndsWith("Count", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            string prefix = csName[..^5];
+            int commonLen = CommonPrefixLength(csFieldName, prefix);
+            int threshold = Math.Max(3, prefix.Length - 2);
+
+            if (commonLen >= threshold && commonLen > bestLen)
+            {
+                bestMatch = csName;
+                bestLen = commonLen;
+            }
+        }
+        if (bestMatch != null)
+            return bestMatch;
+
+        // 3. Exact "Count" field
+        var exact = countFields.FirstOrDefault(c =>
+            c.csName.Equals("Count", StringComparison.OrdinalIgnoreCase));
+        if (exact.csName != null)
+            return exact.csName;
+
+        // 4. Lone count field (only one int*Count field in the struct → shared count)
+        if (countFields.Count == 1)
+            return countFields[0].csName;
+
+        return null;
+    }
+
     private int GenerateStructsFiles(CppCompilation compilation)
     {
         var count = 0;
@@ -155,6 +230,11 @@ public class CodeGenerator(string outputDir)
                 sb.AppendLine("    private nint _handle;");
             }
 
+            // Collect metadata for Span property generation
+            var pointerFields = new List<(string emitName, string elementType, string originalName, string cFieldName)>();
+            var voidPointerFields = new List<(string emitName, string originalName, string cFieldName)>();
+            var countFields = new List<(string csName, string cName)>();
+
             foreach (var field in @class.Fields)
             {
                 (string csType, _, bool isFixedBuffer, int fixedSize) = MapType(field.Type);
@@ -166,13 +246,63 @@ public class CodeGenerator(string outputDir)
                 if (fieldName.EndsWith("Callback", StringComparison.OrdinalIgnoreCase))
                     fieldType = "IntPtr";
 
+                // Typed pointer fields become internal with _ prefix
+                bool isTypedPointer = !isFixedBuffer
+                    && !isOpaque
+                    && fieldType.Contains('*')
+                    && fieldType != "void*";
+
+                string access = isTypedPointer ? "internal" : "public";
+                string emitName = isTypedPointer
+                    ? $"_{char.ToLower(fieldName[0])}{fieldName[1..]}"
+                    : fieldName;
+
+                if (isTypedPointer)
+                {
+                    string elementType = fieldType.Replace("*", "").Trim();
+                    pointerFields.Add((emitName, elementType, fieldName, field.Name));
+                }
+
+                if (!isFixedBuffer && fieldType == "void*")
+                    voidPointerFields.Add((emitName, fieldName, field.Name));
+
+                if (!isFixedBuffer && fieldType is "int" or "uint"
+                    && fieldName.EndsWith("Count", StringComparison.OrdinalIgnoreCase))
+                    countFields.Add((fieldName, field.Name));
+
                 CommentGenerator.Generate(sb, field.Comment, field.Name, "    ");
 
                 if (isFixedBuffer)
-                    sb.AppendLine($"    public fixed {fieldType} {fieldName}[{fixedSize}];");
+                    sb.AppendLine($"    {access} fixed {fieldType} {emitName}[{fixedSize}];");
                 else
-                    sb.AppendLine($"    public {fieldType} {fieldName};");
+                    sb.AppendLine($"    {access} {fieldType} {emitName};");
 
+                sb.AppendLine();
+            }
+
+            // Emit Span<T> properties for typed pointer + count pairs
+            foreach (var (emitName, elementType, originalName, cFieldName) in pointerFields)
+            {
+                string? countExpr = FindCountExpression(@class.Name, cFieldName, originalName, countFields);
+                if (countExpr == null) continue;
+
+                sb.AppendLine("    /// <summary>");
+                sb.AppendLine($"    /// <see cref=\"{originalName}\"/> as a <see cref=\"Span{{T}}\"/>.");
+                sb.AppendLine("    /// </summary>");
+                sb.AppendLine($"    public Span<{elementType}> {originalName} => {emitName} != null ? new({emitName}, {countExpr}) : default;");
+                sb.AppendLine();
+            }
+
+            // Emit generic cast method for void* pointer + count pairs
+            foreach (var (emitName, originalName, cFieldName) in voidPointerFields)
+            {
+                string? countExpr = FindCountExpression(@class.Name, cFieldName, originalName, countFields);
+                if (countExpr == null) continue;
+
+                sb.AppendLine("    /// <summary>");
+                sb.AppendLine($"    /// <see cref=\"{originalName}\"/> cast to the specified type as a <see cref=\"Span{{T}}\"/>.");
+                sb.AppendLine("    /// </summary>");
+                sb.AppendLine($"    public Span<T> {originalName}As<T>() where T : unmanaged => {emitName} != null ? new((T*){emitName}, {countExpr}) : default;");
                 sb.AppendLine();
             }
 

@@ -26,7 +26,7 @@ public unsafe struct Animation
     /// <remarks>
     /// Native: <c>channels</c>
     /// </remarks>
-    public AnimationChannel* Channels;
+    internal AnimationChannel* _channels;
 
     /// <summary>
     /// Total number of channels in this animation.
@@ -67,5 +67,10 @@ public unsafe struct Animation
     /// Native: <c>name</c>
     /// </remarks>
     public fixed byte Name[32];
+
+    /// <summary>
+    /// <see cref="Channels"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<AnimationChannel> Channels => _channels != null ? new(_channels, ChannelCount) : default;
 
 }

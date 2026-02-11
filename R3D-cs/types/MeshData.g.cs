@@ -29,7 +29,7 @@ public unsafe struct MeshData
     /// <remarks>
     /// Native: <c>vertices</c>
     /// </remarks>
-    public Vertex* Vertices;
+    internal Vertex* _vertices;
 
     /// <summary>
     /// Pointer to index data in CPU memory.
@@ -37,7 +37,7 @@ public unsafe struct MeshData
     /// <remarks>
     /// Native: <c>indices</c>
     /// </remarks>
-    public uint* Indices;
+    internal uint* _indices;
 
     /// <summary>
     /// Number of vertices.
@@ -54,5 +54,15 @@ public unsafe struct MeshData
     /// Native: <c>indexCount</c>
     /// </remarks>
     public int IndexCount;
+
+    /// <summary>
+    /// <see cref="Vertices"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<Vertex> Vertices => _vertices != null ? new(_vertices, VertexCount) : default;
+
+    /// <summary>
+    /// <see cref="Indices"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<uint> Indices => _indices != null ? new(_indices, IndexCount) : default;
 
 }

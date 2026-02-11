@@ -26,7 +26,7 @@ public unsafe struct AnimationPlayer
     /// <remarks>
     /// Native: <c>states</c>
     /// </remarks>
-    public AnimationState* States;
+    internal AnimationState* _states;
 
     /// <summary>
     /// Animation library providing the available animations.
@@ -50,7 +50,7 @@ public unsafe struct AnimationPlayer
     /// <remarks>
     /// Native: <c>localPose</c>
     /// </remarks>
-    public Matrix4x4* LocalPose;
+    internal Matrix4x4* _localPose;
 
     /// <summary>
     /// Array of bone transforms in model space, obtained by hierarchical accumulation.
@@ -58,7 +58,7 @@ public unsafe struct AnimationPlayer
     /// <remarks>
     /// Native: <c>modelPose</c>
     /// </remarks>
-    public Matrix4x4* ModelPose;
+    internal Matrix4x4* _modelPose;
 
     /// <summary>
     /// Array of final skinning matrices (invBind * modelPose), sent to the GPU.
@@ -66,7 +66,7 @@ public unsafe struct AnimationPlayer
     /// <remarks>
     /// Native: <c>skinBuffer</c>
     /// </remarks>
-    public Matrix4x4* SkinBuffer;
+    internal Matrix4x4* _skinBuffer;
 
     /// <summary>
     /// GPU texture ID storing the skinning matrices as a 1D RGBA16F texture.
@@ -91,5 +91,25 @@ public unsafe struct AnimationPlayer
     /// Native: <c>eventUserData</c>
     /// </remarks>
     public IntPtr EventUserData;
+
+    /// <summary>
+    /// <see cref="States"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<AnimationState> States => _states != null ? new(_states, AnimLib.Count) : default;
+
+    /// <summary>
+    /// <see cref="LocalPose"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<Matrix4x4> LocalPose => _localPose != null ? new(_localPose, Skeleton.BoneCount) : default;
+
+    /// <summary>
+    /// <see cref="ModelPose"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<Matrix4x4> ModelPose => _modelPose != null ? new(_modelPose, Skeleton.BoneCount) : default;
+
+    /// <summary>
+    /// <see cref="SkinBuffer"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<Matrix4x4> SkinBuffer => _skinBuffer != null ? new(_skinBuffer, Skeleton.BoneCount) : default;
 
 }

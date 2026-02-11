@@ -26,7 +26,7 @@ public unsafe struct Skeleton
     /// <remarks>
     /// Native: <c>bones</c>
     /// </remarks>
-    public BoneInfo* Bones;
+    internal BoneInfo* _bones;
 
     /// <summary>
     /// Total number of bones in the skeleton.
@@ -42,7 +42,7 @@ public unsafe struct Skeleton
     /// <remarks>
     /// Native: <c>localBind</c>
     /// </remarks>
-    public Matrix4x4* LocalBind;
+    internal Matrix4x4* _localBind;
 
     /// <summary>
     /// Bind pose matrices in model/global space
@@ -50,7 +50,7 @@ public unsafe struct Skeleton
     /// <remarks>
     /// Native: <c>modelBind</c>
     /// </remarks>
-    public Matrix4x4* ModelBind;
+    internal Matrix4x4* _modelBind;
 
     /// <summary>
     /// Inverse bind matrices (model space) for skinning
@@ -58,7 +58,7 @@ public unsafe struct Skeleton
     /// <remarks>
     /// Native: <c>invBind</c>
     /// </remarks>
-    public Matrix4x4* InvBind;
+    internal Matrix4x4* _invBind;
 
     /// <summary>
     /// Root correction if local bind is not identity
@@ -75,5 +75,25 @@ public unsafe struct Skeleton
     /// Native: <c>skinTexture</c>
     /// </remarks>
     public uint SkinTexture;
+
+    /// <summary>
+    /// <see cref="Bones"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<BoneInfo> Bones => _bones != null ? new(_bones, BoneCount) : default;
+
+    /// <summary>
+    /// <see cref="LocalBind"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<Matrix4x4> LocalBind => _localBind != null ? new(_localBind, BoneCount) : default;
+
+    /// <summary>
+    /// <see cref="ModelBind"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<Matrix4x4> ModelBind => _modelBind != null ? new(_modelBind, BoneCount) : default;
+
+    /// <summary>
+    /// <see cref="InvBind"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<Matrix4x4> InvBind => _invBind != null ? new(_invBind, BoneCount) : default;
 
 }

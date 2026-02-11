@@ -26,7 +26,7 @@ public unsafe struct AnimationLib
     /// <remarks>
     /// Native: <c>animations</c>
     /// </remarks>
-    public Animation* Animations;
+    internal Animation* _animations;
 
     /// <summary>
     /// Number of animations contained in the library.
@@ -35,5 +35,10 @@ public unsafe struct AnimationLib
     /// Native: <c>count</c>
     /// </remarks>
     public int Count;
+
+    /// <summary>
+    /// <see cref="Animations"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<Animation> Animations => _animations != null ? new(_animations, Count) : default;
 
 }

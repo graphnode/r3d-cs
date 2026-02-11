@@ -26,7 +26,7 @@ public unsafe struct AnimationTrack
     /// <remarks>
     /// Native: <c>times</c>
     /// </remarks>
-    public float* Times;
+    internal float* _times;
 
     /// <summary>
     /// Keyframe values (Vector3 or Quaternion).
@@ -43,5 +43,15 @@ public unsafe struct AnimationTrack
     /// Native: <c>count</c>
     /// </remarks>
     public int Count;
+
+    /// <summary>
+    /// <see cref="Times"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<float> Times => _times != null ? new(_times, Count) : default;
+
+    /// <summary>
+    /// <see cref="Values"/> cast to the specified type as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<T> ValuesAs<T>() where T : unmanaged => Values != null ? new((T*)Values, Count) : default;
 
 }

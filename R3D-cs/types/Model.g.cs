@@ -26,7 +26,7 @@ public unsafe struct Model
     /// <remarks>
     /// Native: <c>meshes</c>
     /// </remarks>
-    public Mesh* Meshes;
+    internal Mesh* _meshes;
 
     /// <summary>
     /// Array of meshes data in RAM (optional, can be NULL).
@@ -34,7 +34,7 @@ public unsafe struct Model
     /// <remarks>
     /// Native: <c>meshData</c>
     /// </remarks>
-    public MeshData* MeshData;
+    internal MeshData* _meshData;
 
     /// <summary>
     /// Array of materials used by the model.
@@ -42,7 +42,7 @@ public unsafe struct Model
     /// <remarks>
     /// Native: <c>materials</c>
     /// </remarks>
-    public Material* Materials;
+    internal Material* _materials;
 
     /// <summary>
     /// Array of material indices, one per mesh.
@@ -50,7 +50,7 @@ public unsafe struct Model
     /// <remarks>
     /// Native: <c>meshMaterials</c>
     /// </remarks>
-    public int* MeshMaterials;
+    internal int* _meshMaterials;
 
     /// <summary>
     /// Number of meshes.
@@ -83,5 +83,25 @@ public unsafe struct Model
     /// Native: <c>skeleton</c>
     /// </remarks>
     public Skeleton Skeleton;
+
+    /// <summary>
+    /// <see cref="Meshes"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<Mesh> Meshes => _meshes != null ? new(_meshes, MeshCount) : default;
+
+    /// <summary>
+    /// <see cref="MeshData"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<MeshData> MeshData => _meshData != null ? new(_meshData, MeshCount) : default;
+
+    /// <summary>
+    /// <see cref="Materials"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<Material> Materials => _materials != null ? new(_materials, MaterialCount) : default;
+
+    /// <summary>
+    /// <see cref="MeshMaterials"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<int> MeshMaterials => _meshMaterials != null ? new(_meshMaterials, MeshCount) : default;
 
 }
