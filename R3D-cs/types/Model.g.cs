@@ -58,7 +58,7 @@ public unsafe struct Model
     /// <remarks>
     /// Native: <c>meshCount</c>
     /// </remarks>
-    public int MeshCount;
+    internal int MeshCount;
 
     /// <summary>
     /// Number of materials.
@@ -66,7 +66,7 @@ public unsafe struct Model
     /// <remarks>
     /// Native: <c>materialCount</c>
     /// </remarks>
-    public int MaterialCount;
+    internal int MaterialCount;
 
     /// <summary>
     /// Axis-Aligned Bounding Box encompassing the whole model.

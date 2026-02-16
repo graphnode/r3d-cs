@@ -42,7 +42,7 @@ public unsafe struct AnimationTrack
     /// <remarks>
     /// Native: <c>count</c>
     /// </remarks>
-    public int Count;
+    internal int Count;
 
     /// <summary>
     /// <see cref="Times"/> as a <see cref="Span{T}"/>.

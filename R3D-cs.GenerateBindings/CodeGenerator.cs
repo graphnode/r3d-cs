@@ -230,10 +230,11 @@ public class CodeGenerator(string outputDir)
                 sb.AppendLine("    private nint _handle;");
             }
 
-            // Collect metadata for Span property generation
+            // --- Pass 1: collect field metadata ---
             var pointerFields = new List<(string emitName, string elementType, string originalName, string cFieldName)>();
             var voidPointerFields = new List<(string emitName, string originalName, string cFieldName)>();
             var countFields = new List<(string csName, string cName)>();
+            var fieldInfos = new List<(CppField field, string fieldType, string fieldName, string emitName, string access, bool isFixedBuffer, int fixedSize)>();
 
             foreach (var field in @class.Fields)
             {
@@ -270,12 +271,34 @@ public class CodeGenerator(string outputDir)
                     && fieldName.EndsWith("Count", StringComparison.OrdinalIgnoreCase))
                     countFields.Add((fieldName, field.Name));
 
+                fieldInfos.Add((field, fieldType, fieldName, emitName, access, isFixedBuffer, fixedSize));
+            }
+
+            // Determine which count fields are consumed by a Span property
+            var usedCountFields = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var (_, _, originalName, cFieldName) in pointerFields)
+            {
+                string? countExpr = FindCountExpression(@class.Name, cFieldName, originalName, countFields);
+                if (countExpr != null) usedCountFields.Add(countExpr);
+            }
+            foreach (var (_, originalName, cFieldName) in voidPointerFields)
+            {
+                string? countExpr = FindCountExpression(@class.Name, cFieldName, originalName, countFields);
+                if (countExpr != null) usedCountFields.Add(countExpr);
+            }
+
+            // --- Pass 2: emit fields ---
+            foreach (var (field, fieldType, fieldName, emitName, access, isFixedBuffer, fixedSize) in fieldInfos)
+            {
+                // Count fields consumed by a Span property become internal
+                string finalAccess = usedCountFields.Contains(fieldName) ? "internal" : access;
+
                 CommentGenerator.Generate(sb, field.Comment, field.Name, "    ");
 
                 if (isFixedBuffer)
-                    sb.AppendLine($"    {access} fixed {fieldType} {emitName}[{fixedSize}];");
+                    sb.AppendLine($"    {finalAccess} fixed {fieldType} {emitName}[{fixedSize}];");
                 else
-                    sb.AppendLine($"    {access} {fieldType} {emitName};");
+                    sb.AppendLine($"    {finalAccess} {fieldType} {emitName};");
 
                 sb.AppendLine();
             }

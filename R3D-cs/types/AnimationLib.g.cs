@@ -34,7 +34,7 @@ public unsafe struct AnimationLib
     /// <remarks>
     /// Native: <c>count</c>
     /// </remarks>
-    public int Count;
+    internal int Count;
 
     /// <summary>
     /// <see cref="Animations"/> as a <see cref="Span{T}"/>.

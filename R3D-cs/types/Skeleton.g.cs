@@ -34,7 +34,7 @@ public unsafe struct Skeleton
     /// <remarks>
     /// Native: <c>boneCount</c>
     /// </remarks>
-    public int BoneCount;
+    internal int BoneCount;
 
     /// <summary>
     /// Bind pose matrices relative to parent

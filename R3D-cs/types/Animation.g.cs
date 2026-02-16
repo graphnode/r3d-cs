@@ -34,7 +34,7 @@ public unsafe struct Animation
     /// <remarks>
     /// Native: <c>channelCount</c>
     /// </remarks>
-    public int ChannelCount;
+    internal int ChannelCount;
 
     /// <summary>
     /// Playback rate; number of animation ticks per second.

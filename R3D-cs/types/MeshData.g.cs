@@ -45,7 +45,7 @@ public unsafe struct MeshData
     /// <remarks>
     /// Native: <c>vertexCount</c>
     /// </remarks>
-    public int VertexCount;
+    internal int VertexCount;
 
     /// <summary>
     /// Number of indices.
@@ -53,7 +53,7 @@ public unsafe struct MeshData
     /// <remarks>
     /// Native: <c>indexCount</c>
     /// </remarks>
-    public int IndexCount;
+    internal int IndexCount;
 
     /// <summary>
     /// <see cref="Vertices"/> as a <see cref="Span{T}"/>.
