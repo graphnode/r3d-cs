@@ -23,28 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           lfs: true
-
-      - name: Read upstream config
-        id: upstream
-        shell: bash
-        run: |
-          source .r3d-upstream
-          REF="${R3D_UPSTREAM_COMMIT:-$R3D_UPSTREAM_TAG}"
-          if [ -z "$REF" ]; then
-            echo "::error::No upstream ref configured in .r3d-upstream"
-            exit 1
-          fi
-          echo "ref=$REF" >> "$GITHUB_OUTPUT"
-          echo "Upstream ref: $REF"
-          echo "Upstream tag: $R3D_UPSTREAM_TAG"
-
-      - name: Clone r3d upstream
-        uses: actions/checkout@v4
-        with:
-          repository: Bigfoot71/r3d
-          ref: ${{ steps.upstream.outputs.ref }}
           submodules: recursive
-          path: r3d-upstream
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -74,7 +53,7 @@ jobs:
 
       - name: CMake configure
         run: >
-          cmake -S r3d-upstream -B r3d-upstream/build
+          cmake -S External/r3d -B External/r3d/build
           -G Ninja
           -DCMAKE_BUILD_TYPE=Release
           -DBUILD_SHARED_LIBS=ON
@@ -83,7 +62,7 @@ jobs:
           -DR3D_BUILD_EXAMPLES=OFF
 
       - name: CMake build
-        run: cmake --build r3d-upstream/build --config Release
+        run: cmake --build External/r3d/build --config Release
 
       # --- Collect native libs ---
 
@@ -93,7 +72,7 @@ jobs:
         run: |
           $staging = "staging/runtimes/win-x64/native"
           New-Item -ItemType Directory -Force -Path $staging
-          Get-ChildItem -Path r3d-upstream/build -Recurse -Include "*.dll" | ForEach-Object {
+          Get-ChildItem -Path External/r3d/build -Recurse -Include "*.dll" | ForEach-Object {
             Write-Host "Copying $($_.FullName)"
             Copy-Item $_.FullName -Destination $staging
           }
@@ -107,7 +86,7 @@ jobs:
           mkdir -p "$staging"
 
           # Find and copy all .so files (including versioned ones like .so.5)
-          find r3d-upstream/build -name '*.so*' -type f | while read -r lib; do
+          find External/r3d/build -name '*.so*' -type f | while read -r lib; do
             cp -v "$lib" "$staging/"
           done
 

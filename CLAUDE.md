@@ -78,6 +78,20 @@ dotnet run -- <example-name>  # e.g., shader, lights, transparency
 dotnet run
 ```
 
+### Update r3d upstream
+
+The r3d source is pinned as a git submodule at `External/r3d`. To update:
+
+```bash
+cd External/r3d
+git fetch origin
+git checkout <new-tag-or-commit>   # e.g. git checkout v0.9
+cd ../..
+git add External/r3d
+```
+
+After updating you should regenerate bindings and rebuild native libraries (see below).
+
 ### Regenerate bindings from r3d source
 
 **When to regenerate**:
@@ -89,11 +103,14 @@ dotnet run
 ```bash
 cd R3D-cs.GenerateBindings
 
-# Using local r3d repository (default output: ../R3D-cs)
-dotnet run -- -p /path/to/r3d -v 0.7.0
+# Uses External/r3d submodule by default (no -p needed)
+dotnet run
 
-# Specify custom output directory
-dotnet run -- -p /path/to/r3d -v 0.7.0 -o /path/to/output
+# Or specify a different r3d repository path
+dotnet run -- -p /path/to/r3d
+
+# Override version detection
+dotnet run -- -v 0.8.0
 ```
 
 **After regeneration**, you MUST:
@@ -109,14 +126,15 @@ dotnet run -- -p /path/to/r3d -v 0.7.0 -o /path/to/output
 - Only build locally when you need to test bindings changes immediately
 
 ```bash
-# In r3d repository
+# Build from the submodule
+cd External/r3d
 mkdir -p build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON \
       -DR3D_ASSIMP_VENDORED=ON -DR3D_RAYLIB_VENDORED=ON ..
 cmake --build . --config Release -j8
 
 # Copy DLLs to R3D-cs for local testing (DO NOT COMMIT)
-cp bin/Release/*.dll /path/to/R3D-cs/R3D-cs/runtimes/win-x64/native/
+cp bin/Release/*.dll ../../../R3D-cs/runtimes/win-x64/native/
 ```
 
 **Note**: Native DLLs in `runtimes/*/native/` are already in `.gitignore` and will not be committed. CI automatically builds and packages them for all platforms during the release process.
@@ -179,6 +197,9 @@ Generates three file types:
 ## Project File Structure
 
 ```
+External/
+└── r3d/            # Git submodule — upstream r3d source (headers + build system)
+
 R3D-cs/
 ├── enums/          # Auto-generated enums (*.g.cs)
 ├── types/          # Auto-generated structs (*.g.cs)
@@ -205,4 +226,4 @@ Examples/
 
 - **Raylib-cs** (7.0.2): C# bindings for raylib, required dependency
 - **CppAst** (0.24.0): C/C++ parser for header files (bindings generator only)
-- **r3d native libraries**: Included in `runtimes/`, built from r3d source
+- **r3d native libraries**: Included in `runtimes/`, built from r3d source (pinned via `External/r3d` submodule)

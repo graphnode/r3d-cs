@@ -14,8 +14,15 @@ internal static class Program
     {
         Option<string> pathOption = new("--path", "-p")
         {
-            Description = "Path to local r3d repository with the header files to parse",
-            Required = true,
+            Description = "Path to local r3d repository with the header files to parse (default: External/r3d submodule)",
+            DefaultValueFactory = _ =>
+            {
+                string? solutionRoot = FindSolutionRoot(Directory.GetCurrentDirectory());
+                if (solutionRoot == null)
+                    throw new DirectoryNotFoundException("Could not find solution root (no .sln file found in parent directories)");
+
+                return Path.Combine(solutionRoot, "External", "r3d");
+            },
         };
 
         Option<string?> versionOption = new("--version", "-v")
@@ -111,16 +118,6 @@ internal static class Program
 
                 var generator = new CodeGenerator(outputDir);
                 generator.Generate(compilation, version);
-
-                // Write .r3d-upstream to solution root
-                string? solutionRoot = FindSolutionRoot(Directory.GetCurrentDirectory());
-                if (solutionRoot != null)
-                {
-                    string upstreamFile = Path.Combine(solutionRoot, ".r3d-upstream");
-                    WriteUpstreamFile(upstreamFile, commitSha, tag);
-                    Console.WriteLine();
-                    Console.WriteLine($"Updated {upstreamFile}");
-                }
             }
             catch (Exception ex)
             {
@@ -208,13 +205,5 @@ internal static class Program
             dir = Directory.GetParent(dir)?.FullName;
         }
         return dir;
-    }
-
-    private static void WriteUpstreamFile(string filePath, string commitSha, string? tag)
-    {
-        using var writer = new StreamWriter(filePath);
-        writer.NewLine = "\n";
-        writer.WriteLine($"R3D_UPSTREAM_COMMIT={commitSha}");
-        writer.WriteLine($"R3D_UPSTREAM_TAG={tag ?? ""}");
     }
 }

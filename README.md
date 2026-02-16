@@ -24,10 +24,12 @@ dotnet add package R3D-cs --prerelease
 
 ## Installation - Manual (Hard mode)
 
-1. Download/clone the repo.
-2. Add the R3D-cs project to your solution as an existing project.
-3. Download/build the native libraries from R3D repository (check the Actions tab for artifacts) and from raylib releases.
-4. Make sure the native libraries are in the same folder as the output.
+1. Clone the repo with submodules:
+   ```
+   git clone --recursive https://github.com/graphnode/r3d-cs.git
+   ```
+2. Add the `R3D-cs` project to your solution as an existing project.
+3. Build the native libraries from the `External/r3d` submodule (see [Building](#building)) and copy them to `R3D-cs/runtimes/<rid>/native/`.
 
 ## Requirements
 
@@ -104,6 +106,38 @@ Raylib.CloseWindow();
 
 - [r3d documentation](https://github.com/Bigfoot71/r3d)
 - [raylib-cs documentation](https://github.com/ChrisDill/Raylib-cs)
+
+## Building
+
+```bash
+dotnet build R3D-cs.sln
+```
+
+### Updating r3d upstream
+
+The r3d source is included as a git submodule at `External/r3d`. To update to a newer version:
+
+```bash
+cd External/r3d
+git fetch origin
+git checkout <new-tag-or-commit>   # e.g. git checkout v0.9
+cd ../..
+git add External/r3d
+```
+
+After updating, regenerate the bindings and rebuild the native libraries:
+
+```bash
+# Regenerate C# bindings
+cd R3D-cs.GenerateBindings
+dotnet run
+
+# Build native libraries for local testing
+cd ../External/r3d
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON \
+      -DR3D_ASSIMP_VENDORED=ON -DR3D_RAYLIB_VENDORED=ON
+cmake --build build --config Release
+```
 
 ## Contributing
 
