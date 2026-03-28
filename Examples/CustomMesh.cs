@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using R3D_cs;
 using Raylib_cs;
@@ -48,7 +49,7 @@ public static class CustomMesh
         indices[2] = 2;
 
         // Generate tangents for the mesh data
-        R3D.GenMeshDataTangents(ref meshData);
+        R3D.GenMeshDataTangents(ref meshData, PrimitiveType.Triangles);
 
         // Upload to GPU
         var mesh = R3D.LoadMesh(PrimitiveType.Triangles, meshData, MeshUsage.StaticMesh);

@@ -31,7 +31,7 @@ public enum UpscaleMode
     Linear,
 
     /// <summary>
-    /// Bicubic (Catmull-Rom) upscaling: slower, smoother, and less blurry than linear.
+    /// Bicubic upscaling: slower, smoother, and less blurry than linear.
     /// </summary>
     /// <remarks>
     /// Native: <c>R3D_UpscaleMode.R3D_UPSCALE_BICUBIC</c>

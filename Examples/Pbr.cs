@@ -17,7 +17,7 @@ public static class Pbr
 
         // Initialize R3D
         R3D.Init(GetScreenWidth(), GetScreenHeight());
-        R3D.SetAntiAliasing(AntiAliasing.Fxaa);
+        R3D.SetAntiAliasingMode(AntiAliasingMode.Fxaa);
 
         var cubemap = R3D.LoadCubemap("resources/panorama/indoor.hdr", CubemapLayout.AutoDetect);
         var ambientMap = R3D.GenAmbientMap(cubemap, AmbientFlags.Illumination | AmbientFlags.Reflection);

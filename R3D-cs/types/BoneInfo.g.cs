@@ -4,6 +4,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Raylib_cs;
 
 namespace R3D_cs;
@@ -26,7 +27,28 @@ public unsafe struct BoneInfo
     /// <remarks>
     /// Native: <c>name</c>
     /// </remarks>
-    public fixed byte Name[32];
+    internal fixed byte _name[32];
+
+    /// <inheritdoc cref="_name"/>
+    public string Name
+    {
+        get
+        {
+            fixed (byte* ptr = _name)
+            {
+                int len = 0;
+                while (len < 32 && ptr[len] != 0) len++;
+                return Encoding.UTF8.GetString(ptr, len);
+            }
+        }
+        set
+        {
+            byte[] utf8 = Encoding.UTF8.GetBytes(value);
+            int len = Math.Min(utf8.Length, 31);
+            for (int i = 0; i < len; i++) _name[i] = utf8[i];
+            _name[len] = 0;
+        }
+    }
 
     /// <summary>
     /// Index of the parent bone (-1 if root).

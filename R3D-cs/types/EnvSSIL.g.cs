@@ -4,6 +4,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Raylib_cs;
 
 namespace R3D_cs;
@@ -11,7 +12,10 @@ namespace R3D_cs;
 /// <summary>
 /// Screen Space Indirect Lighting (SSIL) settings.
 /// <para>
-/// Approximates indirect lighting by gathering light from nearby surfaces in screen space.
+/// Approximates indirect lighting by gathering light from nearby visible surfaces in screen space.
+/// </para>
+/// <para>
+/// With a small radius, SSIL behaves like an extension of SSAO, producing a very subtle local blending of light and surface hues. With a larger radius, it becomes a better complement to SSGI, reinforcing indirect lighting over a wider area.
 /// </para>
 /// </summary>
 /// <remarks>
@@ -21,7 +25,7 @@ namespace R3D_cs;
 public struct EnvSSIL
 {
     /// <summary>
-    /// Number of samples to compute indirect lighting (default: 4)
+    /// Number of samples to compute indirect lighting (default: 2)
     /// </summary>
     /// <remarks>
     /// Native: <c>sampleCount</c>
@@ -37,23 +41,31 @@ public struct EnvSSIL
     public int SliceCount;
 
     /// <summary>
-    /// Maximum distance to gather light from (default: 5.0)
+    /// Maximum distance to gather light from (default: 2.0)
     /// </summary>
     /// <remarks>
-    /// Native: <c>sampleRadius</c>
+    /// Native: <c>radius</c>
     /// </remarks>
-    public float SampleRadius;
+    public float Radius;
 
     /// <summary>
-    /// Thickness threshold for occluders (default: 0.5)
+    /// Thickness threshold for occluders (default: 1.0)
     /// </summary>
     /// <remarks>
-    /// Native: <c>hitThickness</c>
+    /// Native: <c>thickness</c>
     /// </remarks>
-    public float HitThickness;
+    public float Thickness;
 
     /// <summary>
-    /// Exponential falloff for visibility factor (too high = more noise) (default: 1.0)
+    /// IL intensity multiplier (default: 1.0)
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>intensity</c>
+    /// </remarks>
+    public float Intensity;
+
+    /// <summary>
+    /// AO exponent/power (default: 1.0)
     /// </summary>
     /// <remarks>
     /// Native: <c>aoPower</c>
@@ -61,28 +73,12 @@ public struct EnvSSIL
     public float AoPower;
 
     /// <summary>
-    /// Multiplier for indirect light intensity (default: 1.0)
+    /// Number of denoiser iterations (default: 4)
     /// </summary>
     /// <remarks>
-    /// Native: <c>energy</c>
+    /// Native: <c>denoiseSteps</c>
     /// </remarks>
-    public float Energy;
-
-    /// <summary>
-    /// Bounce feeback factor. (default: 0.5) Simulates light bounces by re-injecting the SSIL from the previous frame into the current direct light. Be careful not to make the factor too high in order to avoid a feedback loop.
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>bounce</c>
-    /// </remarks>
-    public float Bounce;
-
-    /// <summary>
-    /// Temporal convergence factor (0 disables it, default 0.5). Smooths sudden light flashes by blending with previous frames. Higher values produce smoother results but may cause ghosting. Tip: The faster the screen changes, the higher the convergence can be acceptable. Requires an additional history buffer (so require more memory). If multiple SSIL passes are done in the same frame, the history may be inconsistent, in that case, enable SSIL/convergence for only one pass per frame.
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>convergence</c>
-    /// </remarks>
-    public float Convergence;
+    public int DenoiseSteps;
 
     /// <summary>
     /// Enable/disable SSIL effect (default: false)

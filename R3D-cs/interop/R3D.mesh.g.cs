@@ -21,7 +21,7 @@ public static unsafe partial class R3D
     /// Creates a 3D mesh from CPU-side mesh data.
     /// </summary>
     /// <param name="type">Primitive type used to interpret vertex data.</param>
-    /// <param name="data">R3D_MeshData containing vertices and indices (cannot be NULL).</param>
+    /// <param name="data">R3D_MeshData containing vertices and indices (can be zero initialized).</param>
     /// <param name="aabb">Optional pointer to a bounding box. If NULL, it will be computed automatically.</param>
     /// <param name="usage">Hint on how the mesh will be used.</param>
     /// <returns>Created R3D_Mesh.</returns>

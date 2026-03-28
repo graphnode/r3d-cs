@@ -36,6 +36,9 @@ public enum OutputMode
     /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_SSIL</c></remarks>
     Ssil,
 
+    /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_SSGI</c></remarks>
+    Ssgi,
+
     /// <remarks>Native: <c>R3D_OutputMode.R3D_OUTPUT_SSR</c></remarks>
     Ssr,
 

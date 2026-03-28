@@ -4,6 +4,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Raylib_cs;
 
 namespace R3D_cs;
@@ -51,6 +52,14 @@ public struct Environment
     /// Native: <c>ssil</c>
     /// </remarks>
     public EnvSSIL Ssil;
+
+    /// <summary>
+    /// Screen space global illumination
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>ssgi</c>
+    /// </remarks>
+    public EnvSSGI Ssgi;
 
     /// <summary>
     /// Screen space reflections

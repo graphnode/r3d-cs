@@ -23,7 +23,7 @@ public enum DownscaleMode
     Nearest,
 
     /// <summary>
-    /// Bilinear downscaling: very fast, can serve as a basic form of anti-aliasing (SSAA).
+    /// Bilinear filtering. Fast, may show moire on high-frequency content.
     /// </summary>
     /// <remarks>
     /// Native: <c>R3D_DownscaleMode.R3D_DOWNSCALE_LINEAR</c>
@@ -31,10 +31,18 @@ public enum DownscaleMode
     Linear,
 
     /// <summary>
-    /// Box-blur downscaling: uses a simple but effective box blur, slightly more expensive than linear, smooths moiré better.
+    /// 4-sample supersampling. Reduces aliasing and moire, low cost. Recommended default.
     /// </summary>
     /// <remarks>
-    /// Native: <c>R3D_DownscaleMode.R3D_DOWNSCALE_BOX</c>
+    /// Native: <c>R3D_DownscaleMode.R3D_DOWNSCALE_RGSS</c>
     /// </remarks>
-    Box,
+    Rgss,
+
+    /// <summary>
+    /// 16-sample supersampling. Better color accuracy than RGSS, higher cost.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_DownscaleMode.R3D_DOWNSCALE_PDSS</c>
+    /// </remarks>
+    Pdss,
 }

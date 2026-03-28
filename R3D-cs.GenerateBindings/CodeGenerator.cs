@@ -28,7 +28,8 @@ public class CodeGenerator(string outputDir)
         {
             if (!IsR3DSource(@class.SourceFile))
                 continue;
-            if (@class.ClassKind == CppClassKind.Struct && @class.Fields.Count == 0)
+            if (@class.Fields.Count == 0 &&
+                @class.ClassKind is CppClassKind.Struct or CppClassKind.Union)
                 TypeMapper.OpaqueTypes.Add(@class.Name);
         }
 
@@ -94,13 +95,17 @@ public class CodeGenerator(string outputDir)
             string prefix = name;
             if (name.EndsWith("Mode", StringComparison.OrdinalIgnoreCase)) prefix = name[..^4];
             if (name.EndsWith("Type", StringComparison.OrdinalIgnoreCase)) prefix = name[..^4];
+            if (name.EndsWith("Status", StringComparison.OrdinalIgnoreCase)) prefix = name[..^6];
 
             for (var i = 0; i < @enum.Items.Count; i++)
             {
                 var item = @enum.Items[i];
                 string itemName = ToPascalCase(StripR3DPrefix(item.Name));
 
-                if (itemName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                // Try stripping full name first, then shorter prefix (handles "Mode"/"Type" in values)
+                if (itemName.StartsWith(name, StringComparison.OrdinalIgnoreCase))
+                    itemName = itemName[name.Length..];
+                else if (itemName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                     itemName = itemName[prefix.Length..];
 
                 bool hasComment = CommentGenerator.Generate(sb, item.Comment, $"{@enum.Name}.{item.Name}", "    ");
@@ -162,24 +167,28 @@ public class CodeGenerator(string outputDir)
         if (ExplicitCountExpressions.TryGetValue((nativeStructName, cFieldName), out string? expr))
             return expr;
 
-        // 2. Common-prefix match: count field name minus "Count" must share a significant
-        //    common prefix with the pointer field name.  This handles Latin plurals where
-        //    the singular is NOT a prefix of the plural (Vertex→Vertices, Index→Indices).
+        // 2. Common-prefix match: field name minus "Count"/"Capacity" suffix must share a
+        //    significant common prefix with the pointer field name.  When both a Count and
+        //    Capacity field match, prefer Capacity (it represents the allocated size).
         string? bestMatch = null;
         var bestLen = 0;
+        bool bestIsCapacity = false;
         foreach (var (csName, _) in countFields)
         {
-            if (csName.Length <= 5 || !csName.EndsWith("Count", StringComparison.OrdinalIgnoreCase))
+            bool isCapacity = csName.EndsWith("Capacity", StringComparison.OrdinalIgnoreCase) && csName.Length > 8;
+            bool isCount = csName.EndsWith("Count", StringComparison.OrdinalIgnoreCase) && csName.Length > 5;
+            if (!isCapacity && !isCount)
                 continue;
 
-            string prefix = csName[..^5];
+            string prefix = isCapacity ? csName[..^8] : csName[..^5];
             int commonLen = CommonPrefixLength(csFieldName, prefix);
             int threshold = Math.Max(3, prefix.Length - 2);
 
-            if (commonLen >= threshold && commonLen > bestLen)
+            if (commonLen >= threshold && (commonLen > bestLen || (commonLen == bestLen && isCapacity && !bestIsCapacity)))
             {
                 bestMatch = csName;
                 bestLen = commonLen;
+                bestIsCapacity = isCapacity;
             }
         }
         if (bestMatch != null)
@@ -207,11 +216,16 @@ public class CodeGenerator(string outputDir)
             if (!IsR3DSource(@class.SourceFile))
                 continue;
 
-            if (@class.ClassKind != CppClassKind.Struct)
+            // Skip non-opaque unions (C unions with fields can't be represented as C# structs)
+            // Opaque unions (no fields) are generated as wrapper structs with nint handle
+            if (@class.ClassKind == CppClassKind.Union && @class.Fields.Count > 0)
+                continue;
+
+            if (@class.ClassKind is not (CppClassKind.Struct or CppClassKind.Union))
                 throw new Exception($"Unexpected class kind: {@class.ClassKind}");
 
             var sb = new StringBuilder();
-            GenerateHeader(sb, ["System", "System.Numerics", "System.Runtime.InteropServices", "Raylib_cs"]);
+            GenerateHeader(sb, ["System", "System.Numerics", "System.Runtime.InteropServices", "System.Text", "Raylib_cs"]);
 
             string className = StripR3DPrefix(@class.Name);
             bool needsUnsafe = @class.Fields.Select(f => MapType(f.Type)).Any(r => r.isUnsafe);
@@ -268,7 +282,8 @@ public class CodeGenerator(string outputDir)
                     voidPointerFields.Add((emitName, fieldName, field.Name));
 
                 if (!isFixedBuffer && fieldType is "int" or "uint"
-                    && fieldName.EndsWith("Count", StringComparison.OrdinalIgnoreCase))
+                    && (fieldName.EndsWith("Count", StringComparison.OrdinalIgnoreCase)
+                        || fieldName.EndsWith("Capacity", StringComparison.OrdinalIgnoreCase)))
                     countFields.Add((fieldName, field.Name));
 
                 fieldInfos.Add((field, fieldType, fieldName, emitName, access, isFixedBuffer, fixedSize));
@@ -293,12 +308,46 @@ public class CodeGenerator(string outputDir)
                 // Count fields consumed by a Span property become internal
                 string finalAccess = usedCountFields.Contains(fieldName) ? "internal" : access;
 
-                CommentGenerator.Generate(sb, field.Comment, field.Name, "    ");
+                // Detect char[] fixed buffers → emit backing field + ReadOnlySpan<byte> setter property
+                bool isStringBuffer = isFixedBuffer
+                    && field.Type is CppArrayType { ElementType: CppPrimitiveType { Kind: CppPrimitiveKind.Char } };
 
-                if (isFixedBuffer)
-                    sb.AppendLine($"    {finalAccess} fixed {fieldType} {emitName}[{fixedSize}];");
+                if (isStringBuffer)
+                {
+                    string backingName = $"_{char.ToLower(fieldName[0])}{fieldName[1..]}";
+                    int maxLen = fixedSize - 1;
+                    CommentGenerator.Generate(sb, field.Comment, field.Name, "    ");
+                    sb.AppendLine($"    internal fixed {fieldType} {backingName}[{fixedSize}];");
+                    sb.AppendLine();
+                    sb.AppendLine($"    /// <inheritdoc cref=\"{backingName}\"/>");
+                    sb.AppendLine($"    public string {fieldName}");
+                    sb.AppendLine( "    {");
+                    sb.AppendLine( "        get");
+                    sb.AppendLine( "        {");
+                    sb.AppendLine($"            fixed (byte* ptr = {backingName})");
+                    sb.AppendLine( "            {");
+                    sb.AppendLine($"                int len = 0;");
+                    sb.AppendLine($"                while (len < {fixedSize} && ptr[len] != 0) len++;");
+                    sb.AppendLine($"                return Encoding.UTF8.GetString(ptr, len);");
+                    sb.AppendLine( "            }");
+                    sb.AppendLine( "        }");
+                    sb.AppendLine( "        set");
+                    sb.AppendLine( "        {");
+                    sb.AppendLine($"            byte[] utf8 = Encoding.UTF8.GetBytes(value);");
+                    sb.AppendLine($"            int len = Math.Min(utf8.Length, {maxLen});");
+                    sb.AppendLine($"            for (int i = 0; i < len; i++) {backingName}[i] = utf8[i];");
+                    sb.AppendLine($"            {backingName}[len] = 0;");
+                    sb.AppendLine( "        }");
+                    sb.AppendLine( "    }");
+                }
                 else
-                    sb.AppendLine($"    {finalAccess} {fieldType} {emitName};");
+                {
+                    CommentGenerator.Generate(sb, field.Comment, field.Name, "    ");
+                    if (isFixedBuffer)
+                        sb.AppendLine($"    {finalAccess} fixed {fieldType} {emitName}[{fixedSize}];");
+                    else
+                        sb.AppendLine($"    {finalAccess} {fieldType} {emitName};");
+                }
 
                 sb.AppendLine();
             }
@@ -369,7 +418,7 @@ public class CodeGenerator(string outputDir)
                         var param = funcType.Parameters[i];
 
                         (string paramType, _, _, _) = MapType(param.Type);
-                        sb.Append($"{StripR3DPrefix(paramType)} {param.Name}");
+                        sb.Append($"{StripR3DPrefix(paramType)} {EscapeIdentifier(param.Name)}");
 
                         if (i < funcType.Parameters.Count - 1)
                             sb.Append(", ");

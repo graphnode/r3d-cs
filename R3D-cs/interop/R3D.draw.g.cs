@@ -120,7 +120,7 @@ public static unsafe partial class R3D
     /// <summary>
     /// Queues an instanced mesh draw command.
     /// <para>
-    /// Draws multiple instances using the provided instance buffer.
+    /// Draws multiple instances using the provided instance buffer. Does nothing if the number of instances is &lt; = 0.
     /// </para>
     /// <para>
     /// The command is executed during R3D_End().
@@ -133,9 +133,13 @@ public static unsafe partial class R3D
     public static partial void DrawMeshInstanced(Mesh mesh, Material material, InstanceBuffer instances, int count);
 
     /// <summary>
-    /// Queues an instanced mesh draw command with an additional transform.
+    /// Queues an instanced mesh draw command with an instance range.
     /// <para>
-    /// The transform is applied to all instances.
+    /// Draws 'count' instances starting at 'offset' in the instance buffer. Both 'offset' and 'count' are clamped to stay within [0, instances.capacity]:
+    /// <list type="bullet">
+    /// <item><description>offset is clamped to [0, capacity]</description></item>
+    /// <item><description>count is clamped to [0, capacity - offset] Does nothing if the resulting count is &lt; = 0.</description></item>
+    /// </list>
     /// </para>
     /// <para>
     /// The command is executed during R3D_End().
@@ -145,7 +149,26 @@ public static unsafe partial class R3D
     /// Native: <c>R3D_DrawMeshInstancedEx</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawMeshInstancedEx")]
-    public static partial void DrawMeshInstancedEx(Mesh mesh, Material material, InstanceBuffer instances, int count, Matrix4x4 transform);
+    public static partial void DrawMeshInstancedEx(Mesh mesh, Material material, InstanceBuffer instances, int offset, int count);
+
+    /// <summary>
+    /// Queues an instanced mesh draw command with an instance range and an additional transform.
+    /// <para>
+    /// Draws 'count' instances starting at 'offset' in the instance buffer. Both 'offset' and 'count' are clamped to stay within [0, instances.capacity]:
+    /// <list type="bullet">
+    /// <item><description>offset is clamped to [0, capacity]</description></item>
+    /// <item><description>count is clamped to [0, capacity - offset] Does nothing if the resulting count is &lt; = 0. The transform is applied to all instances.</description></item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// The command is executed during R3D_End().
+    /// </para>
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_DrawMeshInstancedPro</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawMeshInstancedPro")]
+    public static partial void DrawMeshInstancedPro(Mesh mesh, Material material, InstanceBuffer instances, int offset, int count, Matrix4x4 transform);
 
     /// <summary>
     /// Queues a model draw command with position and uniform scale.
@@ -186,7 +209,7 @@ public static unsafe partial class R3D
     /// <summary>
     /// Queues an instanced model draw command.
     /// <para>
-    /// Draws multiple instances using the provided instance buffer.
+    /// Draws multiple instances using the provided instance buffer. Does nothing if the number of instances is &lt; = 0.
     /// </para>
     /// <para>
     /// The command is executed during R3D_End().
@@ -199,9 +222,13 @@ public static unsafe partial class R3D
     public static partial void DrawModelInstanced(Model model, InstanceBuffer instances, int count);
 
     /// <summary>
-    /// Queues an instanced model draw command with an additional transform.
+    /// Queues an instanced model draw command with an instance range.
     /// <para>
-    /// The transform is applied to all instances.
+    /// Draws 'count' instances starting at 'offset' in the instance buffer. Both 'offset' and 'count' are clamped to stay within [0, instances.capacity]:
+    /// <list type="bullet">
+    /// <item><description>offset is clamped to [0, capacity]</description></item>
+    /// <item><description>count is clamped to [0, capacity - offset] Does nothing if the resulting count is &lt; = 0.</description></item>
+    /// </list>
     /// </para>
     /// <para>
     /// The command is executed during R3D_End().
@@ -211,7 +238,26 @@ public static unsafe partial class R3D
     /// Native: <c>R3D_DrawModelInstancedEx</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawModelInstancedEx")]
-    public static partial void DrawModelInstancedEx(Model model, InstanceBuffer instances, int count, Matrix4x4 transform);
+    public static partial void DrawModelInstancedEx(Model model, InstanceBuffer instances, int offset, int count);
+
+    /// <summary>
+    /// Queues an instanced model draw command with an instance range and an additional transform.
+    /// <para>
+    /// Draws 'count' instances starting at 'offset' in the instance buffer. Both 'offset' and 'count' are clamped to stay within [0, instances.capacity]:
+    /// <list type="bullet">
+    /// <item><description>offset is clamped to [0, capacity]</description></item>
+    /// <item><description>count is clamped to [0, capacity - offset] Does nothing if the resulting count is &lt; = 0. The transform is applied to all instances.</description></item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// The command is executed during R3D_End().
+    /// </para>
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_DrawModelInstancedPro</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawModelInstancedPro")]
+    public static partial void DrawModelInstancedPro(Model model, InstanceBuffer instances, int offset, int count, Matrix4x4 transform);
 
     /// <summary>
     /// Queues an animated model draw command.
@@ -258,7 +304,7 @@ public static unsafe partial class R3D
     /// <summary>
     /// Queues an instanced animated model draw command.
     /// <para>
-    /// Draws multiple animated instances using the provided instance buffer.
+    /// Draws multiple animated instances using the provided instance buffer. Does nothing if the number of instances is &lt; = 0.
     /// </para>
     /// <para>
     /// The command is executed during R3D_End().
@@ -271,9 +317,13 @@ public static unsafe partial class R3D
     public static partial void DrawAnimatedModelInstanced(Model model, AnimationPlayer player, InstanceBuffer instances, int count);
 
     /// <summary>
-    /// Queues an instanced animated model draw command with an additional transform.
+    /// Queues an instanced animated model draw command with an instance range.
     /// <para>
-    /// The transform is applied to all instances.
+    /// Draws 'count' animated instances starting at 'offset' in the instance buffer. Both 'offset' and 'count' are clamped to stay within [0, instances.capacity]:
+    /// <list type="bullet">
+    /// <item><description>offset is clamped to [0, capacity]</description></item>
+    /// <item><description>count is clamped to [0, capacity - offset] Does nothing if the resulting count is &lt; = 0.</description></item>
+    /// </list>
     /// </para>
     /// <para>
     /// The command is executed during R3D_End().
@@ -283,7 +333,26 @@ public static unsafe partial class R3D
     /// Native: <c>R3D_DrawAnimatedModelInstancedEx</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawAnimatedModelInstancedEx")]
-    public static partial void DrawAnimatedModelInstancedEx(Model model, AnimationPlayer player, InstanceBuffer instances, int count, Matrix4x4 transform);
+    public static partial void DrawAnimatedModelInstancedEx(Model model, AnimationPlayer player, InstanceBuffer instances, int offset, int count);
+
+    /// <summary>
+    /// Queues an instanced animated model draw command with an instance range and an additional transform.
+    /// <para>
+    /// Draws 'count' animated instances starting at 'offset' in the instance buffer. Both 'offset' and 'count' are clamped to stay within [0, instances.capacity]:
+    /// <list type="bullet">
+    /// <item><description>offset is clamped to [0, capacity]</description></item>
+    /// <item><description>count is clamped to [0, capacity - offset] Does nothing if the resulting count is &lt; = 0. The transform is applied to all instances.</description></item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// The command is executed during R3D_End().
+    /// </para>
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_DrawAnimatedModelInstancedPro</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawAnimatedModelInstancedPro")]
+    public static partial void DrawAnimatedModelInstancedPro(Model model, AnimationPlayer player, InstanceBuffer instances, int offset, int count, Matrix4x4 transform);
 
     /// <summary>
     /// Queues a decal draw command with position and uniform scale.
@@ -324,7 +393,7 @@ public static unsafe partial class R3D
     /// <summary>
     /// Queues an instanced decal draw command.
     /// <para>
-    /// Draws multiple instances using the provided instance buffer.
+    /// Draws multiple instances using the provided instance buffer. Does nothing if the number of instances is &lt; = 0.
     /// </para>
     /// <para>
     /// The command is executed during R3D_End().
@@ -337,9 +406,13 @@ public static unsafe partial class R3D
     public static partial void DrawDecalInstanced(Decal decal, InstanceBuffer instances, int count);
 
     /// <summary>
-    /// Queues an instanced decal draw command with an additional transform.
+    /// Queues an instanced decal draw command with an instance range.
     /// <para>
-    /// The transform is applied to all instances.
+    /// Draws 'count' instances starting at 'offset' in the instance buffer. Both 'offset' and 'count' are clamped to stay within [0, instances.capacity]:
+    /// <list type="bullet">
+    /// <item><description>offset is clamped to [0, capacity]</description></item>
+    /// <item><description>count is clamped to [0, capacity - offset] Does nothing if the resulting count is &lt; = 0.</description></item>
+    /// </list>
     /// </para>
     /// <para>
     /// The command is executed during R3D_End().
@@ -349,6 +422,25 @@ public static unsafe partial class R3D
     /// Native: <c>R3D_DrawDecalInstancedEx</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawDecalInstancedEx")]
-    public static partial void DrawDecalInstancedEx(Decal decal, InstanceBuffer instances, int count, Matrix4x4 transform);
+    public static partial void DrawDecalInstancedEx(Decal decal, InstanceBuffer instances, int offset, int count);
+
+    /// <summary>
+    /// Queues an instanced decal draw command with an instance range and an additional transform.
+    /// <para>
+    /// Draws 'count' instances starting at 'offset' in the instance buffer. Both 'offset' and 'count' are clamped to stay within [0, instances.capacity]:
+    /// <list type="bullet">
+    /// <item><description>offset is clamped to [0, capacity]</description></item>
+    /// <item><description>count is clamped to [0, capacity - offset] Does nothing if the resulting count is &lt; = 0. The transform is applied to all instances.</description></item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// The command is executed during R3D_End().
+    /// </para>
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_DrawDecalInstancedPro</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawDecalInstancedPro")]
+    public static partial void DrawDecalInstancedPro(Decal decal, InstanceBuffer instances, int offset, int count, Matrix4x4 transform);
 
 }

@@ -4,6 +4,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Raylib_cs;
 
 namespace R3D_cs;

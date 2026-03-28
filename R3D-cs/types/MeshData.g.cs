@@ -4,6 +4,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Raylib_cs;
 
 namespace R3D_cs;
@@ -40,12 +41,28 @@ public unsafe struct MeshData
     internal uint* _indices;
 
     /// <summary>
+    /// Capacity of vertices.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>vertexCapacity</c>
+    /// </remarks>
+    internal int VertexCapacity;
+
+    /// <summary>
+    /// Capacity of indices.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>indexCapacity</c>
+    /// </remarks>
+    internal int IndexCapacity;
+
+    /// <summary>
     /// Number of vertices.
     /// </summary>
     /// <remarks>
     /// Native: <c>vertexCount</c>
     /// </remarks>
-    internal int VertexCount;
+    public int VertexCount;
 
     /// <summary>
     /// Number of indices.
@@ -53,16 +70,16 @@ public unsafe struct MeshData
     /// <remarks>
     /// Native: <c>indexCount</c>
     /// </remarks>
-    internal int IndexCount;
+    public int IndexCount;
 
     /// <summary>
     /// <see cref="Vertices"/> as a <see cref="Span{T}"/>.
     /// </summary>
-    public Span<Vertex> Vertices => _vertices != null ? new(_vertices, VertexCount) : default;
+    public Span<Vertex> Vertices => _vertices != null ? new(_vertices, VertexCapacity) : default;
 
     /// <summary>
     /// <see cref="Indices"/> as a <see cref="Span{T}"/>.
     /// </summary>
-    public Span<uint> Indices => _indices != null ? new(_indices, IndexCount) : default;
+    public Span<uint> Indices => _indices != null ? new(_indices, IndexCapacity) : default;
 
 }

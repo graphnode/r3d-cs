@@ -22,7 +22,7 @@ public static class Kinematics
         R3D.Init(GetScreenWidth(), GetScreenHeight());
         R3D.SetTextureFilter(TextureFilter.Anisotropic8X);
 
-        var sky = R3D.GenCubemapSky(4096, R3D.CUBEMAP_SKY_BASE);
+        var sky = R3D.GenProceduralSky(4096, R3D.PROCEDURAL_SKY_BASE);
         var ambient = R3D.GenAmbientMap(sky, AmbientFlags.Illumination | AmbientFlags.Reflection);
         R3D.SetEnvironmentEx((ref env) =>
         {

@@ -4,6 +4,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Raylib_cs;
 
 namespace R3D_cs;
@@ -15,10 +16,10 @@ namespace R3D_cs;
 /// </para>
 /// </summary>
 /// <remarks>
-/// Native: <c>R3D_CubemapSky</c>
+/// Native: <c>R3D_ProceduralSky</c>
 /// </remarks>
 [StructLayout(LayoutKind.Sequential)]
-public struct CubemapSky
+public struct ProceduralSky
 {
     /// <summary>
     /// Sky color at zenith

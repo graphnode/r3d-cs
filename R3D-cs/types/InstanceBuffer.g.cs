@@ -4,6 +4,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Raylib_cs;
 
 namespace R3D_cs;
@@ -23,10 +24,10 @@ public unsafe struct InstanceBuffer
     /// <remarks>Native: <c>buffers</c></remarks>
     public fixed uint Buffers[5];
 
+    /// <remarks>Native: <c>flags</c></remarks>
+    public InstanceFlags Flags;
+
     /// <remarks>Native: <c>capacity</c></remarks>
     public int Capacity;
-
-    /// <remarks>Native: <c>flags</c></remarks>
-    public int Flags;
 
 }

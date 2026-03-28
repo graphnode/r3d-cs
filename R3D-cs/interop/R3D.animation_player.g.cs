@@ -55,17 +55,16 @@ public static unsafe partial class R3D
     public static partial bool IsAnimationPlayerValid(AnimationPlayer player);
 
     /// <summary>
-    /// Returns whether a given animation is currently playing.
+    /// Returns whether an animation is currently playing.
     /// </summary>
     /// <param name="player">Animation player.</param>
-    /// <param name="animIndex">Index of the animation.</param>
     /// <returns>true if playing, false otherwise.</returns>
     /// <remarks>
     /// Native: <c>R3D_IsAnimationPlaying</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_IsAnimationPlaying")]
     [return: MarshalAs(UnmanagedType.I1)]
-    public static partial bool IsAnimationPlaying(AnimationPlayer player, int animIndex);
+    public static partial bool IsAnimationPlaying(AnimationPlayer player);
 
     /// <summary>
     /// Starts playback of the specified animation.
@@ -79,7 +78,7 @@ public static unsafe partial class R3D
     public static partial void PlayAnimation(ref AnimationPlayer player, int animIndex);
 
     /// <summary>
-    /// Pauses the specified animation.
+    /// Pauses the current animation.
     /// </summary>
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation to pause.</param>
@@ -87,10 +86,10 @@ public static unsafe partial class R3D
     /// Native: <c>R3D_PauseAnimation</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_PauseAnimation")]
-    public static partial void PauseAnimation(ref AnimationPlayer player, int animIndex);
+    public static partial void PauseAnimation(ref AnimationPlayer player);
 
     /// <summary>
-    /// Stops the specified animation and clamps its time.
+    /// Stops the current animation and clamps its time.
     /// </summary>
     /// <param name="player">Animation player.</param>
     /// <param name="animIndex">Index of the animation to stop.</param>
@@ -98,7 +97,7 @@ public static unsafe partial class R3D
     /// Native: <c>R3D_StopAnimation</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_StopAnimation")]
-    public static partial void StopAnimation(ref AnimationPlayer player, int animIndex);
+    public static partial void StopAnimation(ref AnimationPlayer player);
 
     /// <summary>
     /// Rewinds the animation to the start or end depending on playback direction.
@@ -109,7 +108,7 @@ public static unsafe partial class R3D
     /// Native: <c>R3D_RewindAnimation</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_RewindAnimation")]
-    public static partial void RewindAnimation(ref AnimationPlayer player, int animIndex);
+    public static partial void RewindAnimation(ref AnimationPlayer player);
 
     /// <summary>
     /// Gets the current playback time of an animation.
@@ -134,30 +133,6 @@ public static unsafe partial class R3D
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetAnimationTime")]
     public static partial void SetAnimationTime(ref AnimationPlayer player, int animIndex, float time);
-
-    /// <summary>
-    /// Gets the blending weight of an animation.
-    /// </summary>
-    /// <param name="player">Animation player.</param>
-    /// <param name="animIndex">Index of the animation.</param>
-    /// <returns>Current weight.</returns>
-    /// <remarks>
-    /// Native: <c>R3D_GetAnimationWeight</c>
-    /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAnimationWeight")]
-    public static partial float GetAnimationWeight(AnimationPlayer player, int animIndex);
-
-    /// <summary>
-    /// Sets the blending weight of an animation.
-    /// </summary>
-    /// <param name="player">Animation player.</param>
-    /// <param name="animIndex">Index of the animation.</param>
-    /// <param name="weight">Blending weight to apply.</param>
-    /// <remarks>
-    /// Native: <c>R3D_SetAnimationWeight</c>
-    /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetAnimationWeight")]
-    public static partial void SetAnimationWeight(ref AnimationPlayer player, int animIndex, float weight);
 
     /// <summary>
     /// Gets the playback speed of an animation.
@@ -212,72 +187,75 @@ public static unsafe partial class R3D
     public static partial void SetAnimationLoop(ref AnimationPlayer player, int animIndex, [MarshalAs(UnmanagedType.I1)] bool loop);
 
     /// <summary>
-    /// Advances the time of all active animations.
+    /// Advances the time of the current animation.
     /// <para>
-    /// Updates all internal animation timers based on speed and delta time. Does NOT recalculate the skeleton pose.
+    /// Updates animation timer based on speed and delta time. Does NOT recalculate the skeleton pose.
     /// </para>
     /// </summary>
     /// <param name="player">Animation player.</param>
     /// <param name="dt">Delta time in seconds.</param>
     /// <remarks>
-    /// Native: <c>R3D_AdvanceAnimationPlayerTime</c>
+    /// Native: <c>R3D_AdvanceAnimationTime</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_AdvanceAnimationPlayerTime")]
-    public static partial void AdvanceAnimationPlayerTime(ref AnimationPlayer player, float dt);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_AdvanceAnimationTime")]
+    public static partial void AdvanceAnimationTime(ref AnimationPlayer player, float dt);
 
     /// <summary>
-    /// Calculates the current blended local pose of the skeleton.
+    /// Computes the local-space transform of each bone for the current animation.
     /// <para>
-    /// Interpolates keyframes and blends all active animations according to their weights, but only computes the local transforms of each bone relative to its parent. Does NOT advance animation time.
+    /// Samples and interpolates the current animation keyframes at the current playback time, and stores the resulting bone transforms in local space intoplayer-&gt;localPose. Does NOT advance animation time, and does NOT compute model-space transforms.
     /// </para>
     /// </summary>
     /// <param name="player">Animation player whose local pose will be updated.</param>
     /// <remarks>
-    /// Native: <c>R3D_CalculateAnimationPlayerLocalPose</c>
+    /// Native: <c>R3D_ComputeAnimationLocalPose</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_CalculateAnimationPlayerLocalPose")]
-    public static partial void CalculateAnimationPlayerLocalPose(ref AnimationPlayer player);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ComputeAnimationLocalPose")]
+    public static partial void ComputeAnimationLocalPose(ref AnimationPlayer player);
 
     /// <summary>
-    /// Calculates the current blended model (global) pose of the skeleton.
+    /// Computes the model-space transform of each bone from the current local pose.
     /// <para>
-    /// Interpolates keyframes and blends all active animations according to their weights, but only computes the global transforms of each bone in model space. This assumes the local pose is already up-to-date. Does NOT advance animation time.
+    /// Traverses the bone hierarchy and accumulates local transforms into model-space matrices, stored intoplayer-&gt;modelPose. This assumesplayer-&gt;localPose is already up-to-date. Does NOT sample animation keyframes, and does NOT advance animation time.
     /// </para>
     /// </summary>
     /// <param name="player">Animation player whose model pose will be updated.</param>
     /// <remarks>
-    /// Native: <c>R3D_CalculateAnimationPlayerModelPose</c>
+    /// Native: <c>R3D_ComputeAnimationModelPose</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_CalculateAnimationPlayerModelPose")]
-    public static partial void CalculateAnimationPlayerModelPose(ref AnimationPlayer player);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ComputeAnimationModelPose")]
+    public static partial void ComputeAnimationModelPose(ref AnimationPlayer player);
 
     /// <summary>
-    /// Calculates the current blended skeleton pose (local and model).
+    /// Computes both the local and model-space transforms for the current animation.
     /// <para>
-    /// Interpolates keyframes and blends all active animations according to their weights, then computes both local and model transforms for the entire skeleton. Does NOT advance animation time.
+    /// Equivalent to calling R3D_ComputeAnimationLocalPose() followed by R3D_ComputeAnimationModelPose(). Does NOT advance animation time.
     /// </para>
     /// </summary>
     /// <param name="player">Animation player whose local and model poses will be updated.</param>
     /// <remarks>
-    /// Native: <c>R3D_CalculateAnimationPlayerPose</c>
+    /// Native: <c>R3D_ComputeAnimationPose</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_CalculateAnimationPlayerPose")]
-    public static partial void CalculateAnimationPlayerPose(ref AnimationPlayer player);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ComputeAnimationPose")]
+    public static partial void ComputeAnimationPose(ref AnimationPlayer player);
 
     /// <summary>
-    /// Calculates the skinning matrices and uploads them to the GPU.
-    /// </summary>
-    /// <param name="player">Animation player.</param>
-    /// <remarks>
-    /// Native: <c>R3D_UploadAnimationPlayerPose</c>
-    /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_UploadAnimationPlayerPose")]
-    public static partial void UploadAnimationPlayerPose(ref AnimationPlayer player);
-
-    /// <summary>
-    /// Updates the animation player: calculates and upload blended pose, then advances time.
+    /// Computes the final skinning matrices and uploads them to the GPU.
     /// <para>
-    /// Equivalent to calling R3D_CalculateAnimationPlayerPose() followed by R3D_UploadAnimationPlayerPose() and R3D_AdvanceAnimationPlayerTime().
+    /// Multiplies each bone's model-space transform by its inverse bind matrix to produce the skinning matrices, then uploads them to the GPU skin texture. This assumesplayer-&gt;modelPose is already up-to-date.
+    /// </para>
+    /// </summary>
+    /// <param name="player">Animation player whose skinning matrices will be uploaded.</param>
+    /// <remarks>
+    /// Native: <c>R3D_UploadAnimationPose</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_UploadAnimationPose")]
+    public static partial void UploadAnimationPose(ref AnimationPlayer player);
+
+    /// <summary>
+    /// Updates the animation player: calculates and upload the current pose pose, then advances time.
+    /// <para>
+    /// Equivalent to calling R3D_ComputeAnimationLocalPose() followed by R3D_ComputeAnimationModelPose() and R3D_AdvanceAnimationTime().
     /// </para>
     /// </summary>
     /// <param name="player">Animation player.</param>

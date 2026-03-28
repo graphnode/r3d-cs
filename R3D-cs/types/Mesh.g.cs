@@ -4,6 +4,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Raylib_cs;
 
 namespace R3D_cs;
@@ -45,7 +46,23 @@ public struct Mesh
     public uint Ebo;
 
     /// <summary>
-    /// Number of vertices and indices currently in use.
+    /// Number of vertices allocated in GPU buffers.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>vertexCapacity</c>
+    /// </remarks>
+    public int VertexCapacity;
+
+    /// <summary>
+    /// Number of indices allocated in GPU buffers.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>indexCapacity</c>
+    /// </remarks>
+    public int IndexCapacity;
+
+    /// <summary>
+    /// Number of vertices currently in use.
     /// </summary>
     /// <remarks>
     /// Native: <c>vertexCount</c>
@@ -53,28 +70,12 @@ public struct Mesh
     public int VertexCount;
 
     /// <summary>
-    /// Number of vertices and indices currently in use.
+    /// Number of indices currently in use.
     /// </summary>
     /// <remarks>
     /// Native: <c>indexCount</c>
     /// </remarks>
     public int IndexCount;
-
-    /// <summary>
-    /// Number of vertices and indices allocated in GPU buffers.
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>allocVertexCount</c>
-    /// </remarks>
-    public int AllocVertexCount;
-
-    /// <summary>
-    /// Number of vertices and indices allocated in GPU buffers.
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>allocIndexCount</c>
-    /// </remarks>
-    public int AllocIndexCount;
 
     /// <summary>
     /// Shadow casting mode for the mesh.

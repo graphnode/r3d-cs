@@ -33,7 +33,8 @@ public static class ExampleList
         new("Sun", Sun.Main),
         new("Dof", Dof.Main),
         new("Decal", Decal.Main),
-        new("CustomMesh", CustomMesh.Main)
+        new("CustomMesh", CustomMesh.Main),
+        new("AnimTree", AnimTree.Main)
     ];
 
     public static ExampleInfo? GetExample(string name)

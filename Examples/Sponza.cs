@@ -78,7 +78,7 @@ public static class Sponza
 
             // Toggle FXAA
             if (IsKeyPressed(KeyboardKey.Five))
-                R3D.SetAntiAliasing(R3D.GetAntiAliasing() == AntiAliasing.Disabled ? AntiAliasing.Fxaa : AntiAliasing.Disabled);
+                R3D.SetAntiAliasingMode(R3D.GetAntiAliasingMode() == AntiAliasingMode.None ? AntiAliasingMode.Fxaa : AntiAliasingMode.None);
 
             // Cycle tonemapping
             if (IsMouseButtonPressed(MouseButton.Left))

@@ -44,6 +44,53 @@ public static unsafe partial class R3D
     public static partial void SetDefaultMaterial(Material material);
 
     /// <summary>
+    /// Load materials from a file.
+    /// <para>
+    /// Parses a 3D model file and loads its associated materials.
+    /// </para>
+    /// </summary>
+    /// <param name="filePath">Path to the 3D model file.</param>
+    /// <param name="materialCount">Pointer to an integer to store the number of loaded materials.</param>
+    /// <returns>Pointer to an array of loaded R3D_Material, or NULL on failure.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_LoadMaterials</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadMaterials", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial Material* LoadMaterials(string filePath, ref int materialCount);
+
+    /// <summary>
+    /// Load materials from memory.
+    /// <para>
+    /// Loads materials directly from a memory buffer containing 3D model data.
+    /// </para>
+    /// </summary>
+    /// <param name="data">Pointer to the memory buffer containing the model data.</param>
+    /// <param name="size">Size of the data buffer in bytes.</param>
+    /// <param name="hint">Hint on the model format (can be NULL).</param>
+    /// <param name="materialCount">Pointer to an integer to store the number of loaded materials.</param>
+    /// <returns>Pointer to an array of loaded R3D_Material, or NULL on failure.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_LoadMaterialsFromMemory</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadMaterialsFromMemory", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial Material* LoadMaterialsFromMemory(void* data, uint size, string hint, ref int materialCount);
+
+    /// <summary>
+    /// Load materials from an importer.
+    /// <para>
+    /// Loads materials that were previously imported via an R3D_Importer instance.
+    /// </para>
+    /// </summary>
+    /// <param name="importer">Pointer to a valid R3D_Importer.</param>
+    /// <param name="materialCount">Pointer to an integer to store the number of loaded materials.</param>
+    /// <returns>Pointer to an array of loaded R3D_Material, or NULL on failure.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_LoadMaterialsFromImporter</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadMaterialsFromImporter")]
+    public static partial Material* LoadMaterialsFromImporter(Importer importer, ref int materialCount);
+
+    /// <summary>
     /// Unload a material and its associated textures.
     /// <para>
     /// Frees all memory associated with a material, including its textures. This function will unload all textures that are not default textures.
@@ -79,7 +126,7 @@ public static unsafe partial class R3D
     /// Same behavior as R3D_LoadAlbedoMap(), but reads from memory instead of disk.
     /// </para>
     /// </summary>
-    /// <param name="fileType">Image format hint (e.g. &quot;png&quot;, &quot;jpg&quot;).</param>
+    /// <param name="fileType">Image format hint (e.g. &quot;.png&quot;, &quot;.jpg&quot;).</param>
     /// <param name="fileData">Pointer to image data.</param>
     /// <param name="dataSize">Size of image data in bytes.</param>
     /// <param name="color">Multiplicative tint applied in the shader.</param>
@@ -125,7 +172,7 @@ public static unsafe partial class R3D
     /// Same behavior as R3D_LoadEmissionMap(), but reads from memory.
     /// </para>
     /// </summary>
-    /// <param name="fileType">Image format hint.</param>
+    /// <param name="fileType">Image format hint (e.g. &quot;.png&quot;, &quot;.jpg&quot;).</param>
     /// <param name="fileData">Pointer to image data.</param>
     /// <param name="dataSize">Size of image data in bytes.</param>
     /// <param name="color">Emission color.</param>
@@ -171,7 +218,7 @@ public static unsafe partial class R3D
     /// Same behavior as R3D_LoadNormalMap(), but reads from memory.
     /// </para>
     /// </summary>
-    /// <param name="fileType">Image format hint.</param>
+    /// <param name="fileType">Image format hint (e.g. &quot;.png&quot;, &quot;.jpg&quot;).</param>
     /// <param name="fileData">Pointer to image data.</param>
     /// <param name="dataSize">Size of image data in bytes.</param>
     /// <param name="scale">Normal intensity multiplier.</param>
@@ -218,7 +265,7 @@ public static unsafe partial class R3D
     /// Same behavior as R3D_LoadOrmMap(), but reads from memory.
     /// </para>
     /// </summary>
-    /// <param name="fileType">Image format hint.</param>
+    /// <param name="fileType">Image format hint (e.g. &quot;.png&quot;, &quot;.jpg&quot;).</param>
     /// <param name="fileData">Pointer to image data.</param>
     /// <param name="dataSize">Size of image data in bytes.</param>
     /// <param name="occlusion">Occlusion multiplier.</param>

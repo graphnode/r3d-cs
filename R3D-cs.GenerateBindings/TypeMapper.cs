@@ -39,7 +39,9 @@ public static class TypeMapper
         {
             CppPrimitiveType pt => MapPrimitiveType(pt),
             CppPointerType ptr => MapPointerType(ptr),
-            CppArrayType arr => (MapType(arr.ElementType).csType, true, true, arr.Size),
+            CppArrayType arr => MapType(arr.ElementType).csType == "string"
+                ? ("byte**", true, false, 0) // const char*[] → byte**
+                : (MapType(arr.ElementType).csType, true, true, arr.Size),
             CppQualifiedType qt => MapType(qt.ElementType),
             CppTypedef td => MapTypedefType(td.Name),
             CppClass cls => MapStructType(cls.Name),
@@ -74,7 +76,9 @@ public static class TypeMapper
         {
             CppPrimitiveType { Kind: CppPrimitiveKind.Void } => ("IntPtr", false, false, 0),
             CppQualifiedType { ElementType: CppPrimitiveType { Kind: CppPrimitiveKind.Char } } => ("string", false, false, 0), // const char*
+            CppFunctionType => ("IntPtr", false, false, 0), // function pointer → IntPtr
             _ when IsOpaqueType(ptr.ElementType) => (MapType(ptr.ElementType).csType, false, false, 0), // Type* → Type (by value)
+            _ when MapType(ptr.ElementType).csType == "string" => ("byte**", true, false, 0), // const char** → byte**
             _ => (MapType(ptr.ElementType).csType + "*", true, false, 0)
         };
     }

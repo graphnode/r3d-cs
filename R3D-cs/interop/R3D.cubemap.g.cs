@@ -42,18 +42,6 @@ public static unsafe partial class R3D
     public static partial Cubemap LoadCubemapFromImage(Image image, CubemapLayout layout);
 
     /// <summary>
-    /// Generates a procedural sky cubemap.
-    /// <para>
-    /// Creates a GPU cubemap with procedural gradient sky and sun rendering. The cubemap is ready for use as environment map or IBL source.
-    /// </para>
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>R3D_GenCubemapSky</c>
-    /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_GenCubemapSky")]
-    public static partial Cubemap GenCubemapSky(int size, CubemapSky @params);
-
-    /// <summary>
     /// Releases GPU resources associated with a cubemap.
     /// </summary>
     /// <remarks>
@@ -61,17 +49,5 @@ public static unsafe partial class R3D
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadCubemap")]
     public static partial void UnloadCubemap(Cubemap cubemap);
-
-    /// <summary>
-    /// Updates an existing procedural sky cubemap.
-    /// <para>
-    /// Re-renders the cubemap with new parameters. Faster than unload + generate when animating sky conditions (time of day, weather, etc.).
-    /// </para>
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>R3D_UpdateCubemapSky</c>
-    /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_UpdateCubemapSky")]
-    public static partial void UpdateCubemapSky(ref Cubemap cubemap, CubemapSky @params);
 
 }

@@ -20,7 +20,7 @@ public static class Dof
 
         // Initialize R3D with FXAA
         R3D.Init(GetScreenWidth(), GetScreenHeight());
-        R3D.SetAntiAliasing(AntiAliasing.Fxaa);
+        R3D.SetAntiAliasingMode(AntiAliasingMode.Fxaa);
 
         // Configure depth of field and background
         R3D.SetEnvironmentEx((ref env) =>

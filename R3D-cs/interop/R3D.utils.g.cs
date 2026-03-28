@@ -64,7 +64,7 @@ public static unsafe partial class R3D
     /// </summary>
     /// <returns>The normal buffer texture.</returns>
     /// <remarks>
-    /// You can find the decoding functions in the embedded shaders, such as 'screen/lighting.fs.glsl'.
+    /// You can find the decoding functions in 'shaders/include/math.glsl'.
     /// Native: <c>R3D_GetBufferNormal</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetBufferNormal")]
@@ -73,7 +73,7 @@ public static unsafe partial class R3D
     /// <summary>
     /// Retrieves the final depth buffer.
     /// <para>
-    /// This texture is an R16 texture containing a linear depth value normalized between the near and far clipping planes. It does not include a stencil buffer.
+    /// This texture is an R16 texture containing a linear depth value normalized between the near and far clipping planes.
     /// </para>
     /// <para>
     /// The texture is intended for post-processing effects outside of R3D that require access to linear depth information.
@@ -137,5 +137,18 @@ public static unsafe partial class R3D
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GetMatrixInvProjection")]
     public static partial Matrix4x4 GetMatrixInvProjection();
+
+    /// <summary>
+    /// Retrieves the view-projection matrix.
+    /// <para>
+    /// This matrix represents the transformation from world space to clip space. It is updated at the last call to 'R3D_Begin'.
+    /// </para>
+    /// </summary>
+    /// <returns>The current view-projection matrix.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_GetMatrixViewProjection</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetMatrixViewProjection")]
+    public static partial Matrix4x4 GetMatrixViewProjection();
 
 }

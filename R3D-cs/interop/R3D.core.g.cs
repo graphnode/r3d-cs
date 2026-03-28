@@ -24,7 +24,7 @@ public static unsafe partial class R3D
     /// </summary>
     public const string NativeLibName = "r3d";
 
-    public const string R3D_VERSION = "0.8.0";
+    public const string R3D_VERSION = "0.9.0";
 
     /// <summary>
     /// Initializes the rendering engine.
@@ -69,40 +69,66 @@ public static unsafe partial class R3D
     public static partial void GetResolution(out int width, out int height);
 
     /// <summary>
-    /// Updates the internal resolution.
+    /// Sets the internal rendering resolution.
     /// <para>
-    /// This function changes the internal resolution of the rendering engine. Note that this process destroys and recreates all framebuffers, which may be a slow operation.
+    /// Reallocates all internal render targets to the new resolution. This operation may cause a stall, this is acceptable when called infrequently (like window resize events), but should never be called per-frame.
     /// </para>
     /// </summary>
-    /// <param name="width">The new width for the internal resolution.</param>
-    /// <param name="height">The new height for the internal resolution.</param>
+    /// <param name="width">New internal width in pixels.</param>
+    /// <param name="height">New internal height in pixels.</param>
     /// <remarks>
-    /// <b>Warning:</b>
-    /// This function may be slow due to the destruction and recreation of framebuffers.
-    /// Native: <c>R3D_UpdateResolution</c>
+    /// Native: <c>R3D_SetResolution</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_UpdateResolution")]
-    public static partial void UpdateResolution(int width, int height);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetResolution")]
+    public static partial void SetResolution(int width, int height);
 
     /// <summary>
     /// Retrieves the current anti-aliasing mode used for rendering.
     /// </summary>
-    /// <returns>The currently active R3D_AntiAliasing mode.</returns>
+    /// <returns>The currently active R3D_AntiAliasingMode.</returns>
     /// <remarks>
-    /// Native: <c>R3D_GetAntiAliasing</c>
+    /// Native: <c>R3D_GetAntiAliasingMode</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAntiAliasing")]
-    public static partial AntiAliasing GetAntiAliasing();
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAntiAliasingMode")]
+    public static partial AntiAliasingMode GetAntiAliasingMode();
 
     /// <summary>
     /// Sets the anti-aliasing mode for rendering.
+    /// <para>
+    /// The new mode takes effect on subsequent frames.
+    /// </para>
     /// </summary>
-    /// <param name="mode">The desired R3D_AntiAliasing mode.</param>
+    /// <param name="mode">The desired R3D_AntiAliasingMode.</param>
     /// <remarks>
-    /// Native: <c>R3D_SetAntiAliasing</c>
+    /// If the mode is invalid, no AA will be applied.
+    /// Native: <c>R3D_SetAntiAliasingMode</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetAntiAliasing")]
-    public static partial void SetAntiAliasing(AntiAliasing mode);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetAntiAliasingMode")]
+    public static partial void SetAntiAliasingMode(AntiAliasingMode mode);
+
+    /// <summary>
+    /// Retrieves the current anti-aliasing quality preset.
+    /// </summary>
+    /// <returns>The currently active R3D_AntiAliasingPreset.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_GetAntiAliasingPreset</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetAntiAliasingPreset")]
+    public static partial AntiAliasingPreset GetAntiAliasingPreset();
+
+    /// <summary>
+    /// Sets the anti-aliasing quality preset.
+    /// <para>
+    /// Changing the preset triggers an internal shader recompilation. Compiled variants are cached and reused if the preset is set again.
+    /// </para>
+    /// </summary>
+    /// <param name="preset">The desired R3D_AntiAliasingPreset.</param>
+    /// <remarks>
+    /// The preset will be a clamp between low and ultra.
+    /// Native: <c>R3D_SetAntiAliasingPreset</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetAntiAliasingPreset")]
+    public static partial void SetAntiAliasingPreset(AntiAliasingPreset preset);
 
     /// <summary>
     /// Retrieves the current aspect ratio handling mode.
@@ -203,6 +229,22 @@ public static unsafe partial class R3D
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetTextureFilter")]
     public static partial void SetTextureFilter(TextureFilter filter);
+
+    /// <summary>
+    /// Sets the default texture wrap mode.
+    /// <para>
+    /// This function only affects textures that are loaded manually for material maps. Textures loaded automatically during model import will use the wrap mode defined in the model file itself.
+    /// </para>
+    /// <para>
+    /// The default texture wrap mode is `TEXTURE_WRAP_CLAMP`.
+    /// </para>
+    /// </summary>
+    /// <param name="wrap">The texture wrap mode to apply by default.</param>
+    /// <remarks>
+    /// Native: <c>R3D_SetTextureWrap</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetTextureWrap")]
+    public static partial void SetTextureWrap(TextureWrap wrap);
 
     /// <summary>
     /// Set the working color space for user-provided surface colors and color textures.

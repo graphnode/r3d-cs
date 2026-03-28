@@ -126,12 +126,12 @@ public static unsafe partial class R3D
 
     /// <summary>
     ///     Gets default procedural sky parameters for cubemap generation.
-    ///     Use this as a starting point when creating procedural skyboxes with <see cref="GenCubemapSky" />.
+    ///     Use this as a starting point when creating procedural skyboxes with <see cref="GenProceduralSky" />.
     /// </summary>
     /// <remarks>
     ///     Creates a sky with blue-gray tones, brown ground, and a white sun.
     /// </remarks>
-    public static CubemapSky CUBEMAP_SKY_BASE =>
+    public static ProceduralSky PROCEDURAL_SKY_BASE =>
         new()
         {
             SkyTopColor = new Color(98, 116, 140, 255),
@@ -144,7 +144,7 @@ public static unsafe partial class R3D
             GroundEnergy = 1.0f,
             SunDirection = new Vector3(-1.0f, -1.0f, -1.0f),
             SunColor = new Color(255, 255, 255, 255),
-            SunSize = 1.5f * Raylib.DEG2RAD,
+            SunSize = 1.0f * Raylib.DEG2RAD,
             SunCurve = 0.15f,
             SunEnergy = 1.0f
         };
@@ -345,6 +345,36 @@ public static unsafe partial class R3D
     public static void SetSurfaceShaderUniform<T>(SurfaceShader shader, string name, ref T value) where T : unmanaged
     {
         SetSurfaceShaderUniform(shader, name, Unsafe.AsPointer(ref value));
+    }
+
+    /// <summary>
+    ///     Sets a uniform value on a sky shader using a typed ref instead of void*.
+    /// </summary>
+    /// <typeparam name="T">The unmanaged uniform type (e.g., float, Vector2, Matrix4x4).</typeparam>
+    /// <param name="shader">Target sky shader.</param>
+    /// <param name="name">Name of the uniform.</param>
+    /// <param name="value">Reference to the uniform value.</param>
+    public static void SetSkyShaderUniform<T>(SkyShader shader, string name, ref T value) where T : unmanaged
+    {
+        SetSkyShaderUniform(shader, name, Unsafe.AsPointer(ref value));
+    }
+
+    /// <summary>
+    ///     Creates a mesh data container with counts pre-set to the requested sizes.
+    ///     Unlike <see cref="LoadMeshData" /> (which starts with count 0 for append workflows),
+    ///     this method sets vertex/index counts equal to their capacities so that
+    ///     <see cref="MeshData.Vertices" /> and <see cref="MeshData.Indices" /> are
+    ///     immediately writable at full size.
+    /// </summary>
+    /// <param name="vertexCount">Number of vertices to allocate and mark as valid.</param>
+    /// <param name="indexCount">Number of indices to allocate and mark as valid.</param>
+    /// <returns>A new MeshData ready for direct Span writes.</returns>
+    public static MeshData CreateMeshData(int vertexCount, int indexCount)
+    {
+        var data = LoadMeshData(vertexCount, indexCount);
+        data.VertexCount = vertexCount;
+        data.IndexCount = indexCount;
+        return data;
     }
 
     /// <summary>

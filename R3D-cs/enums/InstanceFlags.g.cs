@@ -15,7 +15,7 @@ namespace R3D_cs;
 /// Native: <c>R3D_InstanceFlags</c>
 /// </remarks>
 [Flags]
-public enum InstanceFlags
+public enum InstanceFlags : uint
 {
     /// <summary>Vector3</summary>
     /// <remarks>Native: <c>R3D_INSTANCE_POSITION</c></remarks>

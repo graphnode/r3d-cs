@@ -21,26 +21,41 @@ public static class Skybox
         var sphere = R3D.GenMeshSphere(0.5f, 32, 64);
 
         // Define procedural skybox parameters
-        var skyParams = R3D.CUBEMAP_SKY_BASE;
+        var skyParams = R3D.PROCEDURAL_SKY_BASE;
         skyParams.GroundEnergy = 2.0f;
         skyParams.SkyEnergy = 2.0f;
         skyParams.SunEnergy = 2.0f;
 
+        // Load a custom sky shader
+        var skyShader = R3D.LoadSkyShader("resources/shaders/sky.glsl");
+        var color = new Vector3(0.0f, 0.5f, 0.0f);
+        R3D.SetSkyShaderUniform(skyShader, "u_color", ref color);
+        var cells = (X: 10, Y: 10);
+        R3D.SetSkyShaderUniform(skyShader, "u_cells", ref cells);
+        var linePx = 1.0f;
+        R3D.SetSkyShaderUniform(skyShader, "u_line_px", ref linePx);
+
         // Load and generate skyboxes
-        var skyProcedural = R3D.GenCubemapSky(512, skyParams);
         var skyPanorama = R3D.LoadCubemap("resources/panorama/sky.hdr", CubemapLayout.AutoDetect);
+        var skyProcedural = R3D.GenProceduralSky(1024, skyParams);
+        var skyCustom = R3D.GenCustomSky(512, skyShader);
 
         // Generate ambient maps
-        var ambientProcedural = R3D.GenAmbientMap(skyProcedural, AmbientFlags.Illumination | AmbientFlags.Reflection);
         var ambientPanorama = R3D.GenAmbientMap(skyPanorama, AmbientFlags.Illumination | AmbientFlags.Reflection);
+        var ambientProcedural = R3D.GenAmbientMap(skyProcedural, AmbientFlags.Illumination | AmbientFlags.Reflection);
+        var ambientCustom = R3D.GenAmbientMap(skyCustom, AmbientFlags.Illumination | AmbientFlags.Reflection);
+
+        // Store skies/ambients for cycling
+        var skies = new[] { skyPanorama, skyProcedural, skyCustom };
+        var ambients = new[] { ambientPanorama, ambientProcedural, ambientCustom };
+        var currentSky = 0;
 
         R3D.SetEnvironmentEx((ref env) =>
         {
-            // Set default sky/ambient maps
             env.Background.Sky = skyPanorama;
+            env.Background.Energy = 1.0f;
             env.Ambient.Map = ambientPanorama;
-
-            // Set tonemapping
+            env.Ambient.Energy = 1.0f;
             env.Tonemap.Mode = Tonemap.Agx;
         });
 
@@ -64,20 +79,16 @@ public static class Skybox
             BeginDrawing();
             ClearBackground(Color.RayWhite);
 
-            if (IsMouseButtonPressed(MouseButton.Left))
+            int dir = (IsMouseButtonPressed(MouseButton.Right) ? 1 : 0) - (IsMouseButtonPressed(MouseButton.Left) ? 1 : 0);
+            if (dir != 0)
+            {
+                currentSky = (currentSky + dir + 3) % 3;
                 R3D.SetEnvironmentEx((ref env) =>
                 {
-                    if (env.Background.Sky.Texture == skyPanorama.Texture)
-                    {
-                        env.Background.Sky = skyProcedural;
-                        env.Ambient.Map = ambientProcedural;
-                    }
-                    else
-                    {
-                        env.Background.Sky = skyPanorama;
-                        env.Ambient.Map = ambientPanorama;
-                    }
+                    env.Background.Sky = skies[currentSky];
+                    env.Ambient.Map = ambients[currentSky];
                 });
+            }
 
             // Draw sphere grid
             R3D.Begin(camera);
@@ -95,10 +106,13 @@ public static class Skybox
         }
 
         // Cleanup
+        R3D.UnloadAmbientMap(ambientCustom);
         R3D.UnloadAmbientMap(ambientProcedural);
         R3D.UnloadAmbientMap(ambientPanorama);
+        R3D.UnloadCubemap(skyCustom);
         R3D.UnloadCubemap(skyProcedural);
         R3D.UnloadCubemap(skyPanorama);
+        R3D.UnloadSkyShader(skyShader);
         R3D.UnloadMesh(sphere);
         R3D.Close();
 

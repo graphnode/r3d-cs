@@ -4,6 +4,7 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Raylib_cs;
 
 namespace R3D_cs;
@@ -11,7 +12,7 @@ namespace R3D_cs;
 /// <summary>
 /// Describes the playback state of a single animation within a player.
 /// <para>
-/// Tracks the current time, blending weight, speed, play/pause state, and looping behavior.
+/// Tracks the current time, speed, play/pause state, and looping behavior.
 /// </para>
 /// </summary>
 /// <remarks>
@@ -27,14 +28,6 @@ public struct AnimationState
     /// Native: <c>currentTime</c>
     /// </remarks>
     public float CurrentTime;
-
-    /// <summary>
-    /// Blending weight; any positive value is valid.
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>weight</c>
-    /// </remarks>
-    public float Weight;
 
     /// <summary>
     /// Playback speed; can be negative for reverse playback.

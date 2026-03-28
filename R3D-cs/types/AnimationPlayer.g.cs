@@ -4,12 +4,13 @@
 using System;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using Raylib_cs;
 
 namespace R3D_cs;
 
 /// <summary>
-/// Manages playback and blending of multiple animations for a skeleton.
+/// Manages playback of multiple animations for a skeleton.
 /// <para>
 /// The animation player updates animation states, interpolates keyframes, blends animations according to their weights, and stores the resulting local and global bone transforms. It also supports GPU skinning by uploading the global pose into a texture.
 /// </para>
@@ -20,14 +21,6 @@ namespace R3D_cs;
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct AnimationPlayer
 {
-    /// <summary>
-    /// Array of active animation states, one per animation.
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>states</c>
-    /// </remarks>
-    internal AnimationState* _states;
-
     /// <summary>
     /// Animation library providing the available animations.
     /// </summary>
@@ -43,6 +36,22 @@ public unsafe struct AnimationPlayer
     /// Native: <c>skeleton</c>
     /// </remarks>
     public Skeleton Skeleton;
+
+    /// <summary>
+    /// Array of animation states, one per animation.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>states</c>
+    /// </remarks>
+    internal AnimationState* _states;
+
+    /// <summary>
+    /// Index of the current animation.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>activeAnimIndex</c>
+    /// </remarks>
+    public int ActiveAnimIndex;
 
     /// <summary>
     /// Array of bone transforms representing the blended local pose.

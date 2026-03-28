@@ -27,10 +27,10 @@ public static unsafe partial class R3D
     /// <param name="indexCount">Number of indices to allocate. May be zero. If zero, no index buffer is allocated.</param>
     /// <returns>A new R3D_MeshData instance with allocated memory.</returns>
     /// <remarks>
-    /// Native: <c>R3D_CreateMeshData</c>
+    /// Native: <c>R3D_LoadMeshData</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_CreateMeshData")]
-    public static partial MeshData CreateMeshData(int vertexCount, int indexCount);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadMeshData")]
+    public static partial MeshData LoadMeshData(int vertexCount, int indexCount);
 
     /// <summary>
     /// Releases memory used by a mesh data container.
@@ -293,15 +293,47 @@ public static unsafe partial class R3D
     public static partial MeshData GenMeshDataCubicmap(Image cubicmap, Vector3 cubeSize);
 
     /// <summary>
+    /// Reserves memory for the specified number of vertices and indices.
+    /// </summary>
+    /// <param name="meshData">Target mesh data container.</param>
+    /// <param name="vertexCount">Number of vertices to reserve space for.</param>
+    /// <param name="indexCount">Number of indices to reserve space for.</param>
+    /// <remarks>
+    /// Native: <c>R3D_ReserveMeshData</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ReserveMeshData")]
+    public static partial void ReserveMeshData(ref MeshData meshData, int vertexCount, int indexCount);
+
+    /// <summary>
+    /// Shrinks allocated memory to fit the current vertex and index counts.
+    /// </summary>
+    /// <param name="meshData">Target mesh data container to shrink.</param>
+    /// <remarks>
+    /// Native: <c>R3D_ShrinkMeshData</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ShrinkMeshData")]
+    public static partial void ShrinkMeshData(ref MeshData meshData);
+
+    /// <summary>
+    /// Clears all vertices and indices without releasing allocated memory.
+    /// </summary>
+    /// <param name="meshData">Target mesh data container to reset.</param>
+    /// <remarks>
+    /// Native: <c>R3D_ResetMeshData</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ResetMeshData")]
+    public static partial void ResetMeshData(ref MeshData meshData);
+
+    /// <summary>
     /// Creates a deep copy of an existing mesh data container.
     /// </summary>
     /// <param name="meshData">Source mesh data to duplicate.</param>
     /// <returns>A new R3D_MeshData containing a copy of the source data.</returns>
     /// <remarks>
-    /// Native: <c>R3D_DuplicateMeshData</c>
+    /// Native: <c>R3D_CopyMeshData</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_DuplicateMeshData")]
-    public static partial MeshData DuplicateMeshData(MeshData meshData);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_CopyMeshData")]
+    public static partial MeshData CopyMeshData(MeshData meshData);
 
     /// <summary>
     /// Merges two mesh data containers into a single one.
@@ -314,6 +346,31 @@ public static unsafe partial class R3D
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_MergeMeshData")]
     public static partial MeshData MergeMeshData(MeshData a, MeshData b);
+
+    /// <summary>
+    /// Appends vertices and indices to the mesh data container.
+    /// </summary>
+    /// <param name="meshData">Target mesh data container.</param>
+    /// <param name="vertices">Array of vertices to append.</param>
+    /// <param name="vertexCount">Number of vertices to append.</param>
+    /// <param name="indices">Array of indices to append.</param>
+    /// <param name="indexCount">Number of indices to append.</param>
+    /// <remarks>
+    /// Native: <c>R3D_AppendMeshData</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_AppendMeshData")]
+    public static partial void AppendMeshData(ref MeshData meshData, ref Vertex vertices, int vertexCount, ref uint indices, int indexCount);
+
+    /// <summary>
+    /// Applies a transformation matrix to all vertices in the mesh data.
+    /// </summary>
+    /// <param name="meshData">Target mesh data container.</param>
+    /// <param name="transform">Transformation matrix to apply.</param>
+    /// <remarks>
+    /// Native: <c>R3D_TransformMeshData</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_TransformMeshData")]
+    public static partial void TransformMeshData(ref MeshData meshData, Matrix4x4 transform);
 
     /// <summary>
     /// Translates all vertices by a given offset.
@@ -384,21 +441,23 @@ public static unsafe partial class R3D
     /// Computes vertex normals from triangle geometry.
     /// </summary>
     /// <param name="meshData">Mesh data to modify.</param>
+    /// <param name="type">Primitive type of the mesh. Points and line primitives are not supported and will default to a front-facing normal (0, 0, 1).</param>
     /// <remarks>
     /// Native: <c>R3D_GenMeshDataNormals</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshDataNormals")]
-    public static partial void GenMeshDataNormals(ref MeshData meshData);
+    public static partial void GenMeshDataNormals(ref MeshData meshData, PrimitiveType type);
 
     /// <summary>
     /// Computes vertex tangents based on existing normals and UVs.
     /// </summary>
     /// <param name="meshData">Mesh data to modify.</param>
+    /// <param name="type">Primitive type of the mesh. Points and line primitives are not supported and will default to a front-facing tangent (1, 0, 0, 1).</param>
     /// <remarks>
     /// Native: <c>R3D_GenMeshDataTangents</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshDataTangents")]
-    public static partial void GenMeshDataTangents(ref MeshData meshData);
+    public static partial void GenMeshDataTangents(ref MeshData meshData, PrimitiveType type);
 
     /// <summary>
     /// Calculates the axis-aligned bounding box of the mesh.

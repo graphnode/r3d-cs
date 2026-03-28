@@ -19,7 +19,7 @@ public static class Sun
 
         // Initialize R3D
         R3D.Init(GetScreenWidth(), GetScreenHeight());
-        R3D.SetAntiAliasing(AntiAliasing.Fxaa);
+        R3D.SetAntiAliasingMode(AntiAliasingMode.Fxaa);
 
         // Create meshes and material
         var plane = R3D.GenMeshPlane(1000, 1000, 1, 1);
@@ -43,7 +43,7 @@ public static class Sun
         R3D.UnmapInstances(instances, InstanceFlags.Position);
 
         // Setup environment
-        var skybox = R3D.GenCubemapSky(1024, R3D.CUBEMAP_SKY_BASE);
+        var skybox = R3D.GenProceduralSky(1024, R3D.PROCEDURAL_SKY_BASE);
         var ambientMap = R3D.GenAmbientMap(skybox, AmbientFlags.Illumination | AmbientFlags.Reflection);
         R3D.SetEnvironmentEx((ref env) =>
         {

@@ -39,5 +39,5 @@ public enum LightType
     Omni,
 
     /// <remarks>Native: <c>R3D_LightType.R3D_LIGHT_TYPE_COUNT</c></remarks>
-    TypeCount,
+    Count,
 }

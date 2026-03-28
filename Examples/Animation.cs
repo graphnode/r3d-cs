@@ -16,7 +16,7 @@ public static class Animation
 
         // Initialize R3D with FXAA
         R3D.Init(GetScreenWidth(), GetScreenHeight());
-        R3D.SetAntiAliasing(AntiAliasing.Fxaa);
+        R3D.SetAntiAliasingMode(AntiAliasingMode.Fxaa);
 
         var cubemap = R3D.LoadCubemap("resources/panorama/indoor.hdr", CubemapLayout.AutoDetect);
         var ambientMap = R3D.GenAmbientMap(cubemap, AmbientFlags.Illumination);
@@ -46,7 +46,6 @@ public static class Animation
         var modelPlayer = R3D.LoadAnimationPlayer(model.Skeleton, modelAnims);
 
         // Setup animation playing
-        R3D.SetAnimationWeight(ref modelPlayer, 0, 1.0f);
         R3D.SetAnimationLoop(ref modelPlayer, 0, true);
         R3D.PlayAnimation(ref modelPlayer, 0);
 
