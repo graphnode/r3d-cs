@@ -24,8 +24,8 @@ The bindings are **partially auto-generated** from the r3d C headers:
 
 - **Hand-written files** (no `.g.cs` suffix):
   - `R3D-cs/interop/R3D.Utilities.cs` - Helper methods, constants, and convenience wrappers
-  - Contains `MATERIAL_BASE`, `DECAL_BASE`, `CUBEMAP_SKY_BASE` constants
-  - Contains `MapInstances<T>()`, `SetEnvironmentEx()` utility methods
+  - Contains `MATERIAL_BASE`, `DECAL_BASE`, `PROCEDURAL_SKY_BASE` constants
+  - Contains `MapInstances<T>()`, `SetEnvironmentEx()`, `CreateMeshData()` utility methods
 
 **IMPORTANT**: When r3d structs change (like `Material` or `InstanceBuffer`), you MUST update:
 1. Auto-generated files via bindings generator
@@ -148,8 +148,11 @@ Maps C types to C# equivalents:
 - Primitives: `int` → `int`, `float` → `float`, `bool` → `bool`
 - Pointers: `Type*` → `Type*` (unsafe), `const char*` → `string`
 - **Pointer-to-pointer**: `Type**` → `Type**` (NOT `ref Type`)
+- **`const char**`** / `const char*[]` → `byte**`
+- **Function pointers** (`void (*)()`) → `IntPtr`
 - Arrays: `Type[N]` → `fixed Type Field[N]`
-- Opaque types: Empty structs (e.g., `ScreenShader`)
+- **`char[N]`** → `internal fixed byte _field[N]` + `string` property (auto UTF-8)
+- Opaque types: Empty structs or unions with no fields (e.g., `ScreenShader`, `AnimationTreeNode`)
 
 **GetParameterModifier()** logic:
 - `Get*` functions with primitive pointers → `out` parameters
@@ -167,10 +170,14 @@ Extracts Doxygen-style comments from C headers and converts to C# XML doc commen
 
 ### CodeGenerator.cs
 
-Generates three file types:
-1. **Enums** (`enums/`) - Strips `R3D_` prefix, converts to PascalCase
+Generates four file types:
+1. **Enums** (`enums/`) - Strips `R3D_` prefix, converts to PascalCase, strips `Mode`/`Type`/`Status` suffixes from values
 2. **Structs** (`types/`) - Adds `unsafe` if contains pointers/fixed buffers
-3. **P/Invoke** (`interop/`) - Groups by C header file, uses `LibraryImport`
+   - Typed pointer + count/capacity pairs → internal pointer + public `Span<T>` property (prefers `Capacity` over `Count`)
+   - `char[N]` fixed buffers → internal backing field + public `string` property with UTF-8 get/set
+   - Callback fields (ending in `Callback`) → `IntPtr`
+3. **Misc** (`types/`) - Callback delegates (`[UnmanagedFunctionPointer]`), opaque handle types, macro-based enums
+4. **P/Invoke** (`interop/`) - Groups by C header file, uses `LibraryImport`
 
 ## Common Pitfalls
 
@@ -221,6 +228,68 @@ Examples/
 ├── Program.cs          # Example runner
 └── *.cs               # Individual example files
 ```
+
+## Updating to a New r3d Version
+
+End-to-end checklist for updating bindings when a new r3d version is released:
+
+### 1. Update submodule
+```bash
+cd External/r3d
+git fetch origin --tags
+git checkout <new-tag>   # e.g. git checkout v0.9
+cd ../..
+```
+
+### 2. Review header changes
+Compare headers between versions to understand API changes:
+```bash
+cd External/r3d
+git diff <old-tag>..<new-tag> --stat -- 'include/*.h'
+```
+Look for: new headers, removed headers, renamed types/functions, changed struct layouts.
+
+### 3. Fix generator if needed
+Common issues when new C patterns appear:
+- **New opaque types**: unions or empty structs auto-detected, but verify
+- **New callback typedefs**: auto-generated as delegates; parameter names that are C# keywords need `EscapeIdentifier`
+- **New type patterns**: e.g., `char**`, function pointer params — check TypeMapper handles them
+
+### 4. Regenerate bindings
+```bash
+cd R3D-cs.GenerateBindings
+dotnet run -- -v <version>   # e.g. -v 0.9.0
+```
+
+### 5. Update hand-written code
+- **`R3D.Utilities.cs`**: Update constants (`MATERIAL_BASE`, `PROCEDURAL_SKY_BASE`, `DECAL_BASE`) if struct layouts changed. Add convenience overloads for new shader types (e.g., `SetSkyShaderUniform<T>`).
+- **Examples**: Update for any renamed APIs. Port new upstream examples from `External/r3d/examples/`. Copy any new resources (models, shaders) from upstream.
+
+### 6. Build and verify
+```bash
+dotnet build R3D-cs.sln
+```
+Fix any compilation errors from API renames in examples or utilities.
+
+### 7. Commit, tag, and push
+```bash
+git add -A
+git commit -m "Update bindings to r3d <version>"
+git tag v<version>
+git push origin master --tags
+```
+
+### 8. Create GitHub release
+After CI passes (builds native DLLs and publishes NuGet package):
+```bash
+gh release create v<version> --title "v<version>" --notes "<release notes>"
+```
+Follow the format of previous releases (see `gh release view v0.8.2` for reference). Include: what changed, breaking changes, install instructions, commit list, and full changelog link.
+
+### 9. Notify upstream
+Update the binding version in the [r3d README bindings table](https://github.com/Bigfoot71/r3d#bindings):
+1. Update `README.md` in your fork (`graphnode/r3d`) with the new version number
+2. Open a PR to `Bigfoot71/r3d` (see [PR #193](https://github.com/Bigfoot71/r3d/pull/193) as reference)
 
 ## Dependencies
 
