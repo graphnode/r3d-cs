@@ -18,14 +18,26 @@ public static unsafe partial class R3D
 {
 
     /// <summary>
-    /// Creates an empty mesh data container.
+    /// Allocates a mesh data container with the given capacity.
     /// <para>
-    /// Allocates memory for vertex and index buffers. All allocated buffers are zero-initialized.
+    /// This function allocates CPU-side buffers for vertices and indices, but does NOT initialize the mesh with any actual data. The returned R3D_MeshData has:
+    /// </para>
+    /// <para>
+    /// <list type="bullet">
+    /// <item><description>vertexCapacity and indexCapacity set to the requested sizes</description></item>
+    /// <item><description>vertexCount and indexCount set to 0</description></item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// You must manually set vertexCount/indexCount after filling the buffers, or use helper functions like R3D_AppendMeshData() to populate the mesh.
+    /// </para>
+    /// <para>
+    /// All allocated memory is zero-initialized.
     /// </para>
     /// </summary>
-    /// <param name="vertexCount">Number of vertices to allocate. Must be non-zero.</param>
-    /// <param name="indexCount">Number of indices to allocate. May be zero. If zero, no index buffer is allocated.</param>
-    /// <returns>A new R3D_MeshData instance with allocated memory.</returns>
+    /// <param name="vertexCount">Number of vertices to allocate (capacity). Must be &gt; 0.</param>
+    /// <param name="indexCount">Number of indices to allocate (capacity). May be 0. If 0, no index buffer is allocated.</param>
+    /// <returns>A new R3D_MeshData with allocated buffers and zero element counts.</returns>
     /// <remarks>
     /// Native: <c>R3D_LoadMeshData</c>
     /// </remarks>
@@ -195,21 +207,40 @@ public static unsafe partial class R3D
     public static partial MeshData GenMeshDataHemiSphere(float radius, int rings, int slices);
 
     /// <summary>
-    /// Generate a cylinder mesh with specified parameters.
+    /// Generates a cylinder mesh centered at the origin along the Y axis.
     /// <para>
-    /// Creates a mesh centered at the origin, extending along the Y axis. The mesh includes top and bottom caps and smooth side surfaces. A cone is produced when bottomRadius and topRadius differ.
+    /// Both caps are included. For a cone or truncated cone, use R3D_GenMeshDataCylinderEx.
     /// </para>
     /// </summary>
-    /// <param name="bottomRadius">Radius of the bottom cap.</param>
-    /// <param name="topRadius">Radius of the top cap.</param>
-    /// <param name="height">Height of the shape along the Y axis.</param>
-    /// <param name="slices">Number of radial subdivisions around the shape.</param>
-    /// <returns>Generated mesh structure.</returns>
+    /// <param name="radius">Radius of the cylinder. Must be &gt; 0.</param>
+    /// <param name="height">Total height along the Y axis. Must be &gt; 0.</param>
+    /// <param name="slices">Radial subdivisions around the circumference. Must be &gt;= 3.</param>
+    /// <returns>The generated mesh data, or an empty mesh on invalid input.</returns>
     /// <remarks>
     /// Native: <c>R3D_GenMeshDataCylinder</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshDataCylinder")]
-    public static partial MeshData GenMeshDataCylinder(float bottomRadius, float topRadius, float height, int slices);
+    public static partial MeshData GenMeshDataCylinder(float radius, float height, int slices);
+
+    /// <summary>
+    /// Generates a cylinder, cone, or truncated cone mesh centered at the origin along the Y axis.
+    /// <para>
+    /// The bottom cap sits at Y = -height/2 and the top cap at Y = +height/2. Setting one radius to 0 produces a cone; caps can be toggled independently.
+    /// </para>
+    /// </summary>
+    /// <param name="bottomRadius">Radius of the bottom end. Must be &gt;= 0. Cannot both be 0.</param>
+    /// <param name="topRadius">Radius of the top end. Must be &gt;= 0. Cannot both be 0.</param>
+    /// <param name="height">Total height along the Y axis. Must be &gt; 0.</param>
+    /// <param name="slices">Radial subdivisions around the circumference. Must be &gt;= 3.</param>
+    /// <param name="stacks">Vertical subdivisions along the height. Must be &gt;= 1. Higher values reduce faceting, especially on cones.</param>
+    /// <param name="bottomCap">Whether to generate the bottom cap.</param>
+    /// <param name="topCap">Whether to generate the top cap.</param>
+    /// <returns>The generated mesh data, or an empty mesh on invalid input.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshDataCylinderEx</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshDataCylinderEx")]
+    public static partial MeshData GenMeshDataCylinderEx(float bottomRadius, float topRadius, float height, int slices, int stacks, [MarshalAs(UnmanagedType.I1)] bool bottomCap, [MarshalAs(UnmanagedType.I1)] bool topCap);
 
     /// <summary>
     /// Generate a capsule mesh with specified parameters.

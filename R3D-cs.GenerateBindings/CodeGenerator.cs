@@ -224,15 +224,18 @@ public class CodeGenerator(string outputDir)
             if (@class.ClassKind is not (CppClassKind.Struct or CppClassKind.Union))
                 throw new Exception($"Unexpected class kind: {@class.ClassKind}");
 
+            bool isOpaque = TypeMapper.OpaqueTypes.Contains(@class.Name);
+
             var sb = new StringBuilder();
-            GenerateHeader(sb, ["System", "System.Numerics", "System.Runtime.InteropServices", "System.Text", "Raylib_cs"]);
+            var usings = isOpaque
+                ? new List<string> { "System", "System.Numerics", "System.Runtime.InteropServices", "Raylib_cs" }
+                : new List<string> { "System", "System.Numerics", "System.Runtime.InteropServices", "System.Text", "Raylib_cs" };
+            GenerateHeader(sb, usings);
 
             string className = StripR3DPrefix(@class.Name);
             bool needsUnsafe = @class.Fields.Select(f => MapType(f.Type)).Any(r => r.isUnsafe);
 
             CommentGenerator.Generate(sb, @class.Comment, @class.Name);
-
-            bool isOpaque = TypeMapper.OpaqueTypes.Contains(@class.Name);
 
             sb.AppendLine("[StructLayout(LayoutKind.Sequential)]");
             sb.Append($"public {(needsUnsafe ? "unsafe " : "")}struct {className}");
@@ -431,6 +434,25 @@ public class CodeGenerator(string outputDir)
                     count++;
                 }
 
+                continue;
+            }
+
+            // Typedef aliases for opaque struct types (e.g., typedef struct R3D_ShaderCustom R3D_ScreenShader)
+            if (typedef.ElementType is CppClass aliasedClass && TypeMapper.OpaqueTypes.Contains(aliasedClass.Name))
+            {
+                var sb = new StringBuilder();
+                GenerateHeader(sb, ["System", "System.Numerics", "System.Runtime.InteropServices", "Raylib_cs"]);
+
+                CommentGenerator.Generate(sb, typedef.Comment, typedef.Name);
+
+                sb.AppendLine("[StructLayout(LayoutKind.Sequential)]");
+                sb.AppendLine($"public struct {name}");
+                sb.AppendLine("{");
+                sb.AppendLine("    private nint _handle;");
+                sb.AppendLine("}");
+
+                File.WriteAllText(Path.Combine(outputDir, "types", $"{name}.g.cs"), sb.ToString());
+                count++;
                 continue;
             }
 

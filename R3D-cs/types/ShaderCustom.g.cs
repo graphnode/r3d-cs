@@ -8,11 +8,9 @@ using Raylib_cs;
 
 namespace R3D_cs;
 
-/// <remarks>
-/// Native: <c>R3D_ScreenShader</c>
-/// </remarks>
+/// <remarks>Native: <c>R3D_ShaderCustom</c></remarks>
 [StructLayout(LayoutKind.Sequential)]
-public struct ScreenShader
+public struct ShaderCustom
 {
     private nint _handle;
 }

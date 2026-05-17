@@ -46,6 +46,14 @@ public struct EnvDoF
     public float FocusScale;
 
     /// <summary>
+    /// Near blur intensity: 0.0 = disabled, 1.0 = symmetric to far (default: 1.0)
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>nearScale</c>
+    /// </remarks>
+    public float NearScale;
+
+    /// <summary>
     /// Maximum blur radius, similar to aperture (default: 20.0)
     /// </summary>
     /// <remarks>

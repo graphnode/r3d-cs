@@ -171,8 +171,7 @@ public static unsafe partial class R3D
     /// <summary>
     /// Generate a cylinder mesh.
     /// </summary>
-    /// <param name="bottomRadius">Bottom radius.</param>
-    /// <param name="topRadius">Top radius.</param>
+    /// <param name="radius">Radius of the cylinder.</param>
     /// <param name="height">Height along Y axis.</param>
     /// <param name="slices">Radial subdivisions.</param>
     /// <returns>Mesh ready for rendering.</returns>
@@ -180,7 +179,24 @@ public static unsafe partial class R3D
     /// Native: <c>R3D_GenMeshCylinder</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshCylinder")]
-    public static partial Mesh GenMeshCylinder(float bottomRadius, float topRadius, float height, int slices);
+    public static partial Mesh GenMeshCylinder(float radius, float height, int slices);
+
+    /// <summary>
+    /// Generate a cylinder, cone or truncated cone mesh.
+    /// </summary>
+    /// <param name="bottomRadius">Bottom radius.</param>
+    /// <param name="topRadius">Top radius.</param>
+    /// <param name="height">Height along Y axis.</param>
+    /// <param name="slices">Radial subdivisions.</param>
+    /// <param name="stacks">Vertical subdivisions.</param>
+    /// <param name="bottomCap">Generate bottom cap.</param>
+    /// <param name="topCap">Generate top cap.</param>
+    /// <returns>Mesh ready for rendering.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_GenMeshCylinderEx</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshCylinderEx")]
+    public static partial Mesh GenMeshCylinderEx(float bottomRadius, float topRadius, float height, int slices, int stacks, [MarshalAs(UnmanagedType.I1)] bool bottomCap, [MarshalAs(UnmanagedType.I1)] bool topCap);
 
     /// <summary>
     /// Generate a capsule mesh.

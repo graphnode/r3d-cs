@@ -46,7 +46,28 @@ public static unsafe partial class R3D
     public static partial SurfaceShader LoadSurfaceShaderFromMemory(string code);
 
     /// <summary>
+    /// Creates an alias of an existing surface shader.
+    /// <para>
+    /// The alias shares the same compiled program as the original but holds its own independent uniform and sampler state, allowing the same shader to be used multiple times within a single frame with different values.
+    /// </para>
+    /// <para>
+    /// Uniform and sampler state is copied from the original at the moment this function is called, not from the shader source defaults. Any values set on the original after compilation but before this call will be reflected in the alias; values set afterward will not.
+    /// </para>
+    /// </summary>
+    /// <param name="shader">The original surface shader to alias.</param>
+    /// <returns>Pointer to the alias, or NULL on failure.</returns>
+    /// <remarks>
+    /// The alias does not own the program. Always unload all aliases before unloading the original, or the alias program references become dangling.
+    /// Native: <c>R3D_LoadSurfaceShaderAlias</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadSurfaceShaderAlias")]
+    public static partial SurfaceShader LoadSurfaceShaderAlias(SurfaceShader shader);
+
+    /// <summary>
     /// Unloads and destroys a surface shader.
+    /// <para>
+    /// If the shader owns its program shaders (i.e. it was created withR3D_LoadSurfaceShader orR3D_LoadSurfaceShaderFromMemory), they are deleted. Aliases created from this shader viaR3D_LoadSurfaceShaderAlias must be unloaded beforehand, as they share the same programs and will be left with dangling references.
+    /// </para>
     /// </summary>
     /// <param name="shader">Surface shader to unload.</param>
     /// <remarks>

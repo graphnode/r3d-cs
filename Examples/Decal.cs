@@ -20,7 +20,7 @@ public static class Decal
         // Create meshes
         var plane = R3D.GenMeshPlane(5.0f, 5.0f, 1, 1);
         var sphere = R3D.GenMeshSphere(0.5f, 64, 64);
-        var cylinder = R3D.GenMeshCylinder(0.5f, 0.5f, 1, 64);
+        var cylinder = R3D.GenMeshCylinder(0.5f, 1, 64);
         var material = R3D.GetDefaultMaterial();
         material.Albedo.Color = Color.Gray;
 

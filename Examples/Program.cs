@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Linq;
 using Raylib_cs;
 
 namespace Examples;
@@ -52,22 +54,24 @@ internal static class Program
     {
         Raylib.SetTraceLogCallback(&Logging.LogConsole);
 
-        if (args.Length > 0)
-        {
-            var example = ExampleList.GetExample(args[0]);
-            example?.Main.Invoke();
-        }
-        else
-            RunExamples(ExampleList.AllExamples);
-    }
+        var examples = args.Length > 0
+            ? args.Select(ExampleList.GetExample).Where(e => e != null).ToArray()
+            : ExampleList.AllExamples;
 
-    private static void RunExamples(ExampleInfo[] examples)
-    {
-        var configFlags = Enum.GetValues<ConfigFlags>();
+        if (examples.Length <= 1)
+        {
+            examples.FirstOrDefault()?.Main.Invoke();
+            return;
+        }
+
+        var exe = Environment.ProcessPath!;
         foreach (var example in examples)
         {
-            example.Main.Invoke();
-            foreach (var flag in configFlags) Raylib.ClearWindowState(flag);
+            var process = Process.Start(new ProcessStartInfo(exe, example.Name)
+            {
+                UseShellExecute = false
+            })!;
+            process.WaitForExit();
         }
     }
 }

@@ -95,7 +95,7 @@ public static class TypeMapper
         return unwrapped switch
         {
             CppClass cls => OpaqueTypes.Contains(cls.Name),
-            CppTypedef td => OpaqueTypes.Contains(td.Name),
+            CppTypedef td => OpaqueTypes.Contains(td.Name) || IsOpaqueType(td.ElementType),
             _ => false
         };
     }
