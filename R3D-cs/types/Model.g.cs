@@ -38,6 +38,14 @@ public unsafe struct Model
     internal MeshData* _meshData;
 
     /// <summary>
+    /// Array of meshes names (optional, can be NULL).
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>meshNames</c>
+    /// </remarks>
+    internal MeshName* _meshNames;
+
+    /// <summary>
     /// Array of materials used by the model.
     /// </summary>
     /// <remarks>
@@ -94,6 +102,11 @@ public unsafe struct Model
     /// <see cref="MeshData"/> as a <see cref="Span{T}"/>.
     /// </summary>
     public Span<MeshData> MeshData => _meshData != null ? new(_meshData, MeshCount) : default;
+
+    /// <summary>
+    /// <see cref="MeshNames"/> as a <see cref="Span{T}"/>.
+    /// </summary>
+    public Span<MeshName> MeshNames => _meshNames != null ? new(_meshNames, MeshCount) : default;
 
     /// <summary>
     /// <see cref="Materials"/> as a <see cref="Span{T}"/>.

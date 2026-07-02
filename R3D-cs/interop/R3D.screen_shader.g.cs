@@ -115,23 +115,24 @@ public static unsafe partial class R3D
     public static partial void SetScreenShaderSampler(ScreenShader shader, string name, Texture2D texture);
 
     /// <summary>
-    /// Sets the list of screen shaders to execute at the end of the frame.
+    /// Sets the screen shader chain for a given stage.
     /// <para>
-    /// The maximum number of shaders is defined by `R3D_MAX_SCREEN_SHADERS`. If the provided count exceeds this limit, a warning is emitted and only the first `R3D_MAX_SCREEN_SHADERS` shaders are used.
+    /// Screen shaders are executed in the order provided. The maximum number of shaders per stage is `R3D_MAX_SCREEN_SHADERS`; extra entries are ignored and a warning is emitted.
     /// </para>
     /// <para>
-    /// Shader pointers are copied internally, so the original array can be modified or freed after the call. NULL entries are allowed safely within the list.
+    /// Shader pointers are copied internally, so the original array may be modified or freed after the call. NULL entries are allowed and skipped safely.
     /// </para>
     /// <para>
-    /// Calling this function resets all internal screen shaders before copying the new list. To disable all screen shaders, call this function with `shaders = NULL` and/or `count = 0`.
+    /// Calling this function replaces the previous chain for the selected stage. To clear a stage, pass `shaders = NULL` or `count = 0`.
     /// </para>
     /// </summary>
+    /// <param name="stage">Screen shader stage to configure.</param>
     /// <param name="shaders">Array of pointers to R3D_ScreenShader objects.</param>
     /// <param name="count">Number of shaders in the array.</param>
     /// <remarks>
     /// Native: <c>R3D_SetScreenShaderChain</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetScreenShaderChain")]
-    public static partial void SetScreenShaderChain(ScreenShader* shaders, int count);
+    public static partial void SetScreenShaderChain(ScreenShaderStage stage, ScreenShader* shaders, int count);
 
 }

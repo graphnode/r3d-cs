@@ -18,29 +18,16 @@ public static class CustomMesh
         // Create mesh data for a colored triangle (3 vertices, 3 indices)
         var meshData = R3D.CreateMeshData(3, 3);
 
-        // Set vertices directly via Span<Vertex>
+        // Set vertices directly via Span<Vertex>.
+        // R3D_Vertex is a packed format (float16 texcoords, SNORM8 normals/tangents), so build
+        // each vertex with R3D.MakeVertex, which packs the unpacked attributes for you.
+        // The tangent is a placeholder here; it gets recomputed by GenMeshDataTangents below.
+        var normal = new Vector3(0, 1, 0);
+        var tangent = new Vector4(1, 0, 0, 1);
         var verts = meshData.Vertices;
-        verts[0] = new Vertex
-        {
-            Position = new Vector3(-0.5f, 0, 0),
-            Normal = new Vector3(0, 1, 0),
-            Texcoord = new Vector2(0, 0),
-            Color = Color.Red
-        };
-        verts[1] = new Vertex
-        {
-            Position = new Vector3(0.5f, 0, 0),
-            Normal = new Vector3(0, 1, 0),
-            Texcoord = new Vector2(1, 0),
-            Color = Color.Green
-        };
-        verts[2] = new Vertex
-        {
-            Position = new Vector3(0, 1, 0),
-            Normal = new Vector3(0, 1, 0),
-            Texcoord = new Vector2(0.5f, 1),
-            Color = Color.Blue
-        };
+        verts[0] = R3D.MakeVertex(new Vector3(-0.5f, 0, 0), new Vector2(0, 0), normal, tangent, Color.Red);
+        verts[1] = R3D.MakeVertex(new Vector3(0.5f, 0, 0), new Vector2(1, 0), normal, tangent, Color.Green);
+        verts[2] = R3D.MakeVertex(new Vector3(0, 1, 0), new Vector2(0.5f, 1), normal, tangent, Color.Blue);
 
         // Set indices directly via Span<uint>
         var indices = meshData.Indices;
@@ -52,7 +39,7 @@ public static class CustomMesh
         R3D.GenMeshDataTangents(ref meshData, PrimitiveType.Triangles);
 
         // Upload to GPU
-        var mesh = R3D.LoadMesh(PrimitiveType.Triangles, meshData, MeshUsage.StaticMesh);
+        var mesh = R3D.LoadMesh(PrimitiveType.Triangles, meshData);
 
         // Double-sided material so the triangle renders from both sides
         var material = R3D.GetDefaultMaterial();

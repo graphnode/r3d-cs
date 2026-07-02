@@ -23,14 +23,13 @@ public static unsafe partial class R3D
     /// <param name="type">Primitive type used to interpret vertex data.</param>
     /// <param name="data">R3D_MeshData containing vertices and indices (can be zero initialized).</param>
     /// <param name="aabb">Optional pointer to a bounding box. If NULL, it will be computed automatically.</param>
-    /// <param name="usage">Hint on how the mesh will be used.</param>
     /// <returns>Created R3D_Mesh.</returns>
     /// <remarks>
     /// The function copies all vertex and index data into GPU buffers.
     /// Native: <c>R3D_LoadMesh</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadMesh")]
-    public static partial Mesh LoadMesh(PrimitiveType type, MeshData data, BoundingBox* aabb, MeshUsage usage);
+    public static partial Mesh LoadMesh(PrimitiveType type, MeshData data, BoundingBox* aabb);
 
     /// <summary>
     /// Destroys a 3D mesh and frees its resources.

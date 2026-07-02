@@ -12,58 +12,49 @@ namespace R3D_cs;
 /// <summary>
 /// Screen Space Global Illumination (SSGI) settings.
 /// <para>
-/// Real-time global illlumination calculated in screen space.
+/// Computes indirect lighting from the scene's visible surfaces in real time.
 /// </para>
 /// </summary>
 /// <remarks>
-/// Best suited for enclosed/indoor environments.
 /// Native: <c>R3D_EnvSSGI</c>
 /// </remarks>
 [StructLayout(LayoutKind.Sequential)]
 public struct EnvSSGI
 {
     /// <summary>
-    /// Number of rays per pixel (default: 2)
+    /// Number of directions sampled per pixel. Higher = fewer noise streaks, higher cost. (default: 4)
     /// </summary>
     /// <remarks>
-    /// Native: <c>sampleCount</c>
+    /// Native: <c>sliceCount</c>
     /// </remarks>
-    public int SampleCount;
+    public int SliceCount;
 
     /// <summary>
-    /// Maximum ray marching steps (default: 32)
+    /// Fades out GI near screen edges to hide emissive objects partially off-screen. (default: 0.1)
     /// </summary>
     /// <remarks>
-    /// Native: <c>maxRaySteps</c>
+    /// Native: <c>edgeFade</c>
     /// </remarks>
-    public int MaxRaySteps;
+    public float EdgeFade;
 
     /// <summary>
-    /// Ray step size (default: 0.125)
+    /// How quickly indirect light fades with distance. Higher = shorter reach, darker result. (default: 1.0)
     /// </summary>
     /// <remarks>
-    /// Native: <c>stepSize</c>
+    /// Native: <c>distanceFalloff</c>
     /// </remarks>
-    public float StepSize;
+    public float DistanceFalloff;
 
     /// <summary>
-    /// Depth tolerance for valid hits (default: 1.0)
+    /// Prevents surfaces from receiving light through their own backside. 0 = off, 1 = physically correct. May look inconsistent with non-directional emissives. (default: 0.0)
     /// </summary>
     /// <remarks>
-    /// Native: <c>thickness</c>
+    /// Native: <c>normalRejection</c>
     /// </remarks>
-    public float Thickness;
+    public float NormalRejection;
 
     /// <summary>
-    /// Maximum ray distance (default: 4.0)
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>maxDistance</c>
-    /// </remarks>
-    public float MaxDistance;
-
-    /// <summary>
-    /// GI intensity multiplier (default: 3.0)
+    /// Brightness of the indirect lighting. Dimly lit scenes may require significantly higher values to show probable contribution. (default: 1.0)
     /// </summary>
     /// <remarks>
     /// Native: <c>intensity</c>
@@ -71,23 +62,7 @@ public struct EnvSSGI
     public float Intensity;
 
     /// <summary>
-    /// Distance at which the GI fade begins (default: 8.0)
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>fadeStart</c>
-    /// </remarks>
-    public float FadeStart;
-
-    /// <summary>
-    /// Distance at which GI is fully faded (default: 16.0)
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>fadeEnd</c>
-    /// </remarks>
-    public float FadeEnd;
-
-    /// <summary>
-    /// Number of denoiser iterations (default: 5)
+    /// Number of denoiser passes. Higher = smoother result, slightly higher cost. (default: 4)
     /// </summary>
     /// <remarks>
     /// Native: <c>denoiseSteps</c>
@@ -95,7 +70,7 @@ public struct EnvSSGI
     public int DenoiseSteps;
 
     /// <summary>
-    /// Enable/disable SSGI (default: false)
+    /// Enable or disable SSGI entirely. (default: false)
     /// </summary>
     /// <remarks>
     /// Native: <c>enabled</c>

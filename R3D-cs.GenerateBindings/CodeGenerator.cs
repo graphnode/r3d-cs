@@ -18,6 +18,100 @@ public class CodeGenerator(string outputDir)
     private const string NativeLibName = "r3d";
 
     /// <summary>
+    ///     C# types that are legal element types for a <c>fixed</c> buffer.
+    ///     Anything else (enums, structs like Vector4) needs an <c>[InlineArray]</c> wrapper.
+    /// </summary>
+    private static readonly HashSet<string> FixedBufferPrimitives =
+    [
+        "bool", "byte", "sbyte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double", "char"
+    ];
+
+    /// <summary>
+    ///     Caches the full text of parsed header files so field/parameter source spellings
+    ///     can be read from their source spans.
+    /// </summary>
+    private static readonly Dictionary<string, string> SourceFileCache = new();
+
+    /// <summary>
+    ///     Reads the original source text spanned by a parsed element (e.g. <c>int8_t normal[4]</c>).
+    ///     Used to recover information lost during canonicalization, such as the distinction between
+    ///     plain <c>char</c> (a string) and <c>int8_t</c>/<c>signed char</c> (numeric), which MSVC
+    ///     collapses to the same <see cref="CppPrimitiveKind.Char"/>.
+    /// </summary>
+    private static string GetSourceSpelling(CppElement element)
+    {
+        try
+        {
+            var span = element.Span;
+            string? file = span.Start.File;
+            if (string.IsNullOrEmpty(file))
+                return "";
+            if (!SourceFileCache.TryGetValue(file, out string? text))
+            {
+                text = File.ReadAllText(file);
+                SourceFileCache[file] = text;
+            }
+            int start = span.Start.Offset;
+            int end = span.End.Offset;
+            if (start < 0 || end <= start || end > text.Length)
+                return "";
+            return text.Substring(start, end - start);
+        }
+        catch
+        {
+            return "";
+        }
+    }
+
+    /// <summary>
+    ///     Determines whether a char-typed field/parameter is actually a signed 8-bit numeric buffer
+    ///     (<c>int8_t</c> / <c>signed char</c>) rather than a text string (<c>char</c>).
+    /// </summary>
+    private static bool IsSignedCharBuffer(CppElement element)
+    {
+        string s = GetSourceSpelling(element);
+        return s.Contains("int8_t") || s.Contains("signed char");
+    }
+
+    /// <summary>
+    ///     Rewrites C fixed-width integer constant macros (e.g. <c>UINT32_C(0xFFFFFFFF)</c>) into
+    ///     plain C# literals that a C# enum initializer accepts.
+    /// </summary>
+    private static string SanitizeMacroValue(string value)
+    {
+        return System.Text.RegularExpressions.Regex.Replace(
+            value,
+            @"\b(?:U?INT(?:8|16|32|64|MAX|PTR)_C)\s*\(\s*([^)]*?)\s*\)",
+            "$1");
+    }
+
+    /// <summary>
+    ///     Determines whether a function parameter is a signed 8-bit numeric buffer
+    ///     (<c>int8_t</c> / <c>signed char</c>). Parameters carry no usable source span, so the
+    ///     containing function's declaration text is inspected instead.
+    /// </summary>
+    private static bool IsSignedCharParam(CppFunction function, CppParameter param)
+    {
+        string decl = GetSourceSpelling(function);
+        int open = decl.IndexOf('(');
+        if (open < 0)
+            return false;
+
+        string args = decl[(open + 1)..];
+        int close = args.LastIndexOf(')');
+        if (close >= 0)
+            args = args[..close];
+
+        foreach (string segment in args.Split(','))
+        {
+            if (System.Text.RegularExpressions.Regex.IsMatch(segment, $@"\b{System.Text.RegularExpressions.Regex.Escape(param.Name)}\b"))
+                return segment.Contains("int8_t") || segment.Contains("signed char");
+        }
+
+        return false;
+    }
+
+    /// <summary>
     ///     Generates all binding files from the parsed compilation.
     /// </summary>
     public void Generate(CppCompilation compilation, string version)
@@ -305,15 +399,25 @@ public class CodeGenerator(string outputDir)
                 if (countExpr != null) usedCountFields.Add(countExpr);
             }
 
+            // Inline-array wrapper structs to emit after the main struct (for fixed buffers of
+            // non-primitive element types like Vector4 or enums, which C# `fixed` cannot hold).
+            var inlineArrays = new List<(string bufferType, string elementType, int size)>();
+
             // --- Pass 2: emit fields ---
             foreach (var (field, fieldType, fieldName, emitName, access, isFixedBuffer, fixedSize) in fieldInfos)
             {
                 // Count fields consumed by a Span property become internal
                 string finalAccess = usedCountFields.Contains(fieldName) ? "internal" : access;
 
-                // Detect char[] fixed buffers → emit backing field + ReadOnlySpan<byte> setter property
-                bool isStringBuffer = isFixedBuffer
+                // char[] arrays canonicalize to the same primitive kind as int8_t/signed char.
+                // Only a genuine `char[]` is a string; `int8_t[]` is a signed numeric buffer.
+                bool isCharArray = isFixedBuffer
                     && field.Type is CppArrayType { ElementType: CppPrimitiveType { Kind: CppPrimitiveKind.Char } };
+                bool isSignedCharBuffer = isCharArray && IsSignedCharBuffer(field);
+                bool isStringBuffer = isCharArray && !isSignedCharBuffer;
+
+                // The signed numeric char buffer maps to sbyte instead of the default byte.
+                string emitType = isSignedCharBuffer ? "sbyte" : fieldType;
 
                 if (isStringBuffer)
                 {
@@ -346,10 +450,21 @@ public class CodeGenerator(string outputDir)
                 else
                 {
                     CommentGenerator.Generate(sb, field.Comment, field.Name, "    ");
-                    if (isFixedBuffer)
-                        sb.AppendLine($"    {finalAccess} fixed {fieldType} {emitName}[{fixedSize}];");
+                    if (isFixedBuffer && FixedBufferPrimitives.Contains(emitType))
+                    {
+                        sb.AppendLine($"    {finalAccess} fixed {emitType} {emitName}[{fixedSize}];");
+                    }
+                    else if (isFixedBuffer)
+                    {
+                        // C# `fixed` cannot hold non-primitive element types; use an [InlineArray] wrapper.
+                        string bufferType = $"{className}{fieldName}Buffer";
+                        sb.AppendLine($"    {finalAccess} {bufferType} {emitName};");
+                        inlineArrays.Add((bufferType, emitType, fixedSize));
+                    }
                     else
-                        sb.AppendLine($"    {finalAccess} {fieldType} {emitName};");
+                    {
+                        sb.AppendLine($"    {finalAccess} {emitType} {emitName};");
+                    }
                 }
 
                 sb.AppendLine();
@@ -382,6 +497,18 @@ public class CodeGenerator(string outputDir)
             }
 
             sb.AppendLine("}");
+
+            // Emit [InlineArray] wrapper structs for fixed buffers of non-primitive element types.
+            foreach (var (bufferType, elementType, size) in inlineArrays)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"/// <summary>Inline fixed-size buffer of {size} <see cref=\"{elementType}\"/> elements.</summary>");
+                sb.AppendLine($"[System.Runtime.CompilerServices.InlineArray({size})]");
+                sb.AppendLine($"public struct {bufferType}");
+                sb.AppendLine("{");
+                sb.AppendLine($"    private {elementType} _element0;");
+                sb.AppendLine("}");
+            }
 
             File.WriteAllText(Path.Combine(outputDir, "types", $"{className}.g.cs"), sb.ToString());
             count++;
@@ -456,6 +583,55 @@ public class CodeGenerator(string outputDir)
                 continue;
             }
 
+            // Fixed-length char array typedefs (e.g. typedef char R3D_MeshName[32])
+            // → struct wrapping a fixed byte buffer with a UTF-8 string accessor.
+            if (typedef.ElementType is CppArrayType { ElementType: CppPrimitiveType { Kind: CppPrimitiveKind.Char } } charArray)
+            {
+                int size = charArray.Size;
+                int maxLen = size - 1;
+
+                var sb = new StringBuilder();
+                GenerateHeader(sb, ["System", "System.Numerics", "System.Runtime.InteropServices", "System.Text", "Raylib_cs"]);
+
+                CommentGenerator.Generate(sb, typedef.Comment, typedef.Name);
+
+                sb.AppendLine("[StructLayout(LayoutKind.Sequential)]");
+                sb.AppendLine($"public unsafe struct {name}");
+                sb.AppendLine("{");
+                sb.AppendLine($"    internal fixed byte _value[{size}];");
+                sb.AppendLine();
+                sb.AppendLine("    /// <summary>The UTF-8 string stored in this fixed-length buffer.</summary>");
+                sb.AppendLine("    public string Value");
+                sb.AppendLine("    {");
+                sb.AppendLine("        get");
+                sb.AppendLine("        {");
+                sb.AppendLine("            fixed (byte* ptr = _value)");
+                sb.AppendLine("            {");
+                sb.AppendLine("                int len = 0;");
+                sb.AppendLine($"                while (len < {size} && ptr[len] != 0) len++;");
+                sb.AppendLine("                return Encoding.UTF8.GetString(ptr, len);");
+                sb.AppendLine("            }");
+                sb.AppendLine("        }");
+                sb.AppendLine("        set");
+                sb.AppendLine("        {");
+                sb.AppendLine("            byte[] utf8 = Encoding.UTF8.GetBytes(value);");
+                sb.AppendLine($"            int len = Math.Min(utf8.Length, {maxLen});");
+                sb.AppendLine("            for (int i = 0; i < len; i++) _value[i] = utf8[i];");
+                sb.AppendLine("            _value[len] = 0;");
+                sb.AppendLine("        }");
+                sb.AppendLine("    }");
+                sb.AppendLine();
+                sb.AppendLine("    /// <inheritdoc/>");
+                sb.AppendLine("    public override string ToString() => Value;");
+                sb.AppendLine();
+                sb.AppendLine($"    public static implicit operator string({name} v) => v.Value;");
+                sb.AppendLine("}");
+
+                File.WriteAllText(Path.Combine(outputDir, "types", $"{name}.g.cs"), sb.ToString());
+                count++;
+                continue;
+            }
+
             // Check for macro-based enums
             bool isBitflag = name.EndsWith("Flags");
             string enumName = isBitflag ? name[..^5] : name;
@@ -502,7 +678,7 @@ public class CodeGenerator(string outputDir)
 
                     bool hasComment = CommentGenerator.GenerateForMacro(sb, macro, macro.Name, "    ");
 
-                    sb.AppendLine($"    {optionName} = {macro.Value},");
+                    sb.AppendLine($"    {optionName} = {SanitizeMacroValue(macro.Value)},");
 
                     if (i < options.Count - 1 && hasComment)
                         sb.AppendLine();
@@ -588,7 +764,7 @@ public class CodeGenerator(string outputDir)
                 bool hasStringParam = function.Parameters.Any(p => p.Type is CppPointerType
                 {
                     ElementType: CppQualifiedType { ElementType: CppPrimitiveType { Kind: CppPrimitiveKind.Char } }
-                });
+                } && !IsSignedCharParam(function, p));
 
                 CommentGenerator.Generate(sb, function.Comment, name, "    ");
 
@@ -608,7 +784,16 @@ public class CodeGenerator(string outputDir)
                         sb.Append(", ");
 
                     var param = function.Parameters[i];
-                    (string paramType, _, _, _) = MapType(param.Type);
+                    (string paramType, _, bool isArrayParam, _) = MapType(param.Type);
+
+                    // int8_t / signed char buffers canonicalize to `char`; recover the signed
+                    // numeric intent (const int8_t* would otherwise be marshalled as a string).
+                    if (IsSignedCharParam(function, param))
+                        paramType = paramType == "string" ? "sbyte*" : paramType.Replace("byte", "sbyte");
+
+                    // Array parameters (e.g. Vector3 corners[8]) decay to pointers in C.
+                    if (isArrayParam)
+                        paramType += "*";
 
                     if (paramType == "bool")
                         sb.Append("[MarshalAs(UnmanagedType.I1)] ");

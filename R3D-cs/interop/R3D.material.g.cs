@@ -252,12 +252,13 @@ public static unsafe partial class R3D
     /// <param name="occlusion">Occlusion multiplier.</param>
     /// <param name="roughness">Roughness multiplier.</param>
     /// <param name="metalness">Metalness multiplier.</param>
+    /// <param name="specular">Base reflectivity multiplier for non-metal materials.</param>
     /// <returns>ORM map. Returns an empty map on failure.</returns>
     /// <remarks>
     /// Native: <c>R3D_LoadOrmMap</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadOrmMap", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial OrmMap LoadOrmMap(string fileName, float occlusion, float roughness, float metalness);
+    public static partial OrmMap LoadOrmMap(string fileName, float occlusion, float roughness, float metalness, float specular);
 
     /// <summary>
     /// Load a combined ORM (Occlusion-Roughness-Metalness) map from memory.
@@ -271,12 +272,13 @@ public static unsafe partial class R3D
     /// <param name="occlusion">Occlusion multiplier.</param>
     /// <param name="roughness">Roughness multiplier.</param>
     /// <param name="metalness">Metalness multiplier.</param>
+    /// <param name="specular">Base reflectivity multiplier for non-metal materials.</param>
     /// <returns>ORM map. Returns an empty map on failure.</returns>
     /// <remarks>
     /// Native: <c>R3D_LoadOrmMapFromMemory</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadOrmMapFromMemory", StringMarshalling = StringMarshalling.Utf8)]
-    public static partial OrmMap LoadOrmMapFromMemory(string fileType, void* fileData, int dataSize, float occlusion, float roughness, float metalness);
+    public static partial OrmMap LoadOrmMapFromMemory(string fileType, void* fileData, int dataSize, float occlusion, float roughness, float metalness, float specular);
 
     /// <summary>
     /// Unload an ORM map texture.

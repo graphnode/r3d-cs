@@ -21,6 +21,7 @@ public static class Kinematics
 
         R3D.Init(GetScreenWidth(), GetScreenHeight());
         R3D.SetTextureFilter(TextureFilter.Anisotropic8X);
+        R3D.SetTextureWrap(TextureWrap.Repeat);
 
         var sky = R3D.GenProceduralSky(4096, R3D.PROCEDURAL_SKY_BASE);
         var ambient = R3D.GenAmbientMap(sky, AmbientFlags.Illumination | AmbientFlags.Reflection);
@@ -54,7 +55,7 @@ public static class Kinematics
 
         // Slope obstacle
         var slopeMeshData = R3D.GenMeshDataSlope(2, 2, 2, new Vector3(0, 1, -1));
-        var slopeMesh = R3D.LoadMesh(PrimitiveType.Triangles, slopeMeshData, MeshUsage.StaticMesh);
+        var slopeMesh = R3D.LoadMesh(PrimitiveType.Triangles, slopeMeshData);
         var slopeTransform = Matrix4x4.Transpose(Matrix4x4.CreateTranslation(0, 1, 5));
 
         // Player capsule
@@ -97,10 +98,10 @@ public static class Kinematics
                 moveInput = Vector3.Normalize(right * dx + forward * dz);
             }
 
-            // Check grounded
+            // Check grounded: probe for a support surface in the downward direction
             var outGround = new RayCollision();
-            bool isGrounded = R3D.IsCapsuleGroundedBox(capsule, 0.01f, groundBox, ref outGround) ||
-                              R3D.IsCapsuleGroundedMesh(capsule, 0.3f, slopeMeshData, slopeTransform, ref outGround);
+            bool isGrounded = R3D.CheckCapsuleSupportBoundingBox(capsule, new Vector3(0, -1, 0), 0.01f, groundBox, ref outGround) ||
+                              R3D.CheckCapsuleSupportMesh(capsule, new Vector3(0, -1, 0), 0.3f, slopeMeshData, slopeTransform, ref outGround);
 
             // Jump and apply gravity
             if (isGrounded && IsKeyPressed(KeyboardKey.Space)) velocity.Y = JUMP_FORCE;

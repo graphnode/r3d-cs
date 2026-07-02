@@ -18,16 +18,49 @@ public static unsafe partial class R3D
 {
 
     /// <summary>
-    /// Create instance buffers on the GPU.
+    /// Creates instance buffers on the GPU using the default layout.
+    /// <para>
+    /// This is the simple entry point. It allocates one GPU buffer for each enabled attribute in `flags`.
+    /// </para>
+    /// <para>
+    /// Default formats:
+    /// </para>
+    /// <para>
+    /// <list type="bullet">
+    /// <item><description>position: FLOAT32</description></item>
+    /// <item><description>rotation: FLOAT32</description></item>
+    /// <item><description>scale:    FLOAT32</description></item>
+    /// <item><description>color:    UNORM8</description></item>
+    /// <item><description>custom:   FLOAT32</description></item>
+    /// </list>
+    /// </para>
     /// </summary>
-    /// <param name="capacity">Max instances.</param>
+    /// <param name="capacity">Maximum number of instances.</param>
     /// <param name="flags">Attribute mask to allocate.</param>
-    /// <returns>Initialized instance buffer.</returns>
+    /// <returns>Initialized instance buffer, or an empty buffer on failure.</returns>
     /// <remarks>
     /// Native: <c>R3D_LoadInstanceBuffer</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadInstanceBuffer")]
     public static partial InstanceBuffer LoadInstanceBuffer(int capacity, InstanceFlags flags);
+
+    /// <summary>
+    /// Creates instance buffers on the GPU using a custom layout.
+    /// <para>
+    /// This is the advanced entry point. It allocates one GPU buffer for each enabled attribute in `layout.flags`, using the corresponding storage format from `layout.formats`.
+    /// </para>
+    /// <para>
+    /// Data uploaded or mapped for each attribute must match the format selected in the layout.
+    /// </para>
+    /// </summary>
+    /// <param name="capacity">Maximum number of instances.</param>
+    /// <param name="layout">Instance layout describing enabled attributes and formats.</param>
+    /// <returns>Initialized instance buffer, or an empty buffer on failure.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_LoadInstanceBufferEx</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LoadInstanceBufferEx")]
+    public static partial InstanceBuffer LoadInstanceBufferEx(int capacity, InstanceLayout layout);
 
     /// <summary>
     /// Destroy all GPU buffers owned by this instance buffer.
@@ -39,28 +72,68 @@ public static unsafe partial class R3D
     public static partial void UnloadInstanceBuffer(InstanceBuffer buffer);
 
     /// <summary>
-    /// Upload a contiguous range of instance data.
+    /// Grow the GPU buffers of an instance buffer to a new capacity.
+    /// <para>
+    /// Only expands; if newCapacity &lt; = buffer-&gt;capacity the call is a no-op. All attribute buffers present in buffer-&gt;flags are reallocated and if keepData is true, their existing content is copied to the new buffers before the old ones are deleted.
+    /// </para>
     /// </summary>
-    /// <param name="flag">Attribute being updated (single bit).</param>
+    /// <param name="buffer">Instance buffer to resize (updated in place).</param>
+    /// <param name="newCapacity">Desired minimum capacity in number of instances.</param>
+    /// <param name="keepData">If true, preserves existing instance data.</param>
+    /// <remarks>
+    /// Native: <c>R3D_ResizeInstanceBuffer</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ResizeInstanceBuffer")]
+    public static partial void ResizeInstanceBuffer(ref InstanceBuffer buffer, int newCapacity, [MarshalAs(UnmanagedType.I1)] bool keepData);
+
+    /// <summary>
+    /// Upload a contiguous range of instance data to a GPU buffer.
+    /// </summary>
+    /// <param name="buffer">Instance buffer containing the target GPU buffer.</param>
+    /// <param name="flag">Attribute to update (single bit).</param>
     /// <param name="offset">First instance index.</param>
-    /// <param name="count">Number of instances.</param>
-    /// <param name="data">Source pointer.</param>
+    /// <param name="count">Number of instances to upload.</param>
+    /// <param name="data">Source data pointer.</param>
+    /// <param name="discard">If true, the entire GPU buffer is orphaned before upload, avoiding a GPU/CPU sync at the cost of discarding existing data. Safe to use when rewriting the full buffer each frame.</param>
     /// <remarks>
     /// Native: <c>R3D_UploadInstances</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UploadInstances")]
-    public static partial void UploadInstances(InstanceBuffer buffer, InstanceFlags flag, int offset, int count, IntPtr data);
+    public static partial void UploadInstances(InstanceBuffer buffer, InstanceFlags flag, int offset, int count, void* data, [MarshalAs(UnmanagedType.I1)] bool discard);
 
     /// <summary>
-    /// Map an attribute buffer for CPU write access.
+    /// Map an entire attribute buffer for CPU write access.
+    /// <para>
+    /// Call R3D_UnmapInstances when done writing.
+    /// </para>
     /// </summary>
+    /// <param name="buffer">Instance buffer containing the target GPU buffer.</param>
     /// <param name="flag">Attribute to map (single bit).</param>
-    /// <returns>Writable pointer, or NULL on error.</returns>
+    /// <param name="discard">If true, existing buffer contents are invalidated, allowing the driver to return a fresh memory region without stalling on in-flight GPU reads.</param>
+    /// <returns>Writable pointer to the full buffer, or NULL on error.</returns>
     /// <remarks>
     /// Native: <c>R3D_MapInstances</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_MapInstances")]
-    public static partial IntPtr MapInstances(InstanceBuffer buffer, InstanceFlags flag);
+    public static partial IntPtr MapInstances(InstanceBuffer buffer, InstanceFlags flag, [MarshalAs(UnmanagedType.I1)] bool discard);
+
+    /// <summary>
+    /// Map a sub-range of an attribute buffer for CPU write access.
+    /// <para>
+    /// Prefer this over R3D_MapInstances for partial updates to avoid touching unrelated data. Call R3D_UnmapInstances when done writing.
+    /// </para>
+    /// </summary>
+    /// <param name="buffer">Instance buffer containing the target GPU buffer.</param>
+    /// <param name="flag">Attribute to map (single bit).</param>
+    /// <param name="offset">First instance index of the mapped range.</param>
+    /// <param name="count">Number of instances to map.</param>
+    /// <param name="discard">If true, the mapped range is invalidated, allowing the driver to skip syncing that region with in-flight GPU reads.</param>
+    /// <returns>Writable pointer to the mapped range, or NULL on error.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_MapInstancesEx</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_MapInstancesEx")]
+    public static partial IntPtr MapInstancesEx(InstanceBuffer buffer, InstanceFlags flag, int offset, int count, [MarshalAs(UnmanagedType.I1)] bool discard);
 
     /// <summary>
     /// Unmap one or more previously mapped attribute buffers.
@@ -71,5 +144,38 @@ public static unsafe partial class R3D
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnmapInstances")]
     public static partial void UnmapInstances(InstanceBuffer buffer, InstanceFlags flags);
+
+    /// <summary>
+    /// Sets the storage format of an instance attribute in a layout.
+    /// <para>
+    /// `attribute` must be a single instance attribute flag, such as `R3D_INSTANCE_POSITION`, not a combination of multiple flags.
+    /// </para>
+    /// <para>
+    /// This function only changes the format stored in the layout. It does not enable the attribute in `layout.flags`.
+    /// </para>
+    /// </summary>
+    /// <param name="layout">Layout to modify.</param>
+    /// <param name="attribute">Single attribute flag to modify.</param>
+    /// <param name="format">New storage format.</param>
+    /// <remarks>
+    /// Native: <c>R3D_SetInstanceFormat</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetInstanceFormat")]
+    public static partial void SetInstanceFormat(ref InstanceLayout layout, InstanceFlags attribute, InstanceFormat format);
+
+    /// <summary>
+    /// Gets the storage format of an instance attribute from a layout.
+    /// <para>
+    /// `attribute` must be a single instance attribute flag, such as `R3D_INSTANCE_POSITION`, not a combination of multiple flags.
+    /// </para>
+    /// </summary>
+    /// <param name="layout">Layout to read from.</param>
+    /// <param name="attribute">Single attribute flag to query.</param>
+    /// <returns>Storage format of the requested attribute, or FLOAT32 if the attribute flag is invalid.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_GetInstanceFormat</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetInstanceFormat")]
+    public static partial InstanceFormat GetInstanceFormat(InstanceLayout layout, InstanceFlags attribute);
 
 }

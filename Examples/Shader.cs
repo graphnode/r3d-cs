@@ -41,7 +41,7 @@ public static class Shader
 
         // Load a screen shader
         var screenShader = R3D.LoadScreenShader("resources/shaders/screen.glsl");
-        R3D.SetScreenShaderChain([screenShader]);
+        R3D.SetScreenShaderChain(ScreenShaderStage.Output, [screenShader]);
 
         // Create light
         var light = R3D.CreateLight(LightType.Spot);

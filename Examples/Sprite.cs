@@ -17,6 +17,7 @@ public static class Sprite
         // Initialize R3D
         R3D.Init(GetScreenWidth(), GetScreenHeight());
         R3D.SetTextureFilter(TextureFilter.Point);
+        R3D.SetTextureWrap(TextureWrap.Repeat);
 
         // Set background/ambient color
         R3D.SetEnvironmentEx((ref env) =>

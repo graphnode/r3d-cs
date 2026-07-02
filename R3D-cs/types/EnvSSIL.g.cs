@@ -12,10 +12,7 @@ namespace R3D_cs;
 /// <summary>
 /// Screen Space Indirect Lighting (SSIL) settings.
 /// <para>
-/// Approximates indirect lighting by gathering light from nearby visible surfaces in screen space.
-/// </para>
-/// <para>
-/// With a small radius, SSIL behaves like an extension of SSAO, producing a very subtle local blending of light and surface hues. With a larger radius, it becomes a better complement to SSGI, reinforcing indirect lighting over a wider area.
+/// Extends the SSAO algorithm with a global illumination component: occluding surfaces not only darken the fragment (ambient occlusion) but also transfer their color to it (indirect light bounce). A larger radius than SSAO is generally preferable to capture meaningful indirect lighting contributions.
 /// </para>
 /// </summary>
 /// <remarks>
@@ -25,7 +22,7 @@ namespace R3D_cs;
 public struct EnvSSIL
 {
     /// <summary>
-    /// Number of samples to compute indirect lighting (default: 2)
+    /// Number of samples to compute SSIL (default: 16)
     /// </summary>
     /// <remarks>
     /// Native: <c>sampleCount</c>
@@ -33,39 +30,23 @@ public struct EnvSSIL
     public int SampleCount;
 
     /// <summary>
-    /// Number of depth slices for accumulation (default: 4)
+    /// Indirect light strength multiplier (default: 1.0)
     /// </summary>
     /// <remarks>
-    /// Native: <c>sliceCount</c>
+    /// Native: <c>giIntensity</c>
     /// </remarks>
-    public int SliceCount;
+    public float GiIntensity;
 
     /// <summary>
-    /// Maximum distance to gather light from (default: 2.0)
+    /// Ambient occlusion strength multiplier (default: 1.0)
     /// </summary>
     /// <remarks>
-    /// Native: <c>radius</c>
+    /// Native: <c>aoIntensity</c>
     /// </remarks>
-    public float Radius;
+    public float AoIntensity;
 
     /// <summary>
-    /// Thickness threshold for occluders (default: 1.0)
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>thickness</c>
-    /// </remarks>
-    public float Thickness;
-
-    /// <summary>
-    /// IL intensity multiplier (default: 1.0)
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>intensity</c>
-    /// </remarks>
-    public float Intensity;
-
-    /// <summary>
-    /// AO exponent/power (default: 1.0)
+    /// Exponential falloff for sharper occlusion darkening (default: 1.0)
     /// </summary>
     /// <remarks>
     /// Native: <c>aoPower</c>
@@ -73,12 +54,28 @@ public struct EnvSSIL
     public float AoPower;
 
     /// <summary>
-    /// Number of denoiser iterations (default: 4)
+    /// Fraction of screen height beyond which the sampling radius is clamped (default: 0.2)
     /// </summary>
     /// <remarks>
-    /// Native: <c>denoiseSteps</c>
+    /// Native: <c>maxRadius</c>
     /// </remarks>
-    public int DenoiseSteps;
+    public float MaxRadius;
+
+    /// <summary>
+    /// Sampling radius in world space (default: 4.0)
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>radius</c>
+    /// </remarks>
+    public float Radius;
+
+    /// <summary>
+    /// Depth bias to prevent self-occlusion artifacts, in world-space units (default: 0.03)
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>bias</c>
+    /// </remarks>
+    public float Bias;
 
     /// <summary>
     /// Enable/disable SSIL effect (default: false)

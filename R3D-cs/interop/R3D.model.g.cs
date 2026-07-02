@@ -109,4 +109,40 @@ public static unsafe partial class R3D
     [LibraryImport(NativeLibName, EntryPoint = "R3D_UnloadModel")]
     public static partial void UnloadModel(Model model, [MarshalAs(UnmanagedType.I1)] bool unloadMaterials);
 
+    /// <summary>
+    /// Returns the index of the mesh with the given name.
+    /// </summary>
+    /// <param name="model">The model to search in.</param>
+    /// <param name="meshName">The name of the mesh to look up.</param>
+    /// <returns>The mesh index, or -1 if not found or ifmeshNames is NULL.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_GetModelMeshIndex</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetModelMeshIndex", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial int GetModelMeshIndex(Model model, string meshName);
+
+    /// <summary>
+    /// Returns a pointer to the mesh with the given name.
+    /// </summary>
+    /// <param name="model">The model to search in.</param>
+    /// <param name="meshName">The name of the mesh to look up.</param>
+    /// <returns>A pointer to the mesh, or NULL if not found or ifmeshNames is NULL.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_GetModelMesh</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetModelMesh", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial Mesh* GetModelMesh(Model model, string meshName);
+
+    /// <summary>
+    /// Returns a pointer to the mesh data with the given name.
+    /// </summary>
+    /// <param name="model">The model to search in.</param>
+    /// <param name="meshName">The name of the mesh to look up.</param>
+    /// <returns>A pointer to the mesh data, or NULL if not found or ifmeshNames ormeshData is NULL.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_GetModelMeshData</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetModelMeshData", StringMarshalling = StringMarshalling.Utf8)]
+    public static partial MeshData* GetModelMeshData(Model model, string meshName);
+
 }

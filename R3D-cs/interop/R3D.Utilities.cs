@@ -94,7 +94,8 @@ public static unsafe partial class R3D
                 Texture = default,
                 Occlusion = 1.0f,
                 Roughness = 1.0f,
-                Metalness = 0.0f
+                Metalness = 0.0f,
+                Specular = 0.5f
             },
             UvOffset = Vector2.Zero,
             UvScale = Vector2.One,
@@ -121,7 +122,28 @@ public static unsafe partial class R3D
             BlendMode = BlendMode.Mix,
             CullMode = CullMode.Back,
             Unlit = false,
+            Priority = 0,
             Shader = default
+        };
+
+    /// <summary>
+    ///     Gets a default R3D camera with sensible base values (matching <c>R3D_CAMERA_BASE</c>).
+    ///     Use this as a starting point when creating a quaternion-based <see cref="Camera" />.
+    /// </summary>
+    /// <remarks>
+    ///     Perspective projection, 60° vertical FOV, near 0.05, far 4000, identity rotation,
+    ///     positioned at the origin, and rendering all layers.
+    /// </remarks>
+    public static Camera CAMERA_BASE =>
+        new()
+        {
+            Position = Vector3.Zero,
+            Rotation = Quaternion.Identity,
+            Fovy = 60.0,
+            NearPlane = 0.05,
+            FarPlane = 4000.0,
+            CullMask = Layer.All,
+            Projection = Projection.Perspective
         };
 
     /// <summary>
@@ -212,7 +234,8 @@ public static unsafe partial class R3D
                 Texture = default,
                 Occlusion = 1.0f,
                 Roughness = 1.0f,
-                Metalness = 0.0f
+                Metalness = 0.0f,
+                Specular = 0.5f
             },
             UvOffset = Vector2.Zero,
             UvScale = Vector2.One,
@@ -281,6 +304,10 @@ public static unsafe partial class R3D
     /// <typeparam name="T">The unmanaged type to map (e.g., Vector3 for positions, Color for colors).</typeparam>
     /// <param name="buffer">The instance buffer to map.</param>
     /// <param name="flag">Which instance attribute to map (Position, Rotation, Scale, or Color).</param>
+    /// <param name="discard">
+    ///     If true, existing buffer contents are invalidated, allowing the driver to return a fresh
+    ///     memory region without stalling on in-flight GPU reads.
+    /// </param>
     /// <returns>A span allowing direct read/write access to the instance data.</returns>
     /// <example>
     ///     <code>
@@ -290,9 +317,9 @@ public static unsafe partial class R3D
     /// R3D.UnmapInstances(instances, InstanceFlags.Position);
     /// </code>
     /// </example>
-    public static Span<T> MapInstances<T>(InstanceBuffer buffer, InstanceFlags flag) where T : unmanaged
+    public static Span<T> MapInstances<T>(InstanceBuffer buffer, InstanceFlags flag, bool discard = false) where T : unmanaged
     {
-        return new Span<T>((void*)MapInstances(buffer, flag), buffer.Capacity);
+        return new Span<T>((void*)MapInstances(buffer, flag, discard), buffer.Capacity);
     }
 
     /// <summary>
@@ -304,6 +331,10 @@ public static unsafe partial class R3D
     /// <param name="offset">Starting index in the buffer to upload to.</param>
     /// <param name="data">The source data span.</param>
     /// <param name="count">Number of elements to upload. If null, uploads the entire span.</param>
+    /// <param name="discard">
+    ///     If true, the entire GPU buffer is orphaned before upload, avoiding a GPU/CPU sync at the
+    ///     cost of discarding existing data. Safe when rewriting the full buffer each frame.
+    /// </param>
     /// <example>
     ///     <code>
     /// Span&lt;Vector3&gt; positions = stackalloc Vector3[1000];
@@ -311,13 +342,13 @@ public static unsafe partial class R3D
     /// R3D.UploadInstances(instances, InstanceFlags.Position, 0, positions, activeCount);
     /// </code>
     /// </example>
-    public static void UploadInstances<T>(InstanceBuffer buffer, InstanceFlags flag, int offset, ReadOnlySpan<T> data, int? count = null) where T : unmanaged
+    public static void UploadInstances<T>(InstanceBuffer buffer, InstanceFlags flag, int offset, ReadOnlySpan<T> data, int? count = null, bool discard = false) where T : unmanaged
     {
         int length = count ?? data.Length;
         if (length == 0) return;
         fixed (T* ptr = data)
         {
-            UploadInstances(buffer, flag, offset, length, (IntPtr)ptr);
+            UploadInstances(buffer, flag, offset, length, ptr, discard);
         }
     }
 
@@ -382,10 +413,9 @@ public static unsafe partial class R3D
     /// </summary>
     /// <param name="type">Primitive type used to interpret vertex data.</param>
     /// <param name="data">MeshData containing vertices and indices.</param>
-    /// <param name="usage">Hint on how the mesh will be used.</param>
     /// <returns>Created Mesh.</returns>
-    public static Mesh LoadMesh(PrimitiveType type, MeshData data, MeshUsage usage)
-        => LoadMesh(type, data, null, usage);
+    public static Mesh LoadMesh(PrimitiveType type, MeshData data)
+        => LoadMesh(type, data, null);
 
     /// <summary>
     ///     Creates a 3D mesh from CPU-side mesh data with an explicit bounding box.
@@ -393,12 +423,11 @@ public static unsafe partial class R3D
     /// <param name="type">Primitive type used to interpret vertex data.</param>
     /// <param name="data">MeshData containing vertices and indices.</param>
     /// <param name="aabb">Bounding box for the mesh.</param>
-    /// <param name="usage">Hint on how the mesh will be used.</param>
     /// <returns>Created Mesh.</returns>
-    public static Mesh LoadMesh(PrimitiveType type, MeshData data, ref BoundingBox aabb, MeshUsage usage)
+    public static Mesh LoadMesh(PrimitiveType type, MeshData data, ref BoundingBox aabb)
     {
         fixed (BoundingBox* ptr = &aabb)
-            return LoadMesh(type, data, ptr, usage);
+            return LoadMesh(type, data, ptr);
     }
 
     /// <summary>
@@ -424,11 +453,13 @@ public static unsafe partial class R3D
     }
 
     /// <summary>
-    ///     Sets the screen shader chain from a span of shaders.
+    ///     Sets the screen shader chain for a given stage from a span of shaders.
     /// </summary>
-    public static void SetScreenShaderChain(ReadOnlySpan<ScreenShader> shaders)
+    /// <param name="stage">Screen shader stage to configure.</param>
+    /// <param name="shaders">The shaders to execute, in order.</param>
+    public static void SetScreenShaderChain(ScreenShaderStage stage, ReadOnlySpan<ScreenShader> shaders)
     {
         fixed (ScreenShader* ptr = shaders)
-            SetScreenShaderChain(ptr, shaders.Length);
+            SetScreenShaderChain(stage, ptr, shaders.Length);
     }
 }

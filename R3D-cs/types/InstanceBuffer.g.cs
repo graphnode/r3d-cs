@@ -12,7 +12,7 @@ namespace R3D_cs;
 /// <summary>
 /// GPU buffers storing instance attribute streams.
 /// <para>
-/// buffers: One VBO per attribute (indexed by flag order). capcity: Maximum number of instances. flags: Enabled attribute mask.
+/// Each enabled attribute owns one GPU buffer. The enabled attributes and their storage formats are described by `layout`.
 /// </para>
 /// </summary>
 /// <remarks>
@@ -21,13 +21,28 @@ namespace R3D_cs;
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct InstanceBuffer
 {
-    /// <remarks>Native: <c>buffers</c></remarks>
+    /// <summary>
+    /// One GPU buffer per attribute, indexed by attribute order.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>buffers</c>
+    /// </remarks>
     public fixed uint Buffers[5];
 
-    /// <remarks>Native: <c>flags</c></remarks>
-    public InstanceFlags Flags;
+    /// <summary>
+    /// Instance buffer layout.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>layout</c>
+    /// </remarks>
+    public InstanceLayout Layout;
 
-    /// <remarks>Native: <c>capacity</c></remarks>
+    /// <summary>
+    /// Maximum number of instances.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>capacity</c>
+    /// </remarks>
     public int Capacity;
 
 }

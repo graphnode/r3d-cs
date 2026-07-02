@@ -36,7 +36,10 @@ public static class ExampleList
         new("Dof", Dof.Main),
         new("Decal", Decal.Main),
         new("CustomMesh", CustomMesh.Main),
-        new("AnimTree", AnimTree.Main)
+        new("AnimTree", AnimTree.Main),
+        new("Multiview", Multiview.Main),
+        new("Stencil", Stencil.Main),
+        new("ToTexture", ToTexture.Main)
     ];
 
     public static ExampleInfo? GetExample(string name)

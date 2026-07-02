@@ -38,7 +38,7 @@ public struct EnvSSAO
     public float Intensity;
 
     /// <summary>
-    /// Exponential falloff for sharper darkening (default: 1.5)
+    /// Exponential falloff for sharper darkening (default: 1.0)
     /// </summary>
     /// <remarks>
     /// Native: <c>power</c>
@@ -46,7 +46,15 @@ public struct EnvSSAO
     public float Power;
 
     /// <summary>
-    /// Sampling radius in world space (default: 0.25)
+    /// Fraction of screen height beyond which the sampling radius is clamped (default: 0.2)
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>maxRadius</c>
+    /// </remarks>
+    public float MaxRadius;
+
+    /// <summary>
+    /// Sampling radius in world space (default: 1.0)
     /// </summary>
     /// <remarks>
     /// Native: <c>radius</c>
@@ -54,7 +62,7 @@ public struct EnvSSAO
     public float Radius;
 
     /// <summary>
-    /// Depth bias to prevent self-shadowing, good value is ~2% of the radius (default: 0.007)
+    /// Depth bias to prevent self-occlusion artifacts, in world-space units (default: 0.03)
     /// </summary>
     /// <remarks>
     /// Native: <c>bias</c>

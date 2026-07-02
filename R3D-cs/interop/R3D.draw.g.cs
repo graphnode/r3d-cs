@@ -18,9 +18,12 @@ public static unsafe partial class R3D
 {
 
     /// <summary>
-    /// Begins a rendering session using the given camera.
+    /// Begins a rendering session using the given raylib camera.
     /// <para>
     /// Rendering output is directed to the default framebuffer.
+    /// </para>
+    /// <para>
+    /// The given Camera3D is converted internally to an R3D_Camera. Since raylib cameras do not store near/far clipping planes, the converted camera uses the current rlgl culling distances for those values.
     /// </para>
     /// </summary>
     /// <param name="camera">Camera used to render the scene.</param>
@@ -31,18 +34,39 @@ public static unsafe partial class R3D
     public static partial void Begin(Camera3D camera);
 
     /// <summary>
-    /// Begins a rendering session with a custom render target.
+    /// Begins a rendering session using an R3D camera.
     /// <para>
-    /// If the render target is invalid (ID = 0), rendering goes to the screen.
+    /// Rendering output is directed to the default framebuffer.
+    /// </para>
+    /// <para>
+    /// This entry point provides access to R3D-specific camera features such as layer masks, custom near/far clipping planes and quaternion-based orientation.
     /// </para>
     /// </summary>
-    /// <param name="target">Render texture to render into.</param>
     /// <param name="camera">Camera used to render the scene.</param>
     /// <remarks>
     /// Native: <c>R3D_BeginEx</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_BeginEx")]
-    public static partial void BeginEx(RenderTexture2D target, Camera3D camera);
+    public static partial void BeginEx(Camera camera);
+
+    /// <summary>
+    /// Begins a rendering session using a complete R3D view descriptor.
+    /// <para>
+    /// This is the advanced entry point. It allows the caller to specify the camera, render target and viewport used for the rendering session.
+    /// </para>
+    /// <para>
+    /// The view camera is used as-is, including its near/far clipping planes and layer mask. If the camera was created from a raylib Camera3D using `R3D_CameraFromRL()`, its near/far planes come from the current rlgl culling distances because raylib cameras do not store those values directly.
+    /// </para>
+    /// <para>
+    /// Use this function for render-to-texture workflows, custom viewports, multipass rendering, editor views, minimaps, probes or any case where the default framebuffer is not enough.
+    /// </para>
+    /// </summary>
+    /// <param name="view">View descriptor used to render the scene.</param>
+    /// <remarks>
+    /// Native: <c>R3D_BeginPro</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_BeginPro")]
+    public static partial void BeginPro(View view);
 
     /// <summary>
     /// Ends the current rendering session.

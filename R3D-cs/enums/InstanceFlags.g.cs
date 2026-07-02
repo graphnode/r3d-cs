@@ -10,6 +10,12 @@ namespace R3D_cs;
 
 /// <summary>
 /// Bitmask defining which instance attributes are present.
+/// <para>
+/// Each bit enables one per-instance attribute stream. Attribute data is stored in separate GPU buffers, one buffer per enabled attribute.
+/// </para>
+/// <para>
+/// The memory format of each enabled attribute is defined by `R3D_InstanceLayout`. In shaders, these attributes are exposed as floating-point vectors, including normalized integer formats such as UNORM/SNORM.
+/// </para>
 /// </summary>
 /// <remarks>
 /// Native: <c>R3D_InstanceFlags</c>
@@ -17,23 +23,23 @@ namespace R3D_cs;
 [Flags]
 public enum InstanceFlags : uint
 {
-    /// <summary>Vector3</summary>
+    /// <summary>Position attribute: 3 components</summary>
     /// <remarks>Native: <c>R3D_INSTANCE_POSITION</c></remarks>
-    Position = (1<<0),
+    Position = (1u<<0),
 
-    /// <summary>Quaternion</summary>
+    /// <summary>Rotation attribute: 4 components (quaternion)</summary>
     /// <remarks>Native: <c>R3D_INSTANCE_ROTATION</c></remarks>
-    Rotation = (1<<1),
+    Rotation = (1u<<1),
 
-    /// <summary>Vector3</summary>
+    /// <summary>Scale attribute: 3 components</summary>
     /// <remarks>Native: <c>R3D_INSTANCE_SCALE</c></remarks>
-    Scale = (1<<2),
+    Scale = (1u<<2),
 
-    /// <summary>Color</summary>
+    /// <summary>Color attribute: 4 components</summary>
     /// <remarks>Native: <c>R3D_INSTANCE_COLOR</c></remarks>
-    Color = (1<<3),
+    Color = (1u<<3),
 
-    /// <summary>Vector4</summary>
+    /// <summary>Custom attribute: 4 components</summary>
     /// <remarks>Native: <c>R3D_INSTANCE_CUSTOM</c></remarks>
-    Custom = (1<<4),
+    Custom = (1u<<4),
 }

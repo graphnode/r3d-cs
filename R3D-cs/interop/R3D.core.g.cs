@@ -24,7 +24,7 @@ public static unsafe partial class R3D
     /// </summary>
     public const string NativeLibName = "r3d";
 
-    public const string R3D_VERSION = "0.9.1";
+    public const string R3D_VERSION = "0.10.0";
 
     /// <summary>
     /// Initializes the rendering engine.
@@ -271,57 +271,5 @@ public static unsafe partial class R3D
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetColorSpace")]
     public static partial void SetColorSpace(ColorSpace space);
-
-    /// <summary>
-    /// Get the currently active global rendering layers.
-    /// <para>
-    /// Returns the bitfield representing the currently active layers in the renderer. By default, the internal active layers are set to 0, which means that any non-zero layer assigned to an object will NOT be rendered unless explicitly activated.
-    /// </para>
-    /// </summary>
-    /// <returns>R3D_Layer Bitfield of active layers.</returns>
-    /// <remarks>
-    /// Native: <c>R3D_GetActiveLayers</c>
-    /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetActiveLayers")]
-    public static partial Layer GetActiveLayers();
-
-    /// <summary>
-    /// Set the active global rendering layers.
-    /// <para>
-    /// Replaces the current set of active layers with the given bitfield.
-    /// </para>
-    /// </summary>
-    /// <param name="bitfield">Bitfield representing the layers to activate.</param>
-    /// <remarks>
-    /// Native: <c>R3D_SetActiveLayers</c>
-    /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetActiveLayers")]
-    public static partial void SetActiveLayers(Layer bitfield);
-
-    /// <summary>
-    /// Enable one or more layers without affecting other active layers.
-    /// <para>
-    /// This function sets the bits in the global active layers corresponding to the bits in the provided bitfield. Layers already active remain active.
-    /// </para>
-    /// </summary>
-    /// <param name="bitfield">Bitfield representing one or more layers to enable.</param>
-    /// <remarks>
-    /// Native: <c>R3D_EnableLayers</c>
-    /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_EnableLayers")]
-    public static partial void EnableLayers(Layer bitfield);
-
-    /// <summary>
-    /// Disable one or more layers without affecting other active layers.
-    /// <para>
-    /// This function clears the bits in the global active layers corresponding to the bits in the provided bitfield. Layers not included in the bitfield remain unchanged.
-    /// </para>
-    /// </summary>
-    /// <param name="bitfield">Bitfield representing one or more layers to disable.</param>
-    /// <remarks>
-    /// Native: <c>R3D_DisableLayers</c>
-    /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_DisableLayers")]
-    public static partial void DisableLayers(Layer bitfield);
 
 }

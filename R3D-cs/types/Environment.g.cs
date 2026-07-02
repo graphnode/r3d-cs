@@ -70,14 +70,6 @@ public struct Environment
     public EnvSSR Ssr;
 
     /// <summary>
-    /// Bloom glow effect
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>bloom</c>
-    /// </remarks>
-    public EnvBloom Bloom;
-
-    /// <summary>
     /// Atmospheric fog
     /// </summary>
     /// <remarks>
@@ -92,6 +84,22 @@ public struct Environment
     /// Native: <c>dof</c>
     /// </remarks>
     public EnvDoF Dof;
+
+    /// <summary>
+    /// Bloom glow effect
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>bloom</c>
+    /// </remarks>
+    public EnvBloom Bloom;
+
+    /// <summary>
+    /// Auto exposure effect
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>autoExposure</c>
+    /// </remarks>
+    public EnvAutoExposure AutoExposure;
 
     /// <summary>
     /// HDR tone mapping

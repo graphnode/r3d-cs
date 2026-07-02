@@ -21,14 +21,20 @@ namespace R3D_cs;
 public enum ImportFlags : uint
 {
     /// <summary>
-    /// When enabled, raw mesh data is preserved in RAM after model import.
+    /// When enabled, raw mesh data is preserved in RAM after model import and stored in @c meshData.
     /// </summary>
     /// <remarks>Native: <c>R3D_IMPORT_MESH_DATA</c></remarks>
     MeshData = (1<<0),
 
     /// <summary>
+    /// When enabled, mesh names are retrieved during import and stored in @c meshNames.
+    /// </summary>
+    /// <remarks>Native: <c>R3D_IMPORT_MESH_NAMES</c></remarks>
+    MeshNames = (1<<1),
+
+    /// <summary>
     /// When disabled, a faster import preset is used, suitable for runtime.
     /// </summary>
     /// <remarks>Native: <c>R3D_IMPORT_QUALITY</c></remarks>
-    Quality = (1<<1),
+    Quality = (1<<2),
 }

@@ -9,21 +9,12 @@ using Raylib_cs;
 namespace R3D_cs;
 
 /// <summary>
-/// Bitfield type used to specify rendering layers for 3D objects.
+/// Bitfield type used to specify rendering layers.
 /// <para>
-/// This type is used by `R3D_Mesh` and `R3D_Sprite` objects to indicate which rendering layer(s) they belong to. Active layers are controlled globally via the functions:
+/// This type is used by cameras and renderable objects to control visibility. A renderable object is visible to a camera when at least one bit is shared between the object's layer mask and the camera's layer mask.
 /// </para>
 /// <para>
-/// <list type="bullet">
-/// <item><description>void R3D_EnableLayers(R3D_Layer bitfield);</description></item>
-/// <item><description>void R3D_DisableLayers(R3D_Layer bitfield);</description></item>
-/// </list>
-/// </para>
-/// <para>
-/// A mesh or sprite will be rendered if at least one of its assigned layers is active.
-/// </para>
-/// <para>
-/// For simplicity, 16 layers are defined in this header, but the maximum number of layers is 32 for an uint32_t.
+/// For convenience, 16 predefined layers are provided here, but the underlying type supports up to 32 layers.
 /// </para>
 /// </summary>
 /// <remarks>
@@ -33,52 +24,52 @@ namespace R3D_cs;
 public enum Layer : uint
 {
     /// <remarks>Native: <c>R3D_LAYER_01</c></remarks>
-    Layer01 = (1<<0),
+    Layer01 = (1u<<0),
 
     /// <remarks>Native: <c>R3D_LAYER_02</c></remarks>
-    Layer02 = (1<<1),
+    Layer02 = (1u<<1),
 
     /// <remarks>Native: <c>R3D_LAYER_03</c></remarks>
-    Layer03 = (1<<2),
+    Layer03 = (1u<<2),
 
     /// <remarks>Native: <c>R3D_LAYER_04</c></remarks>
-    Layer04 = (1<<3),
+    Layer04 = (1u<<3),
 
     /// <remarks>Native: <c>R3D_LAYER_05</c></remarks>
-    Layer05 = (1<<4),
+    Layer05 = (1u<<4),
 
     /// <remarks>Native: <c>R3D_LAYER_06</c></remarks>
-    Layer06 = (1<<5),
+    Layer06 = (1u<<5),
 
     /// <remarks>Native: <c>R3D_LAYER_07</c></remarks>
-    Layer07 = (1<<6),
+    Layer07 = (1u<<6),
 
     /// <remarks>Native: <c>R3D_LAYER_08</c></remarks>
-    Layer08 = (1<<7),
+    Layer08 = (1u<<7),
 
     /// <remarks>Native: <c>R3D_LAYER_09</c></remarks>
-    Layer09 = (1<<8),
+    Layer09 = (1u<<8),
 
     /// <remarks>Native: <c>R3D_LAYER_10</c></remarks>
-    Layer10 = (1<<9),
+    Layer10 = (1u<<9),
 
     /// <remarks>Native: <c>R3D_LAYER_11</c></remarks>
-    Layer11 = (1<<10),
+    Layer11 = (1u<<10),
 
     /// <remarks>Native: <c>R3D_LAYER_12</c></remarks>
-    Layer12 = (1<<11),
+    Layer12 = (1u<<11),
 
     /// <remarks>Native: <c>R3D_LAYER_13</c></remarks>
-    Layer13 = (1<<12),
+    Layer13 = (1u<<12),
 
     /// <remarks>Native: <c>R3D_LAYER_14</c></remarks>
-    Layer14 = (1<<13),
+    Layer14 = (1u<<13),
 
     /// <remarks>Native: <c>R3D_LAYER_15</c></remarks>
-    Layer15 = (1<<14),
+    Layer15 = (1u<<14),
 
     /// <remarks>Native: <c>R3D_LAYER_16</c></remarks>
-    Layer16 = (1<<15),
+    Layer16 = (1u<<15),
 
     /// <remarks>Native: <c>R3D_LAYER_ALL</c></remarks>
     All = 0xFFFFFFFF,

@@ -134,6 +134,14 @@ public struct Material
     public bool Unlit;
 
     /// <summary>
+    /// Render order priority; lower values are drawn first (default: 0)
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>priority</c>
+    /// </remarks>
+    public int Priority;
+
+    /// <summary>
     /// Custom shader applied to the material (default: NULL)
     /// </summary>
     /// <remarks>

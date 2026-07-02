@@ -10,7 +10,10 @@ using Raylib_cs;
 namespace R3D_cs;
 
 /// <summary>
-/// Represents a vertex and all its attributes for a mesh.
+/// Compact vertex format used by R3D meshes.
+/// <para>
+/// Texture coordinates are stored as float16 values. Normals and tangents are stored as signed normalized 8-bit values. Bone weights are stored as unsigned 8-bit values and should sum to 255.
+/// </para>
 /// </summary>
 /// <remarks>
 /// Native: <c>R3D_Vertex</c>
@@ -19,7 +22,7 @@ namespace R3D_cs;
 public unsafe struct Vertex
 {
     /// <summary>
-    /// The 3D position of the vertex in object space.
+    /// Vertex position in object space.
     /// </summary>
     /// <remarks>
     /// Native: <c>position</c>
@@ -27,23 +30,31 @@ public unsafe struct Vertex
     public Vector3 Position;
 
     /// <summary>
-    /// The 2D texture coordinates (UV) for mapping textures.
+    /// Texture coordinates stored as float16.
     /// </summary>
     /// <remarks>
     /// Native: <c>texcoord</c>
     /// </remarks>
-    public Vector2 Texcoord;
+    public fixed ushort Texcoord[2];
 
     /// <summary>
-    /// The normal vector used for lighting calculations.
+    /// Normal vector stored as SNORM8. XYZ are used, W is unused.
     /// </summary>
     /// <remarks>
     /// Native: <c>normal</c>
     /// </remarks>
-    public Vector3 Normal;
+    public fixed sbyte Normal[4];
 
     /// <summary>
-    /// Vertex color, in RGBA32.
+    /// Tangent vector stored as SNORM8. XYZ are tangent, W stores handedness.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>tangent</c>
+    /// </remarks>
+    public fixed sbyte Tangent[4];
+
+    /// <summary>
+    /// Vertex color in RGBA8.
     /// </summary>
     /// <remarks>
     /// Native: <c>color</c>
@@ -51,27 +62,19 @@ public unsafe struct Vertex
     public Color Color;
 
     /// <summary>
-    /// The tangent vector, used in normal mapping (often with a handedness in w).
+    /// Indices of up to 4 bones influencing this vertex.
     /// </summary>
     /// <remarks>
-    /// Native: <c>tangent</c>
+    /// Native: <c>boneIndices</c>
     /// </remarks>
-    public Vector4 Tangent;
+    public fixed byte BoneIndices[4];
 
     /// <summary>
-    /// Indices of up to 4 bones that influence this vertex (for skinning).
+    /// Bone weights in UNORM8. Values should sum to 255.
     /// </summary>
     /// <remarks>
-    /// Native: <c>boneIds</c>
+    /// Native: <c>boneWeights</c>
     /// </remarks>
-    public fixed int BoneIds[4];
-
-    /// <summary>
-    /// Corresponding bone weights (should sum to 1.0). Defines the influence of each bone.
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>weights</c>
-    /// </remarks>
-    public fixed float Weights[4];
+    public fixed byte BoneWeights[4];
 
 }

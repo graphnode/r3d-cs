@@ -22,44 +22,20 @@ namespace R3D_cs;
 public struct Mesh
 {
     /// <summary>
-    /// OpenGL objects handles.
+    /// Offset in the internal VBO.
     /// </summary>
     /// <remarks>
-    /// Native: <c>vao</c>
+    /// Native: <c>vertexOffset</c>
     /// </remarks>
-    public uint Vao;
+    public int VertexOffset;
 
     /// <summary>
-    /// OpenGL objects handles.
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>vbo</c>
-    /// </remarks>
-    public uint Vbo;
-
-    /// <summary>
-    /// OpenGL objects handles.
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>ebo</c>
-    /// </remarks>
-    public uint Ebo;
-
-    /// <summary>
-    /// Number of vertices allocated in GPU buffers.
+    /// Number of vertices allocated in the internal VBO.
     /// </summary>
     /// <remarks>
     /// Native: <c>vertexCapacity</c>
     /// </remarks>
     public int VertexCapacity;
-
-    /// <summary>
-    /// Number of indices allocated in GPU buffers.
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>indexCapacity</c>
-    /// </remarks>
-    public int IndexCapacity;
 
     /// <summary>
     /// Number of vertices currently in use.
@@ -68,6 +44,22 @@ public struct Mesh
     /// Native: <c>vertexCount</c>
     /// </remarks>
     public int VertexCount;
+
+    /// <summary>
+    /// Offset in the internal EBO.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>indexOffset</c>
+    /// </remarks>
+    public int IndexOffset;
+
+    /// <summary>
+    /// Number of indices allocated in the internal EBO.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>indexCapacity</c>
+    /// </remarks>
+    public int IndexCapacity;
 
     /// <summary>
     /// Number of indices currently in use.
@@ -92,14 +84,6 @@ public struct Mesh
     /// Native: <c>primitiveType</c>
     /// </remarks>
     public PrimitiveType PrimitiveType;
-
-    /// <summary>
-    /// Hint about the usage of the mesh, retained in case of update if there is a reallocation.
-    /// </summary>
-    /// <remarks>
-    /// Native: <c>usage</c>
-    /// </remarks>
-    public MeshUsage Usage;
 
     /// <summary>
     /// Bitfield indicating the rendering layer(s) of this mesh.

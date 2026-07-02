@@ -567,6 +567,34 @@ public static unsafe partial class R3D
     public static partial void SetShadowSoftness(Light id, float softness);
 
     /// <summary>
+    /// Retrieves the shadow opacity for a light.
+    /// </summary>
+    /// <param name="id">The ID of the light.</param>
+    /// <returns>The current shadow opacity.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_GetShadowOpacity</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetShadowOpacity")]
+    public static partial float GetShadowOpacity(Light id);
+
+    /// <summary>
+    /// Sets the shadow opacity for a light.
+    /// <para>
+    /// The opacity controls the visual strength of shadows. A value of 0 makes shadows fully transparent, while 1 applies full opacity. Values are not clamped, but the usual range is 0 to 1.
+    /// </para>
+    /// <para>
+    /// When the opacity is exactly 0, the light still owns its shadow map, but shadow map rendering and shadow application are entirely skipped.
+    /// </para>
+    /// </summary>
+    /// <param name="id">The ID of the light.</param>
+    /// <param name="opacity">The shadow opacity to apply.</param>
+    /// <remarks>
+    /// Native: <c>R3D_SetShadowOpacity</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetShadowOpacity")]
+    public static partial void SetShadowOpacity(Light id, float opacity);
+
+    /// <summary>
     /// Gets the shadow depth bias value.
     /// </summary>
     /// <remarks>
@@ -607,6 +635,61 @@ public static unsafe partial class R3D
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetShadowSlopeBias")]
     public static partial void SetShadowSlopeBias(Light id, float value);
+
+    /// <summary>
+    /// Gets the shadow caster mask.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_GetShadowCasterMask</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetShadowCasterMask")]
+    public static partial Layer GetShadowCasterMask(Light id);
+
+    /// <summary>
+    /// Replaces the shadow caster mask.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_SetShadowCasterMask</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetShadowCasterMask")]
+    public static partial void SetShadowCasterMask(Light id, Layer cullMask);
+
+    /// <summary>
+    /// Enables one or more layers in the shadow caster mask.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_EnableShadowCasterLayers</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_EnableShadowCasterLayers")]
+    public static partial void EnableShadowCasterLayers(Light id, Layer layerMask);
+
+    /// <summary>
+    /// Disables one or more layers from the shadow caster mask.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_DisableShadowCasterLayers</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_DisableShadowCasterLayers")]
+    public static partial void DisableShadowCasterLayers(Light id, Layer layerMask);
+
+    /// <summary>
+    /// Toggles one or more layers in the shadow caster mask.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_ToggleShadowCasterLayers</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ToggleShadowCasterLayers")]
+    public static partial void ToggleShadowCasterLayers(Light id, Layer layerMask);
+
+    /// <summary>
+    /// Checks whether at least one object layer is visible to the shadow caster.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_IsShadowCasterLayerVisible</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsShadowCasterLayerVisible")]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool IsShadowCasterLayerVisible(Light id, Layer layerMask);
 
     /// <summary>
     /// Returns the bounding box encompassing the light's area of influence.

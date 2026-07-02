@@ -53,4 +53,12 @@ public struct OrmMap
     /// </remarks>
     public float Metalness;
 
+    /// <summary>
+    /// Controls how reflective non-metal materials appear (default: 0.5f)
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>specular</c>
+    /// </remarks>
+    public float Specular;
+
 }
