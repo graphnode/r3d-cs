@@ -39,7 +39,8 @@ public static class ExampleList
         new("AnimTree", AnimTree.Main),
         new("Multiview", Multiview.Main),
         new("Stencil", Stencil.Main),
-        new("ToTexture", ToTexture.Main)
+        new("ToTexture", ToTexture.Main),
+        new("VolumetricFog", VolumetricFog.Main)
     ];
 
     public static ExampleInfo? GetExample(string name)
