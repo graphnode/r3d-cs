@@ -26,9 +26,9 @@ public static class ToTexture
 
         // Create light
         var light = R3D.CreateLight(LightType.Spot);
-        R3D.LightLookAt(light, new Vector3(0, 10, 5), Vector3.Zero);
+        R3D.SetLightTarget(light, new Vector3(0, 10, 5), Vector3.Zero);
         R3D.EnableShadow(light);
-        R3D.SetLightActive(light, true);
+        R3D.EnableLight(light);
 
         // Render texture that the R3D scene is drawn into
         var target = LoadRenderTexture(1024, 512);

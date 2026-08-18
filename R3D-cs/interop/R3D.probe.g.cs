@@ -42,16 +42,16 @@ public static unsafe partial class R3D
     public static partial void DestroyProbe(Probe id);
 
     /// <summary>
-    /// Returns whether a probe exists.
+    /// Returns whether a probe ID is valid and allocated.
     /// </summary>
     /// <param name="id">Probe ID.</param>
-    /// <returns>true if the probe is valid and allocated, otherwise false.</returns>
+    /// <returns>true if the probe exists, otherwise false.</returns>
     /// <remarks>
-    /// Native: <c>R3D_IsProbeExist</c>
+    /// Native: <c>R3D_IsProbeValid</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsProbeExist")]
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsProbeValid")]
     [return: MarshalAs(UnmanagedType.I1)]
-    public static partial bool IsProbeExist(Probe id);
+    public static partial bool IsProbeValid(Probe id);
 
     /// <summary>
     /// Returns the probe flags.
@@ -65,30 +65,58 @@ public static unsafe partial class R3D
     public static partial ProbeFlags GetProbeFlags(Probe id);
 
     /// <summary>
-    /// Returns whether a probe is currently active.
+    /// Returns whether a probe is currently enabled.
     /// <para>
-    /// Inactive probes do not contribute to lighting.
+    /// Disabled probes do not contribute to lighting.
     /// </para>
     /// </summary>
     /// <param name="id">Probe ID.</param>
-    /// <returns>true if active, otherwise false.</returns>
+    /// <returns>true if the probe is enabled, otherwise false.</returns>
     /// <remarks>
-    /// Native: <c>R3D_IsProbeActive</c>
+    /// Native: <c>R3D_IsProbeEnabled</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsProbeActive")]
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsProbeEnabled")]
     [return: MarshalAs(UnmanagedType.I1)]
-    public static partial bool IsProbeActive(Probe id);
+    public static partial bool IsProbeEnabled(Probe id);
 
     /// <summary>
-    /// Enables or disables a probe.
+    /// Toggles a probe between enabled and disabled states.
+    /// <para>
+    /// Re-enabling a probe schedules a scene capture on the next frame.
+    /// </para>
     /// </summary>
     /// <param name="id">Probe ID.</param>
-    /// <param name="active">Set to true to enable the probe.</param>
     /// <remarks>
-    /// Native: <c>R3D_SetProbeActive</c>
+    /// Native: <c>R3D_ToggleProbe</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetProbeActive")]
-    public static partial void SetProbeActive(Probe id, [MarshalAs(UnmanagedType.I1)] bool active);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_ToggleProbe")]
+    public static partial void ToggleProbe(Probe id);
+
+    /// <summary>
+    /// Enables a probe.
+    /// <para>
+    /// Schedules a scene capture on the next frame. Has no effect if the probe is already enabled.
+    /// </para>
+    /// </summary>
+    /// <param name="id">Probe ID.</param>
+    /// <remarks>
+    /// Native: <c>R3D_EnableProbe</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_EnableProbe")]
+    public static partial void EnableProbe(Probe id);
+
+    /// <summary>
+    /// Disables a probe.
+    /// <para>
+    /// Has no effect if the probe is already disabled.
+    /// </para>
+    /// </summary>
+    /// <param name="id">Probe ID.</param>
+    /// <remarks>
+    /// Native: <c>R3D_DisableProbe</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_DisableProbe")]
+    public static partial void DisableProbe(Probe id);
 
     /// <summary>
     /// Gets the probe update mode.
@@ -117,6 +145,9 @@ public static unsafe partial class R3D
     /// <para>
     /// Controls when the probe capture is refreshed.
     /// </para>
+    /// <para>
+    /// Default: R3D_PROBE_UPDATE_ONCE
+    /// </para>
     /// </summary>
     /// <param name="id">Probe ID.</param>
     /// <param name="mode">Update mode to apply.</param>
@@ -144,6 +175,9 @@ public static unsafe partial class R3D
 
     /// <summary>
     /// Enables or disables indoor mode for the probe.
+    /// <para>
+    /// Default: false
+    /// </para>
     /// </summary>
     /// <remarks>
     /// Native: <c>R3D_SetProbeInterior</c>
@@ -166,6 +200,9 @@ public static unsafe partial class R3D
 
     /// <summary>
     /// Enables or disables shadow rendering during probe capture.
+    /// <para>
+    /// Default: false
+    /// </para>
     /// </summary>
     /// <remarks>
     /// Native: <c>R3D_SetProbeShadows</c>
@@ -184,6 +221,9 @@ public static unsafe partial class R3D
 
     /// <summary>
     /// Sets the world position of the probe.
+    /// <para>
+    /// Default: (Vector3) {0.0f, 0.0f, 0.0f}
+    /// </para>
     /// </summary>
     /// <remarks>
     /// Native: <c>R3D_SetProbePosition</c>
@@ -240,6 +280,9 @@ public static unsafe partial class R3D
     /// Sets the falloff factor used for distance attenuation.
     /// <para>
     /// Larger values make the probe feel more localized.
+    /// </para>
+    /// <para>
+    /// Default: 1.0f
     /// </para>
     /// </summary>
     /// <remarks>

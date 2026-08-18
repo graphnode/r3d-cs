@@ -42,10 +42,10 @@ public static class Sprite
 
         // Setup spotlight
         var light = R3D.CreateLight(LightType.Spot);
-        R3D.LightLookAt(light, new Vector3(0, 10, 10), Vector3.Zero);
+        R3D.SetLightTarget(light, new Vector3(0, 10, 10), Vector3.Zero);
         R3D.SetLightRange(light, 64.0f);
         R3D.EnableShadow(light);
-        R3D.SetLightActive(light, true);
+        R3D.EnableLight(light);
 
         // Setup camera
         var camera = new Camera3D

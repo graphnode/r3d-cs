@@ -43,8 +43,8 @@ public static class Probe
 
         // Create light
         var light = R3D.CreateLight(LightType.Spot);
-        R3D.LightLookAt(light, new Vector3(0, 10, 5), Vector3.Zero);
-        R3D.SetLightActive(light, true);
+        R3D.SetLightTarget(light, new Vector3(0, 10, 5), Vector3.Zero);
+        R3D.EnableLight(light);
         R3D.EnableShadow(light);
 
         // Create probe
@@ -52,7 +52,7 @@ public static class Probe
         R3D.SetProbePosition(probe, new Vector3(0, 1, 0));
         R3D.SetProbeShadows(probe, true);
         R3D.SetProbeFalloff(probe, 0.5f);
-        R3D.SetProbeActive(probe, true);
+        R3D.EnableProbe(probe);
 
         // Setup camera
         var camera = new Camera3D

@@ -62,7 +62,7 @@ public static class Animation
         // Setup lights with shadows
         var light = R3D.CreateLight(LightType.Dir);
         R3D.SetLightDirection(light, new Vector3(-1.0f, -1.0f, -1.0f));
-        R3D.SetLightActive(light, true);
+        R3D.EnableLight(light);
         R3D.SetLightRange(light, 10.0f);
         R3D.EnableShadow(light);
 

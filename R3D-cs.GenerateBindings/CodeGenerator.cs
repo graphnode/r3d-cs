@@ -664,10 +664,11 @@ public class CodeGenerator(string outputDir)
                 sb.AppendLine();
                 sb.AppendLine("{");
 
-                for (var i = 0; i < options.Count; i++)
+                // Map macro names to enum member names up front so combination macros
+                // (e.g. R3D_IMPORT_QUALITY = A | B | C) can reference sibling members
+                var optionNames = new Dictionary<string, string>();
+                foreach (var macro in options)
                 {
-                    var macro = options[i];
-
                     string optionName = ToPascalCase(macro.Name[prefix.Length..]);
 
                     if (optionName.All(char.IsDigit))
@@ -676,9 +677,21 @@ public class CodeGenerator(string outputDir)
                     if (optionName.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                         optionName = optionName[prefix.Length..];
 
+                    optionNames[macro.Name] = optionName;
+                }
+
+                for (var i = 0; i < options.Count; i++)
+                {
+                    var macro = options[i];
+
                     bool hasComment = CommentGenerator.GenerateForMacro(sb, macro, macro.Name, "    ");
 
-                    sb.AppendLine($"    {optionName} = {SanitizeMacroValue(macro.Value)},");
+                    string value = SanitizeMacroValue(macro.Value);
+                    foreach ((string macroName, string memberName) in optionNames)
+                        value = System.Text.RegularExpressions.Regex.Replace(
+                            value, $@"\b{System.Text.RegularExpressions.Regex.Escape(macroName)}\b", memberName);
+
+                    sb.AppendLine($"    {optionNames[macro.Name]} = {value},");
 
                     if (i < options.Count - 1 && hasComment)
                         sb.AppendLine();
@@ -691,9 +704,11 @@ public class CodeGenerator(string outputDir)
                 continue;
             }
 
-            // Opaque handle types (typedef int32_t R3D_Something)
-            if (typedef.ElementType is CppPrimitiveType { Kind: CppPrimitiveKind.Int })
+            // Opaque handle types (typedef int32_t/uint32_t R3D_Something)
+            if (typedef.ElementType is CppPrimitiveType { Kind: CppPrimitiveKind.Int or CppPrimitiveKind.UnsignedInt })
             {
+                string idType = typedef.ElementType is CppPrimitiveType { Kind: CppPrimitiveKind.UnsignedInt } ? "uint" : "int";
+
                 var sb = new StringBuilder();
                 GenerateHeader(sb);
 
@@ -701,10 +716,10 @@ public class CodeGenerator(string outputDir)
 
                 sb.AppendLine($"public struct {name}");
                 sb.AppendLine("{");
-                sb.AppendLine("    internal int id;");
+                sb.AppendLine($"    internal {idType} id;");
                 sb.AppendLine();
-                sb.AppendLine($"    public static explicit operator int({name} handle) => handle.id;");
-                sb.AppendLine($"    public static explicit operator {name}(int id) => new() {{ id = id }};");
+                sb.AppendLine($"    public static explicit operator {idType}({name} handle) => handle.id;");
+                sb.AppendLine($"    public static explicit operator {name}({idType} id) => new() {{ id = id }};");
                 sb.AppendLine("}");
 
                 File.WriteAllText(Path.Combine(outputDir, "types", $"{name}.g.cs"), sb.ToString());

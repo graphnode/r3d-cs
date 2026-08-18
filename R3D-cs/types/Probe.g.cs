@@ -6,7 +6,7 @@ namespace R3D_cs;
 /// <summary>
 /// Unique identifier for an R3D probe.
 /// <para>
-/// Negative values indicate an invalid probe.
+/// ID type used to reference a probe. A zero value indicates an invalid probe.
 /// </para>
 /// </summary>
 /// <remarks>
@@ -14,8 +14,8 @@ namespace R3D_cs;
 /// </remarks>
 public struct Probe
 {
-    internal int id;
+    internal uint id;
 
-    public static explicit operator int(Probe handle) => handle.id;
-    public static explicit operator Probe(int id) => new() { id = id };
+    public static explicit operator uint(Probe handle) => handle.id;
+    public static explicit operator Probe(uint id) => new() { id = id };
 }

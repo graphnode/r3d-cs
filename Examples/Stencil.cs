@@ -69,9 +69,9 @@ public static class Stencil
         R3D.SetEnvironmentEx((ref env) => env.Ambient.Color = new Color(10, 10, 15, 255));
 
         var light = R3D.CreateLight(LightType.Spot);
-        R3D.LightLookAt(light, new Vector3(4, 8, 5), Vector3.Zero);
+        R3D.SetLightTarget(light, new Vector3(4, 8, 5), Vector3.Zero);
         R3D.SetShadowSoftness(light, 8.0f);
-        R3D.SetLightActive(light, true);
+        R3D.EnableLight(light);
         R3D.EnableShadow(light);
 
         var camera = new Camera3D

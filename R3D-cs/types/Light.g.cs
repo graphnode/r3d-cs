@@ -6,7 +6,7 @@ namespace R3D_cs;
 /// <summary>
 /// Unique identifier for an R3D light.
 /// <para>
-/// ID type used to reference a light. A negative value indicates an invalid light.
+/// ID type used to reference a light. A zero value indicates an invalid light.
 /// </para>
 /// </summary>
 /// <remarks>
@@ -14,8 +14,8 @@ namespace R3D_cs;
 /// </remarks>
 public struct Light
 {
-    internal int id;
+    internal uint id;
 
-    public static explicit operator int(Light handle) => handle.id;
-    public static explicit operator Light(int id) => new() { id = id };
+    public static explicit operator uint(Light handle) => handle.id;
+    public static explicit operator Light(uint id) => new() { id = id };
 }

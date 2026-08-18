@@ -10,7 +10,7 @@ using Raylib_cs;
 namespace R3D_cs;
 
 /// <summary>
-/// Fog atmospheric effect settings.
+/// Atmospheric fog effect settings.
 /// </summary>
 /// <remarks>
 /// Native: <c>R3D_EnvFog</c>

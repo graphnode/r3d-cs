@@ -53,11 +53,11 @@ public static unsafe partial class R3D
     /// <param name="id">The ID of the light to check.</param>
     /// <returns>True if the light exists, false otherwise.</returns>
     /// <remarks>
-    /// Native: <c>R3D_IsLightExist</c>
+    /// Native: <c>R3D_IsLightValid</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsLightExist")]
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsLightValid")]
     [return: MarshalAs(UnmanagedType.I1)]
-    public static partial bool IsLightExist(Light id);
+    public static partial bool IsLightValid(Light id);
 
     /// <summary>
     /// Gets the type of a light.
@@ -74,25 +74,19 @@ public static unsafe partial class R3D
     public static partial LightType GetLightType(Light id);
 
     /// <summary>
-    /// Checks if a light is active.
-    /// <para>
-    /// This function checks whether the specified light is currently active (enabled or disabled).
-    /// </para>
+    /// Returns whether a light is currently enabled.
     /// </summary>
-    /// <param name="id">The ID of the light to check.</param>
-    /// <returns>True if the light is active, false otherwise.</returns>
+    /// <param name="id">The ID of the light to query.</param>
+    /// <returns>True if the light is enabled, false otherwise.</returns>
     /// <remarks>
-    /// Native: <c>R3D_IsLightActive</c>
+    /// Native: <c>R3D_IsLightEnabled</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsLightActive")]
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_IsLightEnabled")]
     [return: MarshalAs(UnmanagedType.I1)]
-    public static partial bool IsLightActive(Light id);
+    public static partial bool IsLightEnabled(Light id);
 
     /// <summary>
-    /// Toggles the state of a light (active or inactive).
-    /// <para>
-    /// This function toggles the state of the specified light, turning it on if it is off, or off if it is on.
-    /// </para>
+    /// Toggles a light between enabled and disabled states.
     /// </summary>
     /// <param name="id">The ID of the light to toggle.</param>
     /// <remarks>
@@ -102,27 +96,39 @@ public static unsafe partial class R3D
     public static partial void ToggleLight(Light id);
 
     /// <summary>
-    /// Sets the active state of a light.
+    /// Enables a light.
     /// <para>
-    /// This function allows manually turning a light on or off by specifying its active state.
+    /// Has no effect if the light is already enabled.
     /// </para>
     /// </summary>
-    /// <param name="id">The ID of the light to set the active state for.</param>
-    /// <param name="active">True to activate the light, false to deactivate it.</param>
+    /// <param name="id">The ID of the light to enable.</param>
     /// <remarks>
-    /// Native: <c>R3D_SetLightActive</c>
+    /// Native: <c>R3D_EnableLight</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightActive")]
-    public static partial void SetLightActive(Light id, [MarshalAs(UnmanagedType.I1)] bool active);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_EnableLight")]
+    public static partial void EnableLight(Light id);
 
     /// <summary>
-    /// Gets the color of a light.
+    /// Disables a light.
     /// <para>
-    /// This function retrieves the color of the specified light as a `Color` structure.
+    /// Has no effect if the light is already disabled.
+    /// </para>
+    /// </summary>
+    /// <param name="id">The ID of the light to disable.</param>
+    /// <remarks>
+    /// Native: <c>R3D_DisableLight</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_DisableLight")]
+    public static partial void DisableLight(Light id);
+
+    /// <summary>
+    /// Gets the color of a light in sRGB space.
+    /// <para>
+    /// The internal linear color is converted to sRGB before being returned.
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <returns>The color of the light as a `Color` structure.</returns>
+    /// <returns>The color of the light as an sRGBColor.</returns>
     /// <remarks>
     /// Native: <c>R3D_GetLightColor</c>
     /// </remarks>
@@ -130,27 +136,16 @@ public static unsafe partial class R3D
     public static partial Color GetLightColor(Light id);
 
     /// <summary>
-    /// Gets the color of a light as a `Vector3`.
+    /// Sets the color of a light from an sRGB color.
     /// <para>
-    /// This function retrieves the color of the specified light as a `Vector3`, where each component (x, y, z) represents the RGB values of the light.
+    /// The provided sRGB color is converted to linear space before being stored internally.
+    /// </para>
+    /// <para>
+    /// Default: (Color) {255, 255, 255, 255}
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <returns>The color of the light as a `Vector3`.</returns>
-    /// <remarks>
-    /// Native: <c>R3D_GetLightColorV</c>
-    /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightColorV")]
-    public static partial Vector3 GetLightColorV(Light id);
-
-    /// <summary>
-    /// Sets the color of a light.
-    /// <para>
-    /// This function sets the color of the specified light using a `Color` structure.
-    /// </para>
-    /// </summary>
-    /// <param name="id">The ID of the light.</param>
-    /// <param name="color">The new color to set for the light.</param>
+    /// <param name="color">The new color to set for the light, in sRGB space.</param>
     /// <remarks>
     /// Native: <c>R3D_SetLightColor</c>
     /// </remarks>
@@ -158,18 +153,49 @@ public static unsafe partial class R3D
     public static partial void SetLightColor(Light id, Color color);
 
     /// <summary>
-    /// Sets the color of a light using a `Vector3`.
+    /// Gets the color of a light in linear space.
     /// <para>
-    /// This function sets the color of the specified light using a `Vector3`, where each component (x, y, z) represents the RGB values of the light.
+    /// Returns the raw internal color without any color space conversion.
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <param name="color">The new color to set for the light as a `Vector3`.</param>
+    /// <returns>The color of the light as a linear RGBVector3.</returns>
     /// <remarks>
-    /// Native: <c>R3D_SetLightColorV</c>
+    /// Native: <c>R3D_GetLightColorLinear</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightColorV")]
-    public static partial void SetLightColorV(Light id, Vector3 color);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightColorLinear")]
+    public static partial Vector3 GetLightColorLinear(Light id);
+
+    /// <summary>
+    /// Sets the color of a light from a linear RGB color.
+    /// <para>
+    /// The provided value is stored as-is, without any color space conversion.
+    /// </para>
+    /// <para>
+    /// Default: (Vector3) {1.0f, 1.0f, 1.0f}
+    /// </para>
+    /// </summary>
+    /// <param name="id">The ID of the light.</param>
+    /// <param name="color">The new color to set for the light, in linear space.</param>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightColorLinear</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightColorLinear")]
+    public static partial void SetLightColorLinear(Light id, Vector3 color);
+
+    /// <summary>
+    /// Sets the color of a light from a color temperature.
+    /// <para>
+    /// Converts the given temperature to an sRGB color using the Tanner Helland approximation, then applies the appropriate sRGB-to-linear conversion before storing it internally.
+    /// </para>
+    /// </summary>
+    /// <param name="id">The ID of the light.</param>
+    /// <param name="kelvin">The color temperature in Kelvin. Valid range is 1000K to 40000K.</param>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightTemperature</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightTemperature")]
+    public static partial void SetLightTemperature(Light id, float kelvin);
 
     /// <summary>
     /// Gets the position of a light.
@@ -190,11 +216,14 @@ public static unsafe partial class R3D
     /// <para>
     /// This function sets the position of the specified light. Only applicable to spot lights or omni-lights.
     /// </para>
+    /// <para>
+    /// Default: (Vector3) {0.0f, 0.0f, 0.0f}
+    /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="position">The new position to set for the light.</param>
     /// <remarks>
-    /// Has no effect for directional lights. If called on a directional light, a warning will be logged.
+    /// For directional lights, the position is stored internally but has no effect on lighting calculations. It can still be retrieved viaR3D_GetLightPosition and may be used for debug visualization withR3D_DrawLightDebug.
     /// Native: <c>R3D_SetLightPosition</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightPosition")]
@@ -219,6 +248,9 @@ public static unsafe partial class R3D
     /// <para>
     /// This function sets the direction of the specified light. Only applicable to directional lights or spot lights.
     /// </para>
+    /// <para>
+    /// Default: (Vector3) {0.0f, 0.0f, -1.0f}
+    /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="direction">The new direction to set for the light. The vector is automatically normalized.</param>
@@ -240,21 +272,17 @@ public static unsafe partial class R3D
     /// <param name="target">The point the light should look at.</param>
     /// <remarks>
     /// <list type="bullet">
-    /// <item><description>For directional lights, only the direction is updated (position is ignored).</description></item>
+    /// <item><description>For directional lights, only the direction is updated. The position is stored internally but has no effect on lighting calculations; it may still be used for debug visualization withR3D_DrawLightDebug.</description></item>
     /// <item><description>For omni-directional lights, only the position is updated (direction is not calculated).</description></item>
     /// <item><description>For spot lights, both position and direction are set accordingly.</description></item>
-    /// <item><description>This function does **not** emit any warning or log message.</description></item>
     /// </list>
-    /// Native: <c>R3D_LightLookAt</c>
+    /// Native: <c>R3D_SetLightTarget</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_LightLookAt")]
-    public static partial void LightLookAt(Light id, Vector3 position, Vector3 target);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightTarget")]
+    public static partial void SetLightTarget(Light id, Vector3 position, Vector3 target);
 
     /// <summary>
     /// Gets the energy level of a light.
-    /// <para>
-    /// This function retrieves the energy level (intensity) of the specified light. Energy typically affects the brightness of the light.
-    /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The energy level of the light.</returns>
@@ -269,6 +297,9 @@ public static unsafe partial class R3D
     /// <para>
     /// This function sets the energy (intensity) of the specified light. A higher energy value will result in a brighter light.
     /// </para>
+    /// <para>
+    /// Default: 1.0f
+    /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="energy">The new energy value to set for the light.</param>
@@ -279,10 +310,35 @@ public static unsafe partial class R3D
     public static partial void SetLightEnergy(Light id, float energy);
 
     /// <summary>
-    /// Gets the specular intensity of a light.
+    /// Gets the energy level of a light as a luminous flux.
     /// <para>
-    /// This function retrieves the current specular intensity of the specified light. Specular intensity affects how shiny surfaces appear when reflecting the light.
+    /// Converts the light's current energy factor to lumens using a reference distance of 1 unit, assuming 1 unit = 1 meter. For a custom reference distance, useR3D_EnergyToLumens withR3D_GetLightEnergy directly.
     /// </para>
+    /// </summary>
+    /// <param name="id">The ID of the light.</param>
+    /// <returns>The luminous flux in lumens.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_GetLightLumen</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightLumen")]
+    public static partial float GetLightLumen(Light id);
+
+    /// <summary>
+    /// Sets the energy of a light from a luminous flux value.
+    /// <para>
+    /// Converts the given flux to an energy factor using a reference distance of 1 unit, assuming 1 unit = 1 meter. For a custom reference distance, useR3D_LumensToEnergy and pass the result toR3D_SetLightEnergy directly.
+    /// </para>
+    /// </summary>
+    /// <param name="id">The ID of the light.</param>
+    /// <param name="lumens">The luminous flux in lumens.</param>
+    /// <remarks>
+    /// Native: <c>R3D_SetLightLumen</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightLumen")]
+    public static partial void SetLightLumen(Light id, float lumens);
+
+    /// <summary>
+    /// Gets the specular intensity of a light.
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The current specular intensity of the light.</returns>
@@ -295,7 +351,10 @@ public static unsafe partial class R3D
     /// <summary>
     /// Sets the specular intensity of a light.
     /// <para>
-    /// This function sets the specular intensity of the specified light. Higher specular values result in stronger and sharper highlights on reflective surfaces.
+    /// This function sets the specular intensity of the specified light. Specular intensity affects how shiny surfaces appear when reflecting the light. Higher specular values result in stronger and sharper highlights on reflective surfaces.
+    /// </para>
+    /// <para>
+    /// Default: 1.0f
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
@@ -308,9 +367,6 @@ public static unsafe partial class R3D
 
     /// <summary>
     /// Gets the range of a light.
-    /// <para>
-    /// This function retrieves the range of the specified light, which determines how far the light can affect. Only applicable to spot lights or omni-lights.
-    /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <returns>The range of the light.</returns>
@@ -325,6 +381,9 @@ public static unsafe partial class R3D
     /// <para>
     /// For spot and omni lights, this defines the maximum illumination distance. For directional lights, this defines the shadow rendering radius around the camera.
     /// </para>
+    /// <para>
+    /// Default: 50.0f
+    /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="range">The range value to apply.</param>
@@ -335,88 +394,90 @@ public static unsafe partial class R3D
     public static partial void SetLightRange(Light id, float range);
 
     /// <summary>
-    /// Gets the attenuation factor of a light.
-    /// <para>
-    /// This function retrieves the attenuation factor of the specified light. Attenuation controls how the intensity of a light decreases with distance. Only applicable to spot lights or omni-lights.
-    /// </para>
+    /// Gets the falloff exponent of a light.
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <returns>The attenuation factor of the light.</returns>
+    /// <returns>The falloff exponent of the light.</returns>
     /// <remarks>
-    /// Native: <c>R3D_GetLightAttenuation</c>
+    /// Native: <c>R3D_GetLightFalloff</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightAttenuation")]
-    public static partial float GetLightAttenuation(Light id);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightFalloff")]
+    public static partial float GetLightFalloff(Light id);
 
     /// <summary>
-    /// Sets the attenuation factor of a light.
+    /// Sets the falloff exponent of a light.
     /// <para>
-    /// This function sets the attenuation factor of the specified light. A higher attenuation value causes the light to lose intensity more quickly as the distance increases. For a realistic effect, an attenuation factor of 2.0f is typically used. Only applicable to spot lights or omni-lights.
+    /// Controls the shape of the attenuation curve over the light's range. A value of 1.0 produces a linear falloff, 2.0 a quadratic (more physically plausible) falloff, and higher values concentrate the light closer to the source. Values of 0.0 or below are clamped to 1.0. Only applicable to spot lights and omni-lights.
+    /// </para>
+    /// <para>
+    /// Default: 1.0f
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <param name="attenuation">The new attenuation factor to set for the light.</param>
+    /// <param name="falloff">The falloff exponent to set. Typical range is [0.5, 4.0].</param>
     /// <remarks>
-    /// Native: <c>R3D_SetLightAttenuation</c>
+    /// Native: <c>R3D_SetLightFalloff</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightAttenuation")]
-    public static partial void SetLightAttenuation(Light id, float attenuation);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightFalloff")]
+    public static partial void SetLightFalloff(Light id, float falloff);
 
     /// <summary>
-    /// Gets the inner cutoff angle of a spotlight.
-    /// <para>
-    /// This function retrieves the inner cutoff angle of a spotlight. The inner cutoff defines the cone of light where the light is at full intensity.
-    /// </para>
+    /// Gets the inner and outer cone angles of a spot light.
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <returns>The inner cutoff angle in degrees of the spotlight.</returns>
+    /// <param name="inner">Pointer to receive the inner cone angle, in degrees. May be NULL.</param>
+    /// <param name="outer">Pointer to receive the outer cone angle, in degrees. May be NULL.</param>
     /// <remarks>
-    /// Native: <c>R3D_GetLightInnerCutOff</c>
+    /// Native: <c>R3D_GetLightAngle</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightInnerCutOff")]
-    public static partial float GetLightInnerCutOff(Light id);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightAngle")]
+    public static partial void GetLightAngle(Light id, out float inner, out float outer);
 
     /// <summary>
-    /// Sets the inner cutoff angle of a spotlight.
+    /// Sets the inner and outer cone angles of a spot light.
     /// <para>
-    /// This function sets the inner cutoff angle of a spotlight. The inner cutoff angle defines the cone where the light is at full intensity. Anything outside this cone starts to fade.
+    /// The inner angle defines the region of full intensity, and the outer angle defines where the light fully fades out. The transition between the two produces a soft edge. Both angles are in degrees. If inner exceeds outer, the two values are swapped automatically. Only applicable to spot lights.
+    /// </para>
+    /// <para>
+    /// Default: 22.5f, 45.0f
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <param name="degrees">The new inner cutoff angle in degrees.</param>
+    /// <param name="inner">The inner cone half-angle, in degrees.</param>
+    /// <param name="outer">The outer cone half-angle, in degrees.</param>
     /// <remarks>
-    /// Native: <c>R3D_SetLightInnerCutOff</c>
+    /// Native: <c>R3D_SetLightAngle</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightInnerCutOff")]
-    public static partial void SetLightInnerCutOff(Light id, float degrees);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightAngle")]
+    public static partial void SetLightAngle(Light id, float inner, float outer);
 
     /// <summary>
-    /// Gets the outer cutoff angle of a spotlight.
-    /// <para>
-    /// This function retrieves the outer cutoff angle of a spotlight. The outer cutoff defines the outer boundary of the light's cone, where the light starts to fade.
-    /// </para>
+    /// Gets the volumetric fog energy multiplier of a light.
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <returns>The outer cutoff angle in degrees of the spotlight.</returns>
+    /// <returns>The volumetric fog energy multiplier of the light.</returns>
     /// <remarks>
-    /// Native: <c>R3D_GetLightOuterCutOff</c>
+    /// Native: <c>R3D_GetLightFogEnergy</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightOuterCutOff")]
-    public static partial float GetLightOuterCutOff(Light id);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetLightFogEnergy")]
+    public static partial float GetLightFogEnergy(Light id);
 
     /// <summary>
-    /// Sets the outer cutoff angle of a spotlight.
+    /// Sets the volumetric fog energy multiplier of a light.
     /// <para>
-    /// This function sets the outer cutoff angle of a spotlight. The outer cutoff defines the boundary of the light's cone where the light intensity starts to gradually decrease.
+    /// The final fog contribution is the light's energy multiplied by this factor, allowing fine-grained control over its volumetric fog intensity independently of its regular lighting contribution.
+    /// </para>
+    /// <para>
+    /// Default: 1.0f
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <param name="degrees">The new outer cutoff angle in degrees.</param>
+    /// <param name="energy">The new volumetric fog energy multiplier to set for the light.</param>
     /// <remarks>
-    /// Native: <c>R3D_SetLightOuterCutOff</c>
+    /// Native: <c>R3D_SetLightFogEnergy</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightOuterCutOff")]
-    public static partial void SetLightOuterCutOff(Light id, float degrees);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetLightFogEnergy")]
+    public static partial void SetLightFogEnergy(Light id, float energy);
 
     /// <summary>
     /// Enables shadow rendering for a light.
@@ -424,7 +485,11 @@ public static unsafe partial class R3D
     /// Turns on shadow rendering for the light. The engine will allocate a shadow map if needed, or reuse one previously allocated for another light.
     /// </para>
     /// <para>
-    /// Shadow map resolutions are fixed: 2048x2048 for spot and point lights, and 4096x4096 for directional lights.
+    /// Shadow map resolutions are by default:
+    /// <list type="bullet">
+    /// <item><description>2048x2048 for spot and point lights</description></item>
+    /// <item><description>4096x4096 for directional lights</description></item>
+    /// </list>
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
@@ -487,6 +552,9 @@ public static unsafe partial class R3D
     /// <para>
     /// This function sets the mode for updating the shadow map of the specified light. The update mode controls when and how often the shadow map is refreshed.
     /// </para>
+    /// <para>
+    /// Default: R3D_SHADOW_UPDATE_INTERVAL
+    /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="mode">The update mode to set for the shadow map (Interval, Continuous, or Manual).</param>
@@ -497,32 +565,35 @@ public static unsafe partial class R3D
     public static partial void SetShadowUpdateMode(Light id, ShadowUpdateMode mode);
 
     /// <summary>
-    /// Gets the frequency of shadow map updates for the interval update mode.
+    /// Gets the interval between shadow map updates in interval update mode.
     /// <para>
-    /// This function retrieves the frequency (in milliseconds) at which the shadow map should be updated when the interval update mode is enabled. This function is only relevant if the shadow map update mode is set to &quot;Interval&quot;.
+    /// Only relevant when the shadow update mode is set toR3D_SHADOW_UPDATE_INTERVAL.
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <returns>The frequency in milliseconds at which the shadow map is updated.</returns>
+    /// <returns>The interval in seconds between shadow map updates.</returns>
     /// <remarks>
-    /// Native: <c>R3D_GetShadowUpdateFrequency</c>
+    /// Native: <c>R3D_GetShadowUpdateInterval</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetShadowUpdateFrequency")]
-    public static partial int GetShadowUpdateFrequency(Light id);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetShadowUpdateInterval")]
+    public static partial float GetShadowUpdateInterval(Light id);
 
     /// <summary>
-    /// Sets the frequency of shadow map updates for the interval update mode.
+    /// Sets the interval between shadow map updates in interval update mode.
     /// <para>
-    /// This function sets the frequency (in milliseconds) at which the shadow map should be updated when the interval update mode is enabled. This function is only relevant if the shadow map update mode is set to &quot;Interval&quot;.
+    /// Only relevant when the shadow update mode is set toR3D_SHADOW_UPDATE_INTERVAL.
+    /// </para>
+    /// <para>
+    /// Default: 0.016f
     /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
-    /// <param name="msec">The frequency in milliseconds at which to update the shadow map.</param>
+    /// <param name="seconds">The interval in seconds between shadow map updates.</param>
     /// <remarks>
-    /// Native: <c>R3D_SetShadowUpdateFrequency</c>
+    /// Native: <c>R3D_SetShadowUpdateInterval</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetShadowUpdateFrequency")]
-    public static partial void SetShadowUpdateFrequency(Light id, int msec);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetShadowUpdateInterval")]
+    public static partial void SetShadowUpdateInterval(Light id, float seconds);
 
     /// <summary>
     /// Forces an immediate update of the shadow map during the next rendering pass.
@@ -556,6 +627,9 @@ public static unsafe partial class R3D
     /// <para>
     /// This function adjusts the softness of the shadow edges for the specified light. The softness value corresponds to a number of texels in the shadow map, independent of its resolution. Larger values increase the blur radius, resulting in softer, more diffuse shadows, while smaller values yield sharper shadows.
     /// </para>
+    /// <para>
+    /// Default: 4.0f
+    /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="softness">The softness radius in texels to apply (must be &gt;= 0).</param>
@@ -585,6 +659,9 @@ public static unsafe partial class R3D
     /// <para>
     /// When the opacity is exactly 0, the light still owns its shadow map, but shadow map rendering and shadow application are entirely skipped.
     /// </para>
+    /// <para>
+    /// Default: 1.0f
+    /// </para>
     /// </summary>
     /// <param name="id">The ID of the light.</param>
     /// <param name="opacity">The shadow opacity to apply.</param>
@@ -608,6 +685,14 @@ public static unsafe partial class R3D
     /// <para>
     /// A higher bias helps reduce &quot;shadow acne&quot; artifacts (shadows flickering or appearing misaligned on surfaces). Be careful: too large values may cause shadows to look detached or floating away from objects.
     /// </para>
+    /// <para>
+    /// Default per light type:
+    /// <list type="bullet">
+    /// <item><description>Directional: 0.001</description></item>
+    /// <item><description>Spot:        0.0001</description></item>
+    /// <item><description>Omni:        0.025</description></item>
+    /// </list>
+    /// </para>
     /// </summary>
     /// <remarks>
     /// Native: <c>R3D_SetShadowDepthBias</c>
@@ -628,6 +713,14 @@ public static unsafe partial class R3D
     /// Sets the shadow slope bias value.
     /// <para>
     /// This bias mainly compensates artifacts on surfaces angled relative to the light. It helps prevent shadows from incorrectly appearing or disappearing along object edges.
+    /// </para>
+    /// <para>
+    /// Default per light type:
+    /// <list type="bullet">
+    /// <item><description>Directional: 0.0015</description></item>
+    /// <item><description>Spot:        0.0005</description></item>
+    /// <item><description>Omni:        0.1</description></item>
+    /// </list>
     /// </para>
     /// </summary>
     /// <remarks>
@@ -724,9 +817,39 @@ public static unsafe partial class R3D
     /// <param name="id">The ID of the light.</param>
     /// <remarks>
     /// This function should be called while using the default 3D rendering mode of raylib, not with R3D's rendering mode. It uses raylib's 3D drawing functions to render the light's shape.
-    /// Native: <c>R3D_DrawLightShape</c>
+    /// Native: <c>R3D_DrawLightDebug</c>
     /// </remarks>
-    [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawLightShape")]
-    public static partial void DrawLightShape(Light id);
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_DrawLightDebug")]
+    public static partial void DrawLightDebug(Light id);
+
+    /// <summary>
+    /// Converts a luminous flux to an energy factor.
+    /// <para>
+    /// Computes the illuminance in lux at the given reference distance from an isotropic point source: `energy = lumens / (4 * pi * distance * distance)`
+    /// </para>
+    /// </summary>
+    /// <param name="lumens">The luminous flux in lumens.</param>
+    /// <param name="referenceDistance">The reference distance in scene units (1 unit = 1 meter).</param>
+    /// <returns>The corresponding energy factor.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_LumensToEnergy</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_LumensToEnergy")]
+    public static partial float LumensToEnergy(float lumens, float referenceDistance);
+
+    /// <summary>
+    /// Converts an energy factor back to a luminous flux.
+    /// <para>
+    /// Inverse ofR3D_LumensToEnergy: `lumens = energy * 4 * pi * distance * distance`
+    /// </para>
+    /// </summary>
+    /// <param name="energy">The energy factor.</param>
+    /// <param name="referenceDistance">The reference distance in scene units (1 unit = 1 meter).</param>
+    /// <returns>The corresponding luminous flux in lumens.</returns>
+    /// <remarks>
+    /// Native: <c>R3D_EnergyToLumens</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_EnergyToLumens")]
+    public static partial float EnergyToLumens(float energy, float referenceDistance);
 
 }

@@ -24,7 +24,28 @@ public static unsafe partial class R3D
     /// </summary>
     public const string NativeLibName = "r3d";
 
-    public const string R3D_VERSION = "0.10.0";
+    public const string R3D_VERSION = "0.11.0";
+
+    /// <summary>
+    /// Sets a configuration hint.
+    /// <para>
+    /// Must be called beforeR3D_Init().
+    /// </para>
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_SetHint</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_SetHint")]
+    public static partial void SetHint(Hint hint, int value);
+
+    /// <summary>
+    /// Returns the effective value of a hint.
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>R3D_GetHint</c>
+    /// </remarks>
+    [LibraryImport(NativeLibName, EntryPoint = "R3D_GetHint")]
+    public static partial int GetHint(Hint hint);
 
     /// <summary>
     /// Initializes the rendering engine.

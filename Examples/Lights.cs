@@ -54,7 +54,7 @@ public static class Lights
             R3D.SetLightPosition(lights[i], new Vector3(Randf(-GRID_SIZE / 2f, GRID_SIZE / 2f), Randf(1.0f, 5.0f), Randf(-GRID_SIZE / 2f, GRID_SIZE / 2f)));
             R3D.SetLightColor(lights[i], ColorFromHSV(Randf(0.0f, 360.0f), 1.0f, 1.0f));
             R3D.SetLightRange(lights[i], Randf(8.0f, 16.0f));
-            R3D.SetLightActive(lights[i], true);
+            R3D.EnableLight(lights[i]);
             //R3D.EnableShadow(lights[i]);
         }
 
@@ -85,7 +85,7 @@ public static class Lights
             if (IsKeyDown(KeyboardKey.F))
             {
                 BeginMode3D(camera);
-                for (var i = 0; i < NUM_LIGHTS; i++) R3D.DrawLightShape(lights[i]);
+                for (var i = 0; i < NUM_LIGHTS; i++) R3D.DrawLightDebug(lights[i]);
                 EndMode3D();
             }
 

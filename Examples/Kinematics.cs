@@ -34,7 +34,7 @@ public static class Kinematics
         var light = R3D.CreateLight(LightType.Dir);
         R3D.SetLightDirection(light, new Vector3(-1, -1, -1));
         R3D.SetLightRange(light, 16.0f);
-        R3D.SetLightActive(light, true);
+        R3D.EnableLight(light);
         R3D.EnableShadow(light);
         R3D.SetShadowDepthBias(light, 0.005f);
 

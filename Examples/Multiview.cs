@@ -27,9 +27,9 @@ public static class Multiview
 
         // Create light
         var light = R3D.CreateLight(LightType.Spot);
-        R3D.LightLookAt(light, new Vector3(0, 10, 5), Vector3.Zero);
+        R3D.SetLightTarget(light, new Vector3(0, 10, 5), Vector3.Zero);
         R3D.EnableShadow(light);
-        R3D.SetLightActive(light, true);
+        R3D.EnableLight(light);
 
         // Setup two R3D cameras orbiting in opposite directions
         var cam0 = R3D.CAMERA_BASE;

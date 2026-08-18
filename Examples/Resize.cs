@@ -30,7 +30,7 @@ public static class Resize
         // Set up directional light
         var light = R3D.CreateLight(LightType.Dir);
         R3D.SetLightDirection(light, new Vector3(0, 0, -1));
-        R3D.SetLightActive(light, true);
+        R3D.EnableLight(light);
 
         // Setup camera
         var camera = new Camera3D

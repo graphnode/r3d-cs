@@ -35,7 +35,7 @@ public static class Dof
         // Create directional light
         var light = R3D.CreateLight(LightType.Dir);
         R3D.SetLightDirection(light, new Vector3(0, -1, 0));
-        R3D.SetLightActive(light, true);
+        R3D.EnableLight(light);
 
         // Create sphere mesh and default material
         var meshSphere = R3D.GenMeshSphere(0.2f, 64, 64);

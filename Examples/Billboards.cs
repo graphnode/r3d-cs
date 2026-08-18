@@ -60,7 +60,7 @@ public static class Billboards
         R3D.SetLightDirection(light, new Vector3(-1, -1, -1));
         R3D.SetShadowDepthBias(light, 0.01f);
         R3D.EnableShadow(light);
-        R3D.SetLightActive(light, true);
+        R3D.EnableLight(light);
         R3D.SetLightRange(light, 32.0f);
 
         // Setup camera

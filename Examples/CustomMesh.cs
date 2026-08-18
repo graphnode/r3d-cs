@@ -51,7 +51,7 @@ public static class CustomMesh
         // Create light
         var light = R3D.CreateLight(LightType.Omni);
         R3D.SetLightPosition(light, new Vector3(0, 3, 3));
-        R3D.SetLightActive(light, true);
+        R3D.EnableLight(light);
 
         // Setup camera
         var camera = new Camera3D

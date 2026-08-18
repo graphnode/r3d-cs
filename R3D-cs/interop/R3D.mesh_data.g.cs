@@ -474,6 +474,8 @@ public static unsafe partial class R3D
     /// <param name="meshData">Mesh data to modify.</param>
     /// <param name="type">Primitive type of the mesh. Points and line primitives are not supported and will default to a front-facing normal (0, 0, 1).</param>
     /// <remarks>
+    /// <b>Warning:</b>
+    /// Not thread-safe: uses the shared global scratch stack
     /// Native: <c>R3D_GenMeshDataNormals</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshDataNormals")]
@@ -485,6 +487,8 @@ public static unsafe partial class R3D
     /// <param name="meshData">Mesh data to modify.</param>
     /// <param name="type">Primitive type of the mesh. Points and line primitives are not supported and will default to a front-facing tangent (1, 0, 0, 1).</param>
     /// <remarks>
+    /// <b>Warning:</b>
+    /// Not thread-safe: uses the shared global scratch stack
     /// Native: <c>R3D_GenMeshDataTangents</c>
     /// </remarks>
     [LibraryImport(NativeLibName, EntryPoint = "R3D_GenMeshDataTangents")]

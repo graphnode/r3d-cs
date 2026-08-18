@@ -48,7 +48,7 @@ public static class Decal
         R3D.SetLightDirection(light, new Vector3(0.5f, -1, -0.5f));
         R3D.SetShadowDepthBias(light, 0.005f);
         R3D.EnableShadow(light);
-        R3D.SetLightActive(light, true);
+        R3D.EnableLight(light);
 
         // Setup camera
         var camera = new Camera3D

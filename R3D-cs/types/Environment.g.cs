@@ -78,6 +78,14 @@ public struct Environment
     public EnvFog Fog;
 
     /// <summary>
+    /// Volumetric fog
+    /// </summary>
+    /// <remarks>
+    /// Native: <c>volumetricFog</c>
+    /// </remarks>
+    public VolumetricFog VolumetricFog;
+
+    /// <summary>
     /// Depth of field focus effect
     /// </summary>
     /// <remarks>

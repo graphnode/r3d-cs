@@ -20,6 +20,8 @@ public static class Sponza
         {
             // Post-processing setup
             env.Bloom.Mode = R3D_cs.Bloom.Mix;
+            env.Ssil.GiIntensity = 8.0f;
+            env.Ssgi.Intensity = 8.0f;
             env.Ssao.Enabled = true;
 
             // Background and ambient
@@ -36,11 +38,12 @@ public static class Sponza
         for (var i = 0; i < 2; i++)
         {
             lights[i] = R3D.CreateLight(LightType.Omni);
-            R3D.SetLightPosition(lights[i], new Vector3(i == 0 ? -10.0f : 10.0f, 20.0f, 0.0f));
-            R3D.SetLightActive(lights[i], true);
-            R3D.SetLightEnergy(lights[i], 4.0f);
+            R3D.SetLightPosition(lights[i], new Vector3(i == 0 ? -5.0f : 5.0f, 5.0f, 0.0f));
             R3D.SetShadowUpdateMode(lights[i], ShadowUpdateMode.Manual);
+            R3D.SetLightEnergy(lights[i], 8.0f);
+            R3D.SetLightRange(lights[i], 16.0f);
             R3D.EnableShadow(lights[i]);
+            R3D.EnableLight(lights[i]);
         }
 
         // Setup camera
@@ -103,8 +106,8 @@ public static class Sponza
 
                 // Draw lights
                 BeginMode3D(camera);
-                    DrawSphere(R3D.GetLightPosition(lights[0]), 0.5f, Color.White);
-                    DrawSphere(R3D.GetLightPosition(lights[1]), 0.5f, Color.White);
+                    DrawSphere(R3D.GetLightPosition(lights[0]), 0.2f, Color.White);
+                    DrawSphere(R3D.GetLightPosition(lights[1]), 0.2f, Color.White);
                 EndMode3D();
 
                 // Display tonemapping
